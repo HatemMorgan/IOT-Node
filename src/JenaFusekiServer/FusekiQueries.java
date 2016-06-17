@@ -28,9 +28,10 @@ public class FusekiQueries {
 	}
 	
 	public static void deleteAllTriples (){
-		String deleteQueryString = "DELETE {"
+		String deleteQueryString = "DELETE  {"
 								   + "?a ?b ?c"
-								   + "}";
+								   + "}"
+								   +"WHERE {?a ?b ?c}";
 		 UpdateProcessor upp = UpdateExecutionFactory.createRemote(
 	                UpdateFactory.create(deleteQueryString), 
 	                "http://localhost:3030/myDataset/update");
