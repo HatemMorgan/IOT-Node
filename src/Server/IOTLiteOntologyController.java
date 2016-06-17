@@ -32,9 +32,20 @@ public class IOTLiteOntologyController {
 				Statement statment = itr.nextStatement();
 				Resource subject = statment.getSubject();
 				Property property = statment.getPredicate();
+		
+				
 				RDFNode Object = statment.getObject();
-				FusekiQueries.insertNewTriple(subject.toString(),
-						property.toString(), Object.toString());
+				//System.out.println(subject +" "+property+" "+Object);
+				if(Object.isLiteral()){
+				//	System.out.println("here "+Object.asLiteral());
+					FusekiQueries.insertNewTriple(subject.toString(),
+							property.toString(),null ,Object.toString());
+				}else{
+					
+					FusekiQueries.insertNewTriple(subject.toString(),
+							property.toString(), Object.toString(),null);
+				}
+			
 			}
 
 		}
@@ -43,5 +54,7 @@ public class IOTLiteOntologyController {
 
 	public static void main(String[] args) {
 	  FusekiQueries.deleteAllTriples();
+	  insertNewSystem();
+	  FusekiQueries.SelectAllTriples();
 	}
 }

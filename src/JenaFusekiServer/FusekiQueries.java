@@ -12,9 +12,21 @@ import org.apache.jena.update.UpdateProcessor;
 
 public class FusekiQueries {
   
-	public static void insertNewTriple(String subject , String Property , String Value){
-		String queryString = 	"INSERT DATA"
-							+ "{ "+subject +" "+Property+" "+Value  +" ."	;	
+	public static void insertNewTriple(String subject , String Property , String Object , String literal){
+		String queryString = "" ;
+		if(Object == null){
+			
+		
+		 queryString = 	"INSERT DATA"
+							+ "{ <"+subject +"> <"+Property+"> \""+literal+"\" "+" .}"	;	
+		// System.out.println(queryString);
+		
+		}else{
+			if(literal == null){
+				 queryString = 	"INSERT DATA"
+						+ "{ <"+subject +"> <"+Property+"> <"+Object  +"> .}"	;	
+			}
+		}
 		
 		 UpdateProcessor upp = UpdateExecutionFactory.createRemote(
 	                UpdateFactory.create(queryString), 

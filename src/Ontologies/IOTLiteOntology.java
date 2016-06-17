@@ -84,6 +84,7 @@ public class IOTLiteOntology {
 		Individual temperatureTableRoom12CII01 = IOTLiteOntologyModel
 				.createIndividual(IOT_Lite_URI + "temperatureTableRoom12CII01",
 						Attribute);
+		Individual temperature = IOTLiteOntologyModel.createIndividual("http://purl.org/NET/ssnx/qu/quantity#temperature",null);
 
 		// create triples
 
@@ -95,7 +96,7 @@ public class IOTLiteOntology {
 		temperatureSensorTelosB.addProperty(hasUnit, degree_Celsius);
 		temperatureSensorTelosB.addProperty(hasMetadata, resolution1024);
 		temperatureSensorTelosB.addProperty(hasQuantityKind,
-				"http://purl.org/NET/ssnx/qu/quantity#temperature");
+				temperature);
 		resolution1024.addProperty(metadataType, "resolution");
 		resolution1024.addProperty(metadataValue, "1024");
 		distanceSensor.addProperty(hasSensingDevice,
@@ -106,8 +107,8 @@ public class IOTLiteOntology {
 		temperatureTableRoom12CII01.addProperty(isAssociatedWith,
 				temperatureSensorRoom13CII01);
 		temperatureTableRoom12CII01.addProperty(hasQuantityKind,
-				"http://purl.org/NET/ssnx/qu/quantity#temperature");
-
+				temperature);
+		
 		return IOTLiteOntologyModel;
 	}
 
