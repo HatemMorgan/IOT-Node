@@ -65,6 +65,9 @@ public class IOTLiteOntologyController {
 //	  insertNewSystem();
 //	  FusekiQueries.SelectAllTriples();
 		
+	  
+	  // get the union of two datasets
+		
 		String strQuery =" SELECT * "
 				+"FROM <http://localhost:3030/myDataset> "
 				+"FROM NAMED <http://localhost:3030/NewDataset> "
@@ -86,7 +89,7 @@ public class IOTLiteOntologyController {
 		     // and turn that into a String
 		     String json = new String(outputStream.toByteArray());
 
-		     System.out.println(json);
+		//     System.out.println(json);
 	}finally{
 		quex.close();
 	}
@@ -99,8 +102,44 @@ public class IOTLiteOntologyController {
 							+"			   dc:title ?book .}"	;	
 		
 		
-		FusekiQueries.deleteByCondition(DeleteQuery, "NewDataset");
+	//	FusekiQueries.deleteByCondition(DeleteQuery, "NewDataset");
 						
+	// get all the systems in the database
+		String q1 = "PREFIX iot-lite: <http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+					+"PREFIX qu:<http://purl.org/NET/ssnx/qu/qu#>"
+					+"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+					+"PREFIX iotlins:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+					+"SELECT * "
+					+"WHERE{"
+					+"	?a a ssn:System ."
+					+"}";
+		//FusekiQueries.SelectTriplesByConditions(q1);
+		
+		// get all the sensors used for the system 
+		String q2 = "PREFIX iot-lite: <http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+					+"PREFIX qu:<http://purl.org/NET/ssnx/qu/qu#>"
+					+"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+					+"PREFIX iotlins:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+					+"SELECT ?sensor "
+					+"WHERE{"
+					+"	?a a ssn:SensingDevice ."
+					+"    ?sensor ?hasSensingDevice ?a"
+					  	
+					+"}";	
+		//FusekiQueries.SelectTriplesByConditions(q2);
+		
+		// get the number of sensors used in the system
+		String q3 = "PREFIX iot-lite: <http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+				+"PREFIX qu:<http://purl.org/NET/ssnx/qu/qu#>"
+				+"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+				+"PREFIX iotlins:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+				+"SELECT (COUNT(*) as ?NumberOfSensors )"
+				+"WHERE{"
+				+"	?a a ssn:SensingDevice ."
+				+"    ?sensor ?hasSensingDevice ?a"
+				  	
+				+"}";	
+		FusekiQueries.SelectTriplesByConditions(q3);
 		
 	}
 }
