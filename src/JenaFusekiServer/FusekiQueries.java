@@ -44,9 +44,13 @@ public class FusekiQueries {
 								   + "?a ?b ?c"
 								   + "}"
 								   +"WHERE {?a ?b ?c}";
+		deleteByCondition(deleteQueryString, "myDataset");
+	}
+	
+	public static void deleteByCondition(String strQuery , String Dataset){
 		 UpdateProcessor upp = UpdateExecutionFactory.createRemote(
-	                UpdateFactory.create(deleteQueryString), 
-	                "http://localhost:3030/myDataset/update");
+	                UpdateFactory.create(strQuery), 
+	                "http://localhost:3030/"+Dataset+"/update");
 		 try{
 			 upp.execute();
 			 System.out.println("All triples are deleted");
@@ -63,6 +67,7 @@ public class FusekiQueries {
 	
 	public static void SelectTriplesByConditions(String strQuery){
 		Query qe = QueryFactory.create(strQuery);
+		
 		QueryExecution quex = QueryExecutionFactory.sparqlService("http://localhost:3030/myDataset/query", qe);
 		
 		try{
