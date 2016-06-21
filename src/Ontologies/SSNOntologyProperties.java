@@ -31,7 +31,4 @@ public class SSNOntologyProperties {
 		return observationResultTime;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(getObservationResultTimeProperty());
-	}
 }
