@@ -43,7 +43,5 @@ public class SSNOntologyClasses {
 	}
 	
 	
-	public static void main(String[] args) {
-	  System.out.println(getObservationValueClass());
-	}
+
 }
