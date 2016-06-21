@@ -19,9 +19,11 @@ public class IOTLiteOntology {
 			.getModel("iot-lite.rdf");
 
 	public static OntModel createSystem() {
+	
 		// get ontology defined class
 		OntClass systemClass = IOTLiteOntologyModel.getOntClass(SSN_URI
 				+ "System");
+		System.out.println(systemClass);
 		OntClass DeviceClass = IOTLiteOntologyModel.getOntClass(IOT_Lite_URI
 				+ "Device");
 		OntClass SensorClass = IOTLiteOntologyModel.getOntClass(SSN_URI
@@ -108,7 +110,7 @@ public class IOTLiteOntology {
 				temperatureSensorRoom13CII01);
 		temperatureTableRoom12CII01.addProperty(hasQuantityKind,
 				temperature);
-		
+		IOTLiteOntologyModel.write(System.out);
 		return IOTLiteOntologyModel;
 	}
 
@@ -131,5 +133,7 @@ public class IOTLiteOntology {
 	public static OntModel getIotliteontologymodel() {
 		return IOTLiteOntologyModel;
 	}
-
+ public static void main(String[] args) {
+	createSystem();
+}
 }

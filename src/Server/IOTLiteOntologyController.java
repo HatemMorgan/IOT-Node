@@ -80,7 +80,7 @@ public class IOTLiteOntologyController {
 		QueryExecution quex = QueryExecutionFactory.create(qe);
 		try{
 		 	ResultSet results = quex.execSelect();
-	       // ResultSetFormatter.out(System.out, results);
+	        ResultSetFormatter.out(System.out, results);
 		 	
 		     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -126,7 +126,7 @@ public class IOTLiteOntologyController {
 					+"    ?sensor ?hasSensingDevice ?a"
 					  	
 					+"}";	
-		//FusekiQueries.SelectTriplesByConditions(q2);
+	//FusekiQueries.SelectTriplesByConditions(q2);
 		
 		// get the number of sensors used in the system
 		String q3 = "PREFIX iot-lite: <http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
@@ -139,7 +139,7 @@ public class IOTLiteOntologyController {
 				+"    ?sensor ?hasSensingDevice ?a"
 				  	
 				+"}";	
-		FusekiQueries.SelectTriplesByConditions(q3);
+	//FusekiQueries.SelectTriplesByConditions(q3);
 		
 	}
 }
