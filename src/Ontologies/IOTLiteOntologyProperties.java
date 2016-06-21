@@ -11,61 +11,61 @@ public class IOTLiteOntologyProperties {
 	private static final OntModel IOTLiteOntologyModel = OntologyMain
 			.getIOTLiteOntModel();
 
-	public static OntProperty getHasAttributeProperty() {
+	public static OntProperty hasAttribute() {
 		OntProperty hasAttribute = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "hasAttribute");
 		return hasAttribute;
 	}
 
-	public static OntProperty getIsAssociatedWithProperty() {
+	public static OntProperty isAssociatedWith() {
 		OntProperty isAssociatedWith = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "isAssociatedWith");
 		return isAssociatedWith;
 	}
 
-	public static OntProperty getEndPointProperty() {
+	public static OntProperty endPoint() {
 		OntProperty endPoint = IOTLiteOntologyModel.getOntProperty(IOT_Lite_URI
 				+ "endpoint");
 		return endPoint;
 	}
 
-	public static OntProperty getInterfaceDescriptionProperty() {
+	public static OntProperty interfaceDescription() {
 		OntProperty interfaceDescription = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "interfaceDescription");
 		return interfaceDescription;
 	}
 
-	public static OntProperty getExposedByProperty() {
+	public static OntProperty exposedBy() {
 		OntProperty exposedBy = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "exposedBy");
 		return exposedBy;
 	}
 
-	public static OntProperty getHasQuantityKind() {
+	public static OntProperty hasQuantityKind() {
 		OntProperty hasQuantityKind = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "hasQuantityKind");
 		return hasQuantityKind;
 	}
 
-	public static OntProperty getHasUnit() {
+	public static OntProperty hasUnit() {
 		OntProperty hasUnit = IOTLiteOntologyModel.getOntProperty(IOT_Lite_URI
 				+ "hasUnit");
 		return hasUnit;
 	}
 
-	public static OntProperty getHasSensingDeviceProperty() {
+	public static OntProperty hasSensingDevice() {
 		OntProperty hasSensingDevice = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "hasSensingDevice");
 		return hasSensingDevice;
 	}
 
-	public static OntProperty getHasPoint() {
+	public static OntProperty hasPoint() {
 		OntProperty hasPoint = IOTLiteOntologyModel
 				.createOntProperty(IOT_Lite_URI + "hasPoint");
 		return hasPoint;
 	}
 
-	public static OntProperty getHasLocation() {
+	public static OntProperty hasLocation() {
 		OntProperty hasLocation = IOTLiteOntologyModel
 				.createOntProperty(GEO_URI + "hasLocation");
 		return hasLocation;

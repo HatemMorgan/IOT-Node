@@ -12,7 +12,7 @@ public class FOAFOntologyClasses {
 	private static final OntModel FOAFOntologyModel = OntologyMain
 			.getFOAFOntModel();
 
-	public static OntClass getPersonClass() {
+	public static OntClass PersonClass() {
 
 		OntClass Person = FOAFOntologyModel.getOntClass(FOAF_URI + "Person");
 		return Person;

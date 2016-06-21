@@ -12,67 +12,67 @@ public class IOTLiteInstancesOntologyProperties {
 	private static final OntModel IOTLiteInstancesOntologyModel = ModelFactory
 			.createOntologyModel();
 
-	public static OntProperty getHasApplicationName() {
+	public static OntProperty  hasApplicationName() {
 		OntProperty hasApplicationName = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasApplicationName");
 		return hasApplicationName;
 	}
 
-	public static OntProperty getHasApplicationDescription() {
+	public static OntProperty  hasApplicationDescription() {
 		OntProperty hasApplicationDescription = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasApplicationDescription");
 		return hasApplicationDescription;
 	}
 
-	public static OntProperty getUsesSystemProperty() {
+	public static OntProperty  usesSystemProperty() {
 		OntProperty usesSystem = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "usesSystem");
 		return usesSystem;
 	}
 
-	public static OntProperty getUsesApplication() {
+	public static OntProperty  usesApplication() {
 		OntProperty usesApplication = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "usesApplication");
 		return usesApplication;
 	}
 
-	public static OntProperty getHasMetadataValue() {
+	public static OntProperty  hasMetadataValue() {
 		OntProperty hasMetadataValue = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasMetadataValue");
 		return hasMetadataValue;
 	}
 
-	public static OntProperty getHasMetadataType() {
+	public static OntProperty  hasMetadataType() {
 		OntProperty hasMetadataType = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasMetadataType");
 		return hasMetadataType;
 	}
 
-	public static OntProperty getHasCommunicatingDevice() {
+	public static OntProperty  hasCommunicatingDevice() {
 		OntProperty hasCommunicatingDevice = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasCommunicatingDevice");
 		return hasCommunicatingDevice;
 	}
 
-	public static OntProperty getHasCommunicatingDeviceType() {
+	public static OntProperty  hasCommunicatingDeviceType() {
 		OntProperty hasCommunicatingDeviceType = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "HasCommunicatingDeviceType");
 		return hasCommunicatingDeviceType;
 	}
 
-	public static OntProperty getHasFrequency() {
+	public static OntProperty  hasFrequency() {
 		OntProperty hasFrequency = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasFrequency");
 		return hasFrequency;
 	}
 
-	public static OntProperty getHasNetworkTopology() {
+	public static OntProperty  hasNetworkTopology() {
 		OntProperty hasNetworkTopology = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasNetworkTopology");
 		return hasNetworkTopology;
 	}
 
-	public static OntProperty getHasBandwidth() {
+	public static OntProperty  hasBandwidth() {
 		OntProperty hasBandwidth = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasBandwidth");
 		return hasBandwidth;

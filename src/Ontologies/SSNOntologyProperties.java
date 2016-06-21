@@ -11,22 +11,22 @@ public class SSNOntologyProperties {
 
 	private static final OntModel SSNOntologyModel = OntologyMain.getSSNOntModel();
 	
-	public static OntProperty getHasSubSystemProperty(){
+	public static OntProperty hasSubSystem(){
 		OntProperty hasSubSystem = SSNOntologyModel.getOntProperty(SSN_URI+"hasSubSystem");
 		return hasSubSystem;
 	}
 	
-	public static OntProperty getIsProducedByProperty(){
+	public static OntProperty isProducedBy(){
 		OntProperty isProducedBy = SSNOntologyModel.getOntProperty(SSN_URI+"isProducedBy");
 		return isProducedBy;
 	}
 	
-	public static OntProperty getHasValueProperty(){
+	public static OntProperty hasValue(){
 		OntProperty hasValue = SSNOntologyModel.getOntProperty(SSN_URI+"hasValue");
 		return hasValue;
 	}
 	
-	public static OntProperty getObservationResultTimeProperty(){
+	public static OntProperty observationResultTime(){
 		OntProperty observationResultTime = SSNOntologyModel.getOntProperty(SSN_URI+"observationResultTime");
 		return observationResultTime;
 	}

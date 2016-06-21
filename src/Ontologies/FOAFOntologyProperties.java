@@ -11,25 +11,25 @@ public class FOAFOntologyProperties {
 	private static final OntModel FOAFOntologyModel = OntologyMain
 			.getFOAFOntModel();
 
-	public static OntProperty getFirstNameProperty() {
+	public static OntProperty firstName() {
 		OntProperty firstName = FOAFOntologyModel.getOntProperty(FOAF_URI
 				+ "firstName");
 		return firstName;
 	}
 
-	public static OntProperty getLastNameProperty() {
+	public static OntProperty lastName() {
 		OntProperty lastName = FOAFOntologyModel.getOntProperty(FOAF_URI
 				+ "lastName");
 		return lastName;
 	}
 
-	public static OntProperty getbirthdayProperty() {
+	public static OntProperty birthday() {
 		OntProperty birthday = FOAFOntologyModel.getOntProperty(FOAF_URI
 				+ "birthday");
 		return birthday;
 	}
 
-	public static OntProperty getGenderProperty() {
+	public static OntProperty gender() {
 		OntProperty gender = FOAFOntologyModel.getOntProperty(FOAF_URI
 				+ "gender");
 		return gender;
