@@ -4,7 +4,7 @@ import org.apache.jena.atlas.io.IO;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
-public class IOTLitentologyClasses {
+public class IOTLiteOntologyClasses {
 	
 	private static final String QU_URI = "http://purl.org/NET/ssnx/qu/qu#";
 	private static final String IOT_Lite_URI = "http://purl.oclc.org/NET/UNIS/fiware/iot-lite#";
@@ -71,6 +71,6 @@ public class IOTLitentologyClasses {
 	}
 	
     public static void main(String[] args) {
-		System.out.println(getQuantityKindClass());
+		System.out.println(getActuatingDevice().getSuperClass());
 	}
 }
