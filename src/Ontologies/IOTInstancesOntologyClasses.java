@@ -10,7 +10,7 @@ public class IOTInstancesOntologyClasses {
 
 	private static final String iotlins_URI = "http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#";
 	private static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
-	private static final String IOT_Lite_URI = "http://purl.oclc.org/NET/UNIS/fiware/iot-lite#";
+
 	
 	private static final OntModel IOTLiteInstancesOntologyModel = ModelFactory.createOntologyModel();
 	private static final OntModel IOTLiteOntologyModel = OntologyMain.getIOTLiteOntModel();
@@ -51,6 +51,11 @@ public class IOTInstancesOntologyClasses {
 		CommunicatingDevice.addSuperClass(SSNOntologyClasses.getDeviceClass());
 		return CommunicatingDevice;
 	}	
+	
+	public static OntClass getApplicationClass(){
+		OntClass Application = IOTLiteInstancesOntologyModel.createClass(iotlins_URI+"Application");
+		return Application;
+	}
 	
 	
 	public static void main(String[] args) {

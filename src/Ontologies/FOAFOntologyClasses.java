@@ -1,6 +1,8 @@
 package Ontologies;
 
+import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Resource;
 
 public class FOAFOntologyClasses {
 
@@ -8,4 +10,13 @@ public class FOAFOntologyClasses {
 	private static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
 	
 	private static final OntModel FOAFOntologyModel = OntologyMain.getFOAFOntModel();
+	
+	public static Resource getPersonClass(){
+	
+		Resource Person = FOAFOntologyModel.getOntResource(FOAF_URI+"Person");
+		return Person;
+	}
+	
+
+
 }
