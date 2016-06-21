@@ -10,16 +10,33 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
 
 public class OntologyMain {
-	private static OntModel model;
-
-	public static OntModel getModel(String path) {
-		if (model == null)
-			loadOntology(path);
-
-		return model;
+	private static OntModel FOAFOntModel;
+	private static OntModel IotLiteOntModel;
+	private static OntModel SSNOntModel;
+	
+	public static OntModel getSSNOntModel(){
+		if(SSNOntModel == null)
+			loadOntology(SSNOntModel,"ssn.owl");
+		
+		return SSNOntModel;
 	}
-
-	public static void loadOntology(String path) {
+	
+	
+	public static OntModel getFOAFOntModel() {
+		if (FOAFOntModel == null)
+			loadOntology(FOAFOntModel,"foaf.rdf");
+		
+		return FOAFOntModel;
+	}
+	
+	public static OntModel getIOTLiteOntModel() {
+		if (IotLiteOntModel == null)
+			loadOntology(IotLiteOntModel,"iot-lite.rdf");
+		
+		return IotLiteOntModel;
+	}
+	
+	public static void loadOntology(OntModel ontModel,String path) {
 		
 		OntDocumentManager mgr = new OntDocumentManager();
 		OntModelSpec s = new OntModelSpec(OntModelSpec.OWL_MEM);
@@ -32,6 +49,7 @@ public class OntologyMain {
 		}
 
 		m.read(in, null);
-		model = ModelFactory.createOntologyModel(s, m);
+		ontModel = ModelFactory.createOntologyModel(s, m);
 	}
+	
 }

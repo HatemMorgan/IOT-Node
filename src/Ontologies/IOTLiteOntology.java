@@ -15,14 +15,13 @@ public class IOTLiteOntology {
 	private static final String QU_URI = "http://purl.org/NET/ssnx/qu/qu#";
 	private static final String SSN_URI = "http://purl.oclc.org/NET/ssnx/ssn#";
 	private static final String iotlins_URI = "http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#";
-	private static final OntModel IOTLiteOntologyModel = OntologyMain
-			.getModel("iot-lite.rdf");
+	private static final OntModel IOTLiteOntologyModel = OntologyMain.getIOTLiteOntModel();
 
 	public static OntModel createSystem() {
 	
 		// get ontology defined class
 		OntClass systemClass = IOTLiteOntologyModel.getOntClass(SSN_URI
-				+ "System");
+				+ "ObservationValue");
 		System.out.println(systemClass);
 		OntClass DeviceClass = IOTLiteOntologyModel.getOntClass(IOT_Lite_URI
 				+ "Device");
@@ -110,7 +109,7 @@ public class IOTLiteOntology {
 				temperatureSensorRoom13CII01);
 		temperatureTableRoom12CII01.addProperty(hasQuantityKind,
 				temperature);
-		IOTLiteOntologyModel.write(System.out);
+		
 		return IOTLiteOntologyModel;
 	}
 
