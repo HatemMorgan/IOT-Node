@@ -1,5 +1,6 @@
 package Ontologies;
 
+import org.apache.jena.atlas.io.IO;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
@@ -54,13 +55,22 @@ public class IOTLitentologyClasses {
 		return Rectangle;
 	}
 	
-	public static OntClass getMetaDataClass(){
-		OntClass MetaData = IOTLiteOntologyModel.createClass(IOT_Lite_URI
-				+ "Metadata");
-		return MetaData;
+	public static OntClass getPointClass(){
+		OntClass Point = IOTLiteOntologyModel.getOntClass(GEO_URI+"Point");
+		return Point;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(getMetaDataClass());
+	public static OntClass getUnitClass(){
+		OntClass Unit = IOTLiteOntologyModel.getOntClass(QU_URI+"Unit");
+		return Unit;
+	}
+	
+	public static OntClass getQuantityKindClass(){
+		OntClass QuantityKind = IOTLiteOntologyModel.getOntClass(QU_URI+"QuantityKind");
+		return QuantityKind;
+	}
+	
+    public static void main(String[] args) {
+		System.out.println(getQuantityKindClass());
 	}
 }
