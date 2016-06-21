@@ -2,6 +2,7 @@ package Ontologies;
 
 import java.io.InputStream;
 
+import org.apache.jena.base.Sys;
 import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
@@ -16,7 +17,7 @@ public class OntologyMain {
 	
 	public static OntModel getSSNOntModel(){
 		if(SSNOntModel == null)
-			loadOntology(SSNOntModel,"ssn.owl");
+			SSNOntModel = loadOntology("ssn.owl");
 		
 		return SSNOntModel;
 	}
@@ -24,19 +25,19 @@ public class OntologyMain {
 	
 	public static OntModel getFOAFOntModel() {
 		if (FOAFOntModel == null)
-			loadOntology(FOAFOntModel,"foaf.rdf");
-		
+			FOAFOntModel = loadOntology("foaf.rdf");
+	
 		return FOAFOntModel;
 	}
 	
 	public static OntModel getIOTLiteOntModel() {
 		if (IotLiteOntModel == null)
-			loadOntology(IotLiteOntModel,"iot-lite.rdf");
+			IotLiteOntModel = loadOntology("iot-lite.rdf");
 		
 		return IotLiteOntModel;
 	}
 	
-	public static void loadOntology(OntModel ontModel,String path) {
+	public static OntModel loadOntology(String path) {
 		
 		OntDocumentManager mgr = new OntDocumentManager();
 		OntModelSpec s = new OntModelSpec(OntModelSpec.OWL_MEM);
@@ -49,7 +50,8 @@ public class OntologyMain {
 		}
 
 		m.read(in, null);
-		ontModel = ModelFactory.createOntologyModel(s, m);
+		OntModel ontModel = ModelFactory.createOntologyModel(s, m);
+		return ontModel;
 	}
-	
+
 }
