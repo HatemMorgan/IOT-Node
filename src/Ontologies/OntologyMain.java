@@ -25,7 +25,7 @@ public class OntologyMain {
 	
 	public static OntModel getFOAFOntModel() {
 		if (FOAFOntModel == null)
-			FOAFOntModel = loadOntology("foaf.rdf");
+			FOAFOntModel = loadOntology("FOAF.rdf");
 	
 		return FOAFOntModel;
 	}

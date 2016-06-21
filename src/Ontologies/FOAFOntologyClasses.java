@@ -8,15 +8,14 @@ public class FOAFOntologyClasses {
 
 	private static final String FOAF_URI = "http://xmlns.com/foaf/0.1/";
 	private static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
-	
-	private static final OntModel FOAFOntologyModel = OntologyMain.getFOAFOntModel();
-	
-	public static Resource getPersonClass(){
-	
-		Resource Person = FOAFOntologyModel.getOntResource(FOAF_URI+"Person");
+
+	private static final OntModel FOAFOntologyModel = OntologyMain
+			.getFOAFOntModel();
+
+	public static OntClass getPersonClass() {
+
+		OntClass Person = FOAFOntologyModel.getOntClass(FOAF_URI + "Person");
 		return Person;
 	}
-	
-
 
 }
