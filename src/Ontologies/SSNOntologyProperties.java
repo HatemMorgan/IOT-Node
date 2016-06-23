@@ -11,10 +11,7 @@ public class SSNOntologyProperties {
 
 	private static final OntModel SSNOntologyModel = OntologyMain.getSSNOntModel();
 	
-	public static OntProperty hasSubSystem(){
-		OntProperty hasSubSystem = SSNOntologyModel.getOntProperty(SSN_URI+"hasSubSystem");
-		return hasSubSystem;
-	}
+
 	
 	public static OntProperty isProducedBy(){
 		OntProperty isProducedBy = SSNOntologyModel.getOntProperty(SSN_URI+"isProducedBy");

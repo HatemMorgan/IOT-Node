@@ -18,7 +18,7 @@ public class IOTInstancesOntologyClasses {
 	public static OntClass miniServer() {
 		OntClass MiniServer = IOTLiteInstancesOntologyModel
 				.createClass(iotlins_URI + "MiniServer");
-		MiniServer.addSuperClass(SSNOntologyClasses.device());
+		MiniServer.addSuperClass(IOTLiteOntologyClasses.device());
 		return MiniServer;
 	}
 
@@ -55,7 +55,7 @@ public class IOTInstancesOntologyClasses {
 	public static OntClass communicatingDevice() {
 		OntClass CommunicatingDevice = IOTLiteInstancesOntologyModel
 				.createClass(iotlins_URI + "CommunicatingDevice");
-		CommunicatingDevice.addSuperClass(SSNOntologyClasses.device());
+		CommunicatingDevice.addSuperClass(IOTLiteOntologyClasses.device());
 		return CommunicatingDevice;
 	}
 

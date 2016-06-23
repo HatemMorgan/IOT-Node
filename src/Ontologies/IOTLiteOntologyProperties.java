@@ -8,9 +8,15 @@ public class IOTLiteOntologyProperties {
 	private static final String IOT_Lite_URI = "http://purl.oclc.org/NET/UNIS/fiware/iot-lite#";
 	private static final String GEO_URI = "http://www.w3.org/2003/01/geo/wgs84_pos#";
 	private static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
+	private static final String SSN_URI = "http://purl.oclc.org/NET/ssnx/ssn#";
 	private static final OntModel IOTLiteOntologyModel = OntologyMain
 			.getIOTLiteOntModel();
 
+	public static OntProperty hasSubSystem(){
+		OntProperty hasSubSystem = IOTLiteOntologyModel.getOntProperty(SSN_URI+"hasSubSystem");
+		return hasSubSystem;
+	}
+	
 	public static OntProperty hasAttribute() {
 		OntProperty hasAttribute = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "hasAttribute");

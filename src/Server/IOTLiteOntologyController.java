@@ -122,8 +122,8 @@ public class IOTLiteOntologyController {
 					+"PREFIX iotlins:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
 					+"SELECT ?sensor "
 					+"WHERE{"
-					+"	?a a ssn:Device ."
-					+"    ?sensor ssn:hasSensingDevice ?a ."
+					+"	?a a ssn:SensingDevice ."
+					+"    ?sensor ?hasSensingDevice ?a"
 					  	
 					+"}";	
 	  FusekiQueries.SelectTriplesByConditions(q2);

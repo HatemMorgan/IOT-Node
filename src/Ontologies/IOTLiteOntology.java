@@ -22,7 +22,7 @@ public class IOTLiteOntology {
 		// get ontology defined class
 		OntClass systemClass = IOTLiteOntologyModel.getOntClass(SSN_URI
 				+ "ObservationValue");
-		System.out.println(systemClass);
+		
 		OntClass DeviceClass = IOTLiteOntologyModel.getOntClass(IOT_Lite_URI
 				+ "Device");
 		OntClass SensorClass = IOTLiteOntologyModel.getOntClass(SSN_URI

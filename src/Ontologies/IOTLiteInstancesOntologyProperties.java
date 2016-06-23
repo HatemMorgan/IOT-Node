@@ -36,17 +36,13 @@ public class IOTLiteInstancesOntologyProperties {
 		return usesApplication;
 	}
 
-	public static OntProperty  hasMetadataValue() {
-		OntProperty hasMetadataValue = IOTLiteInstancesOntologyModel
-				.createOntProperty(iotlins_URI + "hasMetadataValue");
-		return hasMetadataValue;
+	public static OntProperty  hasMetadata() {
+		OntProperty hasMetadata = IOTLiteInstancesOntologyModel
+				.createOntProperty(iotlins_URI + "hasMetadata");
+		return hasMetadata;
 	}
 
-	public static OntProperty  hasMetadataType() {
-		OntProperty hasMetadataType = IOTLiteInstancesOntologyModel
-				.createOntProperty(iotlins_URI + "hasMetadataType");
-		return hasMetadataType;
-	}
+
 
 	public static OntProperty  hasCommunicatingDevice() {
 		OntProperty hasCommunicatingDevice = IOTLiteInstancesOntologyModel
@@ -76,6 +72,12 @@ public class IOTLiteInstancesOntologyProperties {
 		OntProperty hasBandwidth = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasBandwidth");
 		return hasBandwidth;
+	}
+	
+	public static OntProperty createNewProperty(String propertyName){
+		OntProperty newProperty = IOTLiteInstancesOntologyModel
+				.createOntProperty(iotlins_URI + propertyName);
+		return newProperty;
 	}
 
 }
