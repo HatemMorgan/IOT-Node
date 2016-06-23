@@ -67,7 +67,7 @@ public class IOTLiteOntologyProperties {
 
 	public static OntProperty hasPoint() {
 		OntProperty hasPoint = IOTLiteOntologyModel
-				.createOntProperty(IOT_Lite_URI + "hasPoint");
+				.getOntProperty(IOT_Lite_URI + "hasPoint");
 		return hasPoint;
 	}
 
@@ -76,5 +76,14 @@ public class IOTLiteOntologyProperties {
 				.createOntProperty(GEO_URI + "hasLocation");
 		return hasLocation;
 	}
-
+	public static OntProperty longtitude() {
+		OntProperty longtitude = IOTLiteOntologyModel
+				.createOntProperty(GEO_URI + "long");
+		return longtitude;
+	}
+	public static OntProperty latitude() {
+		OntProperty latitude = IOTLiteOntologyModel
+				.createOntProperty(GEO_URI + "lat");
+		return latitude;
+	}
 }

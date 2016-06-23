@@ -84,5 +84,9 @@ public class IOTLiteInstancesOntologyProperties {
 		OntProperty hasType = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"hasType");
 		return hasType;
 	}
-
+	
+	public static OntProperty isConnectedTo(){
+		OntProperty isConnectedTo = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"isConnectedTo");
+		return isConnectedTo;
+	}
 }

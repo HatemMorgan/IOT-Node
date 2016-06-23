@@ -53,10 +53,12 @@ public class InsertingTriples {
 			return subSystem;
 	 }
 	 
-	 public static Individual insertDevice(Individual system , String DeviceName){
+	 public static Individual insertDevice(Individual system , String DeviceName ,Individual miniServer){
 		 OntModel model = ModelFactory.createOntologyModel();
 		 Individual newDevice = model.createIndividual(SSN_URI+DeviceName,IOTLiteOntologyClasses.device());
+		 
 		 system.addProperty(IOTLiteOntologyProperties.hasSubSystem(), newDevice);
+		 newDevice.addProperty(IOTLiteInstancesOntologyProperties.isConnectedTo(),miniServer);
 		 FusekiQueries.insertOntmodel(model);
 		 return newDevice;
 	 }
@@ -69,12 +71,34 @@ public class InsertingTriples {
 		 return newSensingDevice;
 	 }
 	 
-	 public static Individual insertCommunicatingDevice(Individual Device , String communicatingDeviceName){
+	 public static Individual insertCommunicatingDevice(Individual Device , String communicatingDeviceName,String type,String bandwidth,String networkTopology ,String frequency){
 		 OntModel model = ModelFactory.createOntologyModel();
 		 Individual newCommunicatingDevice = model.createIndividual(iotlins_URI+communicatingDeviceName,IOTInstancesOntologyClasses.communicatingDevice());
+		 
 		 Device.addProperty(IOTLiteOntologyProperties.hasSubSystem(), newCommunicatingDevice);
+		 newCommunicatingDevice.addProperty(IOTLiteInstancesOntologyProperties.hasBandwidth(),bandwidth);
+		 newCommunicatingDevice.addProperty(IOTLiteInstancesOntologyProperties.hasFrequency(), frequency);
+		 newCommunicatingDevice.addProperty(IOTLiteInstancesOntologyProperties.hasNetworkTopology(), networkTopology);
+		 newCommunicatingDevice.addProperty(IOTLiteInstancesOntologyProperties.hasType(),type);
+		 
 		 FusekiQueries.insertOntmodel(model);
 		 return newCommunicatingDevice;
+	 }
+	 
+	 public static Individual insertMiniServer(String miniServerName , Individual system,String LocationName , String longtitude,String latitude){
+		 OntModel model = ModelFactory.createOntologyModel();
+		 
+		 Individual miniServer = model.createIndividual(iotlins_URI+miniServerName,IOTInstancesOntologyClasses.miniServer());
+		 Individual locationPoint = model.createIndividual(GEO_URI+LocationName,IOTLiteOntologyClasses.point());
+		 
+		 system.addProperty(IOTLiteOntologyProperties.hasSubSystem(),miniServer);
+		 miniServer.addProperty(IOTLiteOntologyProperties.hasLocation(),locationPoint);
+		 locationPoint.addProperty(IOTLiteOntologyProperties.longtitude(),longtitude);
+		 locationPoint.addProperty(IOTLiteOntologyProperties.latitude(), latitude);
+		 
+		 FusekiQueries.insertOntmodel(model);
+		 
+		 return miniServer;
 	 }
 	 
 	 public static void insertSensor(Individual sensingDevice , String sensorName , String strUnit , String strQuantityKind,Individual communicatingDevice ,Hashtable<String,Object> metadataList){
