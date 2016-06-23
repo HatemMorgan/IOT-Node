@@ -61,6 +61,22 @@ public class InsertingTriples {
 		 return newDevice;
 	 }
 	 
+	 public static Individual insertSensingDevice(Individual device , String sensingDeviceName){
+		 OntModel model = ModelFactory.createOntologyModel();
+		 Individual newSensingDevice = model.createIndividual(SSN_URI+sensingDeviceName,IOTLiteOntologyClasses.sensingDevice());
+		 device.addProperty(IOTLiteOntologyProperties.hasSubSystem(), newSensingDevice);
+		 FusekiQueries.insertOntmodel(model);
+		 return newSensingDevice;
+	 }
+	 
+	 public static Individual insertCommunicatingDevice(Individual Device , String communicatingDeviceName){
+		 OntModel model = ModelFactory.createOntologyModel();
+		 Individual newCommunicatingDevice = model.createIndividual(iotlins_URI+communicatingDeviceName,IOTInstancesOntologyClasses.communicatingDevice());
+		 Device.addProperty(IOTLiteOntologyProperties.hasSubSystem(), newCommunicatingDevice);
+		 FusekiQueries.insertOntmodel(model);
+		 return newCommunicatingDevice;
+	 }
+	 
 	 public static void insertSensor(Individual sensingDevice , String sensorName , String strUnit , String strQuantityKind,Individual communicatingDevice ,Hashtable<String,Object> metadataList){
 		 OntModel model = ModelFactory.createOntologyModel();
 		 Individual newSensor = model.createIndividual(SSN_URI+sensorName,IOTLiteOntologyClasses.sensor());
@@ -79,6 +95,7 @@ public class InsertingTriples {
 			 Object value = metadataList.get(key);
 			 metadata.addProperty(IOTLiteInstancesOntologyProperties.createNewProperty("has"+key), value.toString());
 		 }
+		 FusekiQueries.insertOntmodel(model);
 	 }
 	 
 	

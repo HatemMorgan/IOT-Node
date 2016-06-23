@@ -28,29 +28,6 @@ public class IOTInstancesOntologyClasses {
 		return MetaData;
 	}
 
-	public static OntClass bandwidth() {
-		OntClass Bandwidth = IOTLiteInstancesOntologyModel
-				.createClass(iotlins_URI + "Bandwidth");
-		return Bandwidth;
-	}
-
-	public static OntClass networkTopology() {
-		OntClass NetworkTopology = IOTLiteInstancesOntologyModel
-				.createClass(iotlins_URI + "NetworkTopology");
-		return NetworkTopology;
-	}
-
-	public static OntClass frequency() {
-		OntClass Frequency = IOTLiteInstancesOntologyModel
-				.createClass(iotlins_URI + "CommunicatingDevice");
-		return Frequency;
-	}
-
-	public static OntClass communicationDeviceType() {
-		OntClass type = IOTLiteInstancesOntologyModel.createClass(iotlins_URI
-				+ "Type");
-		return type;
-	}
 
 	public static OntClass communicatingDevice() {
 		OntClass CommunicatingDevice = IOTLiteInstancesOntologyModel

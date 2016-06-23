@@ -79,5 +79,10 @@ public class IOTLiteInstancesOntologyProperties {
 				.createOntProperty(iotlins_URI + propertyName);
 		return newProperty;
 	}
+	
+	public static OntProperty hasType(){
+		OntProperty hasType = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"hasType");
+		return hasType;
+	}
 
 }
