@@ -8,8 +8,9 @@ import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntProperty;
 import org.apache.jena.rdf.model.ModelFactory;
-
 import org.apache.jena.rdf.model.Literal;
+
+import com.github.andrewoma.dexx.collection.ArrayList;
 
 import JenaFusekiServer.FusekiQueries;
 import Ontologies.IOTInstancesOntologyClasses;
@@ -57,7 +58,7 @@ public class InsertingTriples {
 	}
 
 	public static Individual insertDevice(Individual system, String DeviceName,
-			Individual miniServer,Individual service) {
+			Individual miniServer, Individual service) {
 		OntModel model = ModelFactory.createOntologyModel();
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
@@ -162,58 +163,119 @@ public class InsertingTriples {
 		FusekiQueries.insertOntmodel(model);
 	}
 
-	public static Individual insertService(String serviceName,String endpoint ,String interfaceDescription){
+	public static Individual insertService(String serviceName, String endpoint,
+			String interfaceDescription) {
 		OntModel model = ModelFactory.createOntologyModel();
-				
-		Individual newServiece = model.createIndividual(IOT_Lite_URI+serviceName,IOTLiteOntologyClasses.service());
-		
-		newServiece.addProperty(IOTLiteOntologyProperties.endPoint(),endpoint);
-		newServiece.addProperty(IOTLiteOntologyProperties.interfaceDescription(), interfaceDescription);
-		
+
+		Individual newServiece = model.createIndividual(IOT_Lite_URI
+				+ serviceName, IOTLiteOntologyClasses.service());
+
+		newServiece.addProperty(IOTLiteOntologyProperties.endPoint(), endpoint);
+		newServiece.addProperty(
+				IOTLiteOntologyProperties.interfaceDescription(),
+				interfaceDescription);
+
 		FusekiQueries.insertOntmodel(model);
-		
+
 		return newServiece;
-		
+
 	}
+
 	/*
 	 * add new place like a room for example
 	 */
-	public static void insertObject(String objectName , Individual Attribute ,String locationName, String longtitude , String latitude){
+	public static void insertObject(String objectName, Individual Attribute,
+			String locationName, String longtitude, String latitude) {
 		OntModel model = ModelFactory.createOntologyModel();
-	
-		Individual newObject = model.createIndividual(IOT_Lite_URI+objectName,IOTLiteOntologyClasses.object());
+
+		Individual newObject = model.createIndividual(
+				IOT_Lite_URI + objectName, IOTLiteOntologyClasses.object());
 		Individual locationPoint = model.createIndividual(GEO_URI
 				+ locationName, IOTLiteOntologyClasses.point());
-		
+
 		locationPoint.addProperty(IOTLiteOntologyProperties.longtitude(),
 				longtitude);
 		locationPoint.addProperty(IOTLiteOntologyProperties.latitude(),
 				latitude);
-		newObject.addProperty(IOTLiteOntologyProperties.hasLocation(), locationPoint);
-		newObject.addProperty(IOTLiteOntologyProperties.hasAttribute(), Attribute);
-		
+		newObject.addProperty(IOTLiteOntologyProperties.hasLocation(),
+				locationPoint);
+		newObject.addProperty(IOTLiteOntologyProperties.hasAttribute(),
+				Attribute);
+
 		FusekiQueries.insertOntmodel(model);
-		
+
 	}
-	
+
 	/*
-	 * add an attribute for an object
-	 * An attribute of an IoT object that can be exposed by an IoT service (i.e. a room (IoT Object) has a temperature 
+	 * add an attribute for an object An attribute of an IoT object that can be
+	 * exposed by an IoT service (i.e. a room (IoT Object) has a temperature
 	 * (Attribute), that can be exposed by a temperature sensor (IoT device)
 	 */
-	
-	public static Individual addAttribute(String attributeName,	Individual device , String quanityKind ){
+
+	public static Individual insertAttribute(String attributeName,
+			Individual device, String quanityKind) {
 		OntModel model = ModelFactory.createOntologyModel();
-		
-		Individual newAttrubute = model.createIndividual(IOT_Lite_URI+attributeName,IOTLiteOntologyClasses.attribute());
-		
-		newAttrubute.addProperty(IOTLiteOntologyProperties.isAssociatedWith(),device);
+
+		Individual newAttrubute = model.createIndividual(IOT_Lite_URI
+				+ attributeName, IOTLiteOntologyClasses.attribute());
+
+		newAttrubute.addProperty(IOTLiteOntologyProperties.isAssociatedWith(),
+				device);
 		newAttrubute.addProperty(IOTLiteOntologyProperties.hasQuantityKind(),
 				QU_URI + quanityKind);
-		
+
 		FusekiQueries.insertOntmodel(model);
-		
+
 		return newAttrubute;
 	}
-	
+
+	public static void insertSensorOutputData(String SensorOutputdata,
+			Individual Sensor, String strValue, String DateTime) {
+		OntModel model = ModelFactory.createOntologyModel();
+
+		Individual newSensorOutput = model.createIndividual(SSN_URI
+				+ SensorOutputdata, SSNOntologyClasses.sensorOutput());
+		Individual value = model.createIndividual(SSN_URI + strValue,
+				SSNOntologyClasses.observationValue());
+
+		newSensorOutput.addProperty(SSNOntologyProperties.isProducedBy(),
+				Sensor);
+		newSensorOutput.addProperty(SSNOntologyProperties.hasValue(), value);
+		newSensorOutput.addProperty(
+				SSNOntologyProperties.observationResultTime(), DateTime);
+
+		FusekiQueries.insertOntmodel(model);
+
+	}
+
+	public static void insertCoverage(String coverageAreaName,
+			Individual device, String coverageType , ArrayList<Individual> Points) throws Exception {
+		OntModel model = ModelFactory.createOntologyModel();
+
+		Individual newCoverage;
+		switch (coverageType) {
+		case "Circle":
+			newCoverage = model.createIndividual(IOT_Lite_URI + coverageType,
+					IOTLiteOntologyClasses.circle());
+
+			break;
+		case "Rectangle":
+			newCoverage = model.createIndividual(IOT_Lite_URI + coverageType,
+					IOTLiteOntologyClasses.rectangle());
+
+			break;
+		case "Polygon":
+			model.createIndividual(IOT_Lite_URI + coverageType,
+					IOTLiteOntologyClasses.polygon());
+		default:
+			throw new Exception("no coverage type equal to " + coverageType);
+
+		}
+		for (Individual point : Points) {
+			newCoverage.addProperty(IOTLiteOntologyProperties.hasPoint(),point);
+		}
+		
+		device.addProperty(IOTLiteOntologyProperties.hasc,)
+		
+	}
 }

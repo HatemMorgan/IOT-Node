@@ -86,4 +86,11 @@ public class IOTLiteOntologyProperties {
 				.createOntProperty(GEO_URI + "lat");
 		return latitude;
 	}
+	
+	public static OntProperty hasCoverage(){
+		OntProperty hasCoverage = IOTLiteOntologyModel.getOntProperty(IOT_Lite_URI+"hasCoverage");
+		return hasCoverage;
+	}
+
 }
+
