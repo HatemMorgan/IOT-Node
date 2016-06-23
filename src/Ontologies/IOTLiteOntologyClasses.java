@@ -12,7 +12,29 @@ public class IOTLiteOntologyClasses {
 	private static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
 	private static final OntModel IOTLiteOntologyModel = OntologyMain
 			.getIOTLiteOntModel();
-
+	private static final String SSN_URI = "http://purl.oclc.org/NET/ssnx/ssn#";
+	
+	public static OntClass system(){
+		OntClass system = IOTLiteOntologyModel.getOntClass(SSN_URI+"System");
+		return system;
+	}
+	
+	public static OntClass device(){
+		OntClass Device = IOTLiteOntologyModel.getOntClass(SSN_URI+"Device");
+		return Device;
+	}
+	
+	public static OntClass sensingDevice(){
+		OntClass SensingDevice = IOTLiteOntologyModel.getOntClass(SSN_URI+"SensingDevice");
+		return SensingDevice;
+	}
+	
+	public static OntClass sensor(){
+		OntClass Sensor = IOTLiteOntologyModel.getOntClass(SSN_URI+"Sensor");
+		return Sensor;
+	}
+	
+	
 	public static OntClass object() {
 		OntClass Object = IOTLiteOntologyModel.getOntClass(IOT_Lite_URI
 				+ "Object");

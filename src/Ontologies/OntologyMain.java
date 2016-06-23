@@ -14,6 +14,16 @@ public class OntologyMain {
 	private static OntModel FOAFOntModel;
 	private static OntModel IotLiteOntModel;
 	private static OntModel SSNOntModel;
+	private static OntModel IOTLiteInstancesOntologyModel ;
+	
+	
+	public static OntModel getIOTLiteInstancesOntModel(){
+		if(IOTLiteInstancesOntologyModel == null)
+			IOTLiteInstancesOntologyModel = ModelFactory.createOntologyModel();
+		
+		return IOTLiteInstancesOntologyModel;
+	}
+	
 	
 	public static OntModel getSSNOntModel(){
 		if(SSNOntModel == null)

@@ -12,25 +12,7 @@ public class SSNOntologyClasses {
 	private static final OntModel SSNOntologyModel = OntologyMain.getSSNOntModel();
 
 	
-	public static OntClass system(){
-		OntClass system = SSNOntologyModel.getOntClass(SSN_URI+"System");
-		return system;
-	}
-	
-	public static OntClass device(){
-		OntClass Device = SSNOntologyModel.getOntClass(SSN_URI+"Device");
-		return Device;
-	}
-	
-	public static OntClass sensingDevice(){
-		OntClass SensingDevice = SSNOntologyModel.getOntClass(SSN_URI+"SensingDevice");
-		return SensingDevice;
-	}
-	
-	public static OntClass sensor(){
-		OntClass Sensor = SSNOntologyModel.getOntClass(SSN_URI+"Sensor");
-		return Sensor;
-	}
+
 	
 	public static OntClass sensorOutput(){
 		OntClass SensorOutput = SSNOntologyModel.getOntClass(SSN_URI+"SensorOutput");
