@@ -50,11 +50,7 @@ public class IOTLiteInstancesOntologyProperties {
 		return hasCommunicatingDevice;
 	}
 
-	public static OntProperty  hasCommunicatingDeviceType() {
-		OntProperty hasCommunicatingDeviceType = IOTLiteInstancesOntologyModel
-				.createOntProperty(iotlins_URI + "HasCommunicatingDeviceType");
-		return hasCommunicatingDeviceType;
-	}
+
 
 	public static OntProperty  hasFrequency() {
 		OntProperty hasFrequency = IOTLiteInstancesOntologyModel
@@ -88,5 +84,19 @@ public class IOTLiteInstancesOntologyProperties {
 	public static OntProperty isConnectedTo(){
 		OntProperty isConnectedTo = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"isConnectedTo");
 		return isConnectedTo;
+	}
+	
+	public static OntProperty email(){
+		OntProperty email = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"email");
+		return email;
+	}
+	
+   public static OntProperty hasRole(){
+	   OntProperty hasRole = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"hasRole");
+	   return hasRole;
+   }
+   public static OntProperty hasTransmitPower(){
+	   OntProperty hasTransmitPower = IOTLiteInstancesOntologyModel.createOntProperty(iotlins_URI+"hasTransmitPower");
+		return hasTransmitPower;
 	}
 }

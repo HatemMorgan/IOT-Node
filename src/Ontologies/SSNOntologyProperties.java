@@ -28,4 +28,11 @@ public class SSNOntologyProperties {
 		return observationResultTime;
 	}
 	
+	public static OntProperty onPlatform(){
+		OntProperty onPlatform = SSNOntologyModel.getOntProperty(SSN_URI+"onPlatform");
+		return onPlatform;
+	}
+	
+	
+	
 }

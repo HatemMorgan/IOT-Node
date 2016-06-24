@@ -35,5 +35,6 @@ public class FOAFOntologyProperties {
 		return gender;
 	}
 
+
 	
 }

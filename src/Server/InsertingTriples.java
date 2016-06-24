@@ -64,11 +64,12 @@ public class InsertingTriples {
 		OntModel model = ModelFactory.createOntologyModel();
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
-
-		system.addProperty(IOTLiteOntologyProperties.hasSubSystem(), newDevice);
 		newDevice.addProperty(
 				IOTLiteInstancesOntologyProperties.isConnectedTo(), miniServer);
 		newDevice.addProperty(IOTLiteOntologyProperties.exposedBy(), service);
+
+		insertSystemDeviceRelation(system, newDevice);
+
 		FusekiQueries.insertOntmodel(model);
 		return newDevice;
 	}
@@ -86,7 +87,7 @@ public class InsertingTriples {
 
 	public static Individual insertCommunicatingDevice(Individual Device,
 			String communicatingDeviceName, String type, String bandwidth,
-			String networkTopology, String frequency) {
+			String networkTopology, String frequency, String transmitPower) {
 		OntModel model = ModelFactory.createOntologyModel();
 		Individual newCommunicatingDevice = model.createIndividual(iotlins_URI
 				+ communicatingDeviceName,
@@ -103,6 +104,10 @@ public class InsertingTriples {
 				networkTopology);
 		newCommunicatingDevice.addProperty(
 				IOTLiteInstancesOntologyProperties.hasType(), type);
+
+		newCommunicatingDevice.addProperty(
+				IOTLiteInstancesOntologyProperties.hasTransmitPower(),
+				transmitPower);
 
 		FusekiQueries.insertOntmodel(model);
 		return newCommunicatingDevice;
@@ -251,7 +256,8 @@ public class InsertingTriples {
 	}
 
 	public static void insertCoverage(String coverageAreaName,
-			Individual device, String coverageType , ArrayList<Individual> Points) throws Exception {
+			Individual device, String coverageType, ArrayList<Individual> Points)
+			throws Exception {
 		OntModel model = ModelFactory.createOntologyModel();
 
 		Individual newCoverage;
@@ -274,56 +280,104 @@ public class InsertingTriples {
 
 		}
 		for (Individual point : Points) {
-			newCoverage.addProperty(IOTLiteOntologyProperties.hasPoint(),point);
+			newCoverage
+					.addProperty(IOTLiteOntologyProperties.hasPoint(), point);
 		}
-		
-		device.addProperty(IOTLiteOntologyProperties.hasCoverage(),newCoverage);
-		
+
+		device.addProperty(IOTLiteOntologyProperties.hasCoverage(), newCoverage);
+
 		FusekiQueries.insertOntmodel(model);
-		
+
 	}
-	
-	public static Individual createPoint ( String pointName ,String longtitude , String latitude){
+
+	public static Individual createPoint(String pointName, String longtitude,
+			String latitude) {
 		OntModel model = ModelFactory.createOntologyModel();
-		
-		Individual newPoint = model.createIndividual(GEO_URI+pointName,IOTLiteOntologyClasses.point());
-		
+
+		Individual newPoint = model.createIndividual(GEO_URI + pointName,
+				IOTLiteOntologyClasses.point());
+
 		newPoint.addProperty(IOTLiteOntologyProperties.longtitude(), longtitude);
 		newPoint.addProperty(IOTLiteOntologyProperties.latitude(), latitude);
-		
+
 		return newPoint;
 	}
-	
-	
-	public static Individual insertApplication(String applicationName,String applicationDescription,Individual System){
+
+	public static Individual insertApplication(String applicationName,
+			String applicationDescription, Individual system) {
 		OntModel model = ModelFactory.createOntologyModel();
-		
-		Individual newApplication = model.createIndividual(iotlins_URI+applicationName,IOTInstancesOntologyClasses.application());
-		
-		newApplication.addProperty(IOTLiteInstancesOntologyProperties.hasApplicationName(),applicationName);
-		newApplication.addProperty(IOTLiteInstancesOntologyProperties.hasApplicationDescription(),applicationDescription);
-		newApplication.addProperty(IOTLiteInstancesOntologyProperties.usesSystemProperty(),System);
-		
+
+		Individual newApplication = model.createIndividual(iotlins_URI
+				+ applicationName, IOTInstancesOntologyClasses.application());
+
+		newApplication.addProperty(
+				IOTLiteInstancesOntologyProperties.hasApplicationName(),
+				applicationName);
+		newApplication.addProperty(
+				IOTLiteInstancesOntologyProperties.hasApplicationDescription(),
+				applicationDescription);
+
+		insertApplicationSystemRelation(newApplication, system);
+
 		FusekiQueries.insertOntmodel(model);
-		
+
 		return newApplication;
 	}
-	
-	
-	public static void insertPerson(String personName , String firstName , String lastName , String gender , String Birthday , Individual application){
-		
+
+	public static void insertPerson(String personName, String firstName,
+			String lastName, String gender, String Birthday,
+			Individual application, String email, String role) {
+
 		OntModel model = ModelFactory.createOntologyModel();
-		
-		Individual newPerson = model.createIndividual(FOAF_URI+personName,FOAFOntologyClasses.PersonClass());
-		
-		newPerson.addProperty(FOAFOntologyProperties.firstName(),firstName);
+
+		Individual newPerson = model.createIndividual(FOAF_URI + personName,
+				FOAFOntologyClasses.PersonClass());
+
+		newPerson.addProperty(FOAFOntologyProperties.firstName(), firstName);
 		newPerson.addProperty(FOAFOntologyProperties.lastName(), lastName);
 		newPerson.addProperty(FOAFOntologyProperties.gender(), gender);
 		newPerson.addProperty(FOAFOntologyProperties.birthday(), Birthday);
-		newPerson.addProperty(IOTLiteInstancesOntologyProperties.usesApplication(), application);
-		
+		newPerson
+				.addProperty(IOTLiteInstancesOntologyProperties.email(), email);
+		newPerson.addProperty(IOTLiteInstancesOntologyProperties.hasRole(),
+				role);
+
+		insertPersonApplicationRelation(newPerson, application);
+
 		FusekiQueries.insertOntmodel(model);
-		
+
 	}
-	
+
+	public static void insertPersonApplicationRelation(Individual Person,
+			Individual Application) {
+
+		FusekiQueries
+				.insertNewTriple(Person.toString(),
+						IOTLiteInstancesOntologyProperties.usesApplication()
+								.toString(), Application.toString(), null);
+
+	}
+
+	public static void insertApplicationSystemRelation(Individual application,
+			Individual system) {
+		FusekiQueries
+				.insertNewTriple(application.toString(),
+						IOTLiteInstancesOntologyProperties.usesApplication()
+								.toString(), system.toString(), null);
+	}
+
+	public static void insertSystemDeviceRelation(Individual system,
+			Individual device) {
+		FusekiQueries.insertNewTriple(system.toString(),
+				IOTLiteOntologyProperties.hasSubSystem().toString(),
+				device.toString(), null);
+	}
+
+	public static void insertDeviceServiceRelation(Individual device,
+			Individual service) {
+		FusekiQueries.insertNewTriple(device.toString(),
+				IOTLiteOntologyProperties.exposedBy().toString(),
+				service.toString(), null);
+	}
+
 }
