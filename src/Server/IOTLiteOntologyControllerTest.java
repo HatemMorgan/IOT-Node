@@ -20,7 +20,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 import JenaFusekiServer.FusekiQueries;
 import Ontologies.IOTLiteOntology;
 
-public class IOTLiteOntologyController {
+public class IOTLiteOntologyControllerTest {
 	public static void insertNewSystem() {
 		OntModel IOTLiteOntologyModel = IOTLiteOntology.createSystem();
 		ExtendedIterator<Individual> individuals = IOTLiteOntologyModel
@@ -61,7 +61,7 @@ public class IOTLiteOntologyController {
 	}
 
 	public static void main(String[] args) {
-//	  FusekiQueries.deleteAllTriples();
+  FusekiQueries.deleteAllTriples();
 //	  insertNewSystem();
 //	  FusekiQueries.SelectAllTriples();
 		
@@ -126,7 +126,7 @@ public class IOTLiteOntologyController {
 					+"    ?sensor ?hasSensingDevice ?a"
 					  	
 					+"}";	
-	  FusekiQueries.SelectTriplesByConditions(q2);
+	//  FusekiQueries.SelectTriplesByConditions(q2);
 		
 		// get the number of sensors used in the system
 		String q3 = "PREFIX iot-lite: <http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"

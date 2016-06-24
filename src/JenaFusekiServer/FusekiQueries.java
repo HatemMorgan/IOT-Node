@@ -24,12 +24,13 @@ import Ontologies.IOTLiteOntology;
 public class FusekiQueries {
 
 	public static void insertOntmodel(OntModel model) {
-
+		
 		ExtendedIterator<Individual> individuals = model
 				.listIndividuals();
 
 		// Iterates trough the list
 		while (individuals.hasNext()) {
+			
 			Individual individual = individuals.next();
 			// Retrieves the URI - identifier of the individual
 			String label = individual.getURI();
@@ -39,6 +40,7 @@ public class FusekiQueries {
 
 			StmtIterator itr = individual.listProperties();
 			while (itr.hasNext()) {
+				
 				Statement statment = itr.nextStatement();
 				Resource subject = statment.getSubject();
 				Property property = statment.getPredicate();
@@ -47,7 +49,7 @@ public class FusekiQueries {
 				RDFNode Object = statment.getObject();
 				//System.out.println(subject +" "+property+" "+Object);
 				if(Object.isLiteral()){
-					System.out.println("here "+Object.asLiteral());
+					//System.out.println("here "+Object.asLiteral());
 					FusekiQueries.insertNewTriple(subject.toString(),
 							property.toString(),null ,Object.toString());
 				}else{
@@ -74,7 +76,8 @@ public class FusekiQueries {
 		}else{
 			if(literal == null){
 				 queryString = 	"INSERT DATA"
-						+ "{ <"+subject +"> <"+Property+"> <"+Object  +"> .}"	;	
+						+ "{ <"+subject +"> <"+Property+"> <"+Object+"> .}"	;	
+				// System.out.println(queryString);	 
 			}
 		}
 		

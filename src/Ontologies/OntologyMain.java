@@ -54,7 +54,7 @@ public class OntologyMain {
 		s.setDocumentManager(mgr);
 		Model m = ModelFactory.createDefaultModel();
 		InputStream in = FileManager.get().open(path);
-
+		
 		if (in == null) {
 			throw new IllegalArgumentException("File: " + path + " not found");
 		}

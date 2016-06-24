@@ -5,8 +5,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Literal;
 
@@ -32,36 +35,38 @@ public class InsertingTriples {
 	private static final String SSN_URI = "http://purl.oclc.org/NET/ssnx/ssn#";
 	private static final String FOAF_URI = "http://xmlns.com/foaf/0.1/";
 
-	// private static final OntModel FOAFOntologyModel =
-	// OntologyMain.getFOAFOntModel();
-	// private static final OntModel IOTLiteInstancesOntologyModel =
-	// OntologyMain.getIOTLiteInstancesOntModel();
-	// private static final OntModel IOTLiteOntologyModel =
-	// OntologyMain.getIOTLiteOntModel();
-	// private static final OntModel SSNOntologyModel =
-	// OntologyMain.getSSNOntModel();
+//	 private static final OntModel FOAFOntologyModel =
+//	 OntologyMain.getFOAFOntModel();
+//	 private static final OntModel IOTLiteInstancesOntologyModel =
+//	 OntologyMain.getIOTLiteInstancesOntModel();
+	 private static final OntModel model =
+	 OntologyMain.getIOTLiteOntModel();
+//	 private static final OntModel SSNOntologyModel =
+//	 OntologyMain.getSSNOntModel();
 
-	public static Individual insertSystem(String SystemName, String[] subSystems) {
-		OntModel model = ModelFactory.createOntologyModel();
+	public static Individual insertSystem(String SystemName) {
+
 		Individual newSystem = model.createIndividual(SSN_URI + SystemName,
 				IOTLiteOntologyClasses.system());
+	
 		FusekiQueries.insertOntmodel(model);
 		return newSystem;
 	}
 
 	public static Individual insertSubSystem(Individual system,
 			String subSystemName) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 		Individual subSystem = model.createIndividual(SSN_URI + subSystemName,
 				IOTLiteOntologyClasses.system());
 		system.addProperty(IOTLiteOntologyProperties.hasSubSystem(), subSystem);
+	
 		FusekiQueries.insertOntmodel(model);
 		return subSystem;
 	}
 
 	public static Individual insertDevice(Individual system, String DeviceName,
 			Individual miniServer, Individual service) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
 		newDevice.addProperty(
@@ -76,7 +81,7 @@ public class InsertingTriples {
 
 	public static Individual insertSensingDevice(Individual device,
 			String sensingDeviceName) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 		Individual newSensingDevice = model.createIndividual(SSN_URI
 				+ sensingDeviceName, IOTLiteOntologyClasses.sensingDevice());
 		device.addProperty(IOTLiteOntologyProperties.hasSubSystem(),
@@ -88,7 +93,7 @@ public class InsertingTriples {
 	public static Individual insertCommunicatingDevice(Individual Device,
 			String communicatingDeviceName, String type, String bandwidth,
 			String networkTopology, String frequency, String transmitPower) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 		Individual newCommunicatingDevice = model.createIndividual(iotlins_URI
 				+ communicatingDeviceName,
 				IOTInstancesOntologyClasses.communicatingDevice());
@@ -116,7 +121,7 @@ public class InsertingTriples {
 	public static Individual insertMiniServer(String miniServerName,
 			Individual system, String LocationName, String longtitude,
 			String latitude) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual miniServer = model.createIndividual(iotlins_URI
 				+ miniServerName, IOTInstancesOntologyClasses.miniServer());
@@ -140,11 +145,10 @@ public class InsertingTriples {
 			String sensorName, String strUnit, String strQuantityKind,
 			Individual communicatingDevice,
 			Hashtable<String, Object> metadataList) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 		Individual newSensor = model.createIndividual(SSN_URI + sensorName,
 				IOTLiteOntologyClasses.sensor());
-		Individual metadata = model.createIndividual(iotlins_URI + sensorName
-				+ "Metadata", IOTInstancesOntologyClasses.metaData());
+	
 
 		sensingDevice.addProperty(IOTLiteOntologyProperties.hasSensingDevice(),
 				newSensor);
@@ -155,6 +159,11 @@ public class InsertingTriples {
 		newSensor.addProperty(
 				IOTLiteInstancesOntologyProperties.hasCommunicatingDevice(),
 				communicatingDevice);
+		
+		if(metadataList != null){
+		
+		Individual metadata = model.createIndividual(iotlins_URI + sensorName
+				+ "'s_Metadata", IOTInstancesOntologyClasses.metaData());
 		newSensor.addProperty(IOTLiteInstancesOntologyProperties.hasMetadata(),
 				metadata);
 
@@ -167,12 +176,13 @@ public class InsertingTriples {
 					IOTLiteInstancesOntologyProperties.createNewProperty("has"
 							+ key), value.toString());
 		}
+		}
 		FusekiQueries.insertOntmodel(model);
 	}
 
 	public static Individual insertService(String serviceName, String endpoint,
 			String interfaceDescription) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newServiece = model.createIndividual(IOT_Lite_URI
 				+ serviceName, IOTLiteOntologyClasses.service());
@@ -193,7 +203,7 @@ public class InsertingTriples {
 	 */
 	public static void insertObject(String objectName, Individual Attribute,
 			String locationName, String longtitude, String latitude) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newObject = model.createIndividual(
 				IOT_Lite_URI + objectName, IOTLiteOntologyClasses.object());
@@ -221,7 +231,7 @@ public class InsertingTriples {
 
 	public static Individual insertAttribute(String attributeName,
 			Individual device, String quanityKind) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newAttrubute = model.createIndividual(IOT_Lite_URI
 				+ attributeName, IOTLiteOntologyClasses.attribute());
@@ -238,7 +248,7 @@ public class InsertingTriples {
 
 	public static void insertSensorOutputData(String SensorOutputdata,
 			Individual Sensor, String strValue, String DateTime) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newSensorOutput = model.createIndividual(SSN_URI
 				+ SensorOutputdata, SSNOntologyClasses.sensorOutput());
@@ -258,7 +268,7 @@ public class InsertingTriples {
 	public static void insertCoverage(String coverageAreaName,
 			Individual device, String coverageType, ArrayList<Individual> Points)
 			throws Exception {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newCoverage;
 		switch (coverageType) {
@@ -292,7 +302,7 @@ public class InsertingTriples {
 
 	public static Individual createPoint(String pointName, String longtitude,
 			String latitude) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newPoint = model.createIndividual(GEO_URI + pointName,
 				IOTLiteOntologyClasses.point());
@@ -305,7 +315,7 @@ public class InsertingTriples {
 
 	public static Individual insertApplication(String applicationName,
 			String applicationDescription, Individual system) {
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newApplication = model.createIndividual(iotlins_URI
 				+ applicationName, IOTInstancesOntologyClasses.application());
@@ -328,7 +338,7 @@ public class InsertingTriples {
 			String lastName, String gender, String Birthday,
 			Individual application, String email, String role) {
 
-		OntModel model = ModelFactory.createOntologyModel();
+		 
 
 		Individual newPerson = model.createIndividual(FOAF_URI + personName,
 				FOAFOntologyClasses.PersonClass());
