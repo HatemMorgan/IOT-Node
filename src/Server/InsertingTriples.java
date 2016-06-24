@@ -13,6 +13,8 @@ import org.apache.jena.rdf.model.Literal;
 import com.github.andrewoma.dexx.collection.ArrayList;
 
 import JenaFusekiServer.FusekiQueries;
+import Ontologies.FOAFOntologyClasses;
+import Ontologies.FOAFOntologyProperties;
 import Ontologies.IOTInstancesOntologyClasses;
 import Ontologies.IOTLiteInstancesOntologyProperties;
 import Ontologies.IOTLiteOntologyClasses;
@@ -275,7 +277,53 @@ public class InsertingTriples {
 			newCoverage.addProperty(IOTLiteOntologyProperties.hasPoint(),point);
 		}
 		
-		device.addProperty(IOTLiteOntologyProperties.hasc,)
+		device.addProperty(IOTLiteOntologyProperties.hasCoverage(),newCoverage);
+		
+		FusekiQueries.insertOntmodel(model);
 		
 	}
+	
+	public static Individual createPoint ( String pointName ,String longtitude , String latitude){
+		OntModel model = ModelFactory.createOntologyModel();
+		
+		Individual newPoint = model.createIndividual(GEO_URI+pointName,IOTLiteOntologyClasses.point());
+		
+		newPoint.addProperty(IOTLiteOntologyProperties.longtitude(), longtitude);
+		newPoint.addProperty(IOTLiteOntologyProperties.latitude(), latitude);
+		
+		return newPoint;
+	}
+	
+	
+	public static Individual insertApplication(String applicationName,String applicationDescription,Individual System){
+		OntModel model = ModelFactory.createOntologyModel();
+		
+		Individual newApplication = model.createIndividual(iotlins_URI+applicationName,IOTInstancesOntologyClasses.application());
+		
+		newApplication.addProperty(IOTLiteInstancesOntologyProperties.hasApplicationName(),applicationName);
+		newApplication.addProperty(IOTLiteInstancesOntologyProperties.hasApplicationDescription(),applicationDescription);
+		newApplication.addProperty(IOTLiteInstancesOntologyProperties.usesSystemProperty(),System);
+		
+		FusekiQueries.insertOntmodel(model);
+		
+		return newApplication;
+	}
+	
+	
+	public static void insertPerson(String personName , String firstName , String lastName , String gender , String Birthday , Individual application){
+		
+		OntModel model = ModelFactory.createOntologyModel();
+		
+		Individual newPerson = model.createIndividual(FOAF_URI+personName,FOAFOntologyClasses.PersonClass());
+		
+		newPerson.addProperty(FOAFOntologyProperties.firstName(),firstName);
+		newPerson.addProperty(FOAFOntologyProperties.lastName(), lastName);
+		newPerson.addProperty(FOAFOntologyProperties.gender(), gender);
+		newPerson.addProperty(FOAFOntologyProperties.birthday(), Birthday);
+		newPerson.addProperty(IOTLiteInstancesOntologyProperties.usesApplication(), application);
+		
+		FusekiQueries.insertOntmodel(model);
+		
+	}
+	
 }

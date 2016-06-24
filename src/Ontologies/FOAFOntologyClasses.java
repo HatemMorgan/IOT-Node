@@ -17,5 +17,7 @@ public class FOAFOntologyClasses {
 		OntClass Person = FOAFOntologyModel.getOntClass(FOAF_URI + "Person");
 		return Person;
 	}
-
+  public static void main(String[] args) {
+	System.out.println(PersonClass());
+}
 }
