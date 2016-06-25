@@ -45,29 +45,34 @@ public class InsertingTriples {
 	// private static final OntModel SSNOntologyModel =
 	// OntologyMain.getSSNOntModel();
 
-	public static Individual insertSystem(String SystemName,
-			Individual miniServer) {
+	public static Individual insertSystem(String SystemName) {
 
 		Individual newSystem = model.createIndividual(SSN_URI + SystemName,
 				IOTLiteOntologyClasses.system());
-
-		newSystem.addProperty(IOTLiteOntologyProperties.hasSubSystem(),
-				miniServer);
 
 		FusekiGraphs.insertIntoSystemsGraph(model);
 		return newSystem;
 	}
 
-	public static Individual insertSubSystem(Individual system,
-			String subSystemName) {
+	/*
+	 * A sytem can has many subSystems (many-to-many relationship)
+	 */
 
-		Individual subSystem = model.createIndividual(SSN_URI + subSystemName,
-				IOTLiteOntologyClasses.system());
-		system.addProperty(IOTLiteOntologyProperties.hasSubSystem(), subSystem);
+	public static void insertSubSystem(Individual system, Individual subSystem) {
 
-		FusekiGraphs.insertIntoSystemHasSubSystemGraph(model);
-		return subSystem;
+		FusekiGraphs.insertIntoSystemHasSubSystemGraph(system.toString(),
+				IOTLiteOntologyProperties.hasSubSystem().toString(),
+				subSystem.toString(), null);
+
 	}
+
+	/*
+	 * A system can has many Devices (One-to-many relationship) An attribute of
+	 * an object can has many Devices (one-to-many relationship) A device has
+	 * subsystem communicatingDevice and SensingDevice (one-to-one relationship)
+	 * A service can has many devices (many-to-many relationship) A MiniServer
+	 * can has many devices connecting to it (one-to-many relationship)
+	 */
 
 	public static Individual insertDevice(String DeviceName, Individual system,
 			Individual miniServer, Individual service,
@@ -130,8 +135,13 @@ public class InsertingTriples {
 		return newCommunicatingDevice;
 	}
 
+	/*
+	 * A system can has many MiniServers (one-to-many relationship)
+	 */
+
 	public static Individual insertMiniServer(String miniServerName,
-			String LocationName, String longtitude, String latitude) {
+			String LocationName, String longtitude, String latitude,
+			Individual system) {
 
 		Individual miniServer = model.createIndividual(iotlins_URI
 				+ miniServerName, IOTInstancesOntologyClasses.miniServer());
@@ -145,10 +155,18 @@ public class InsertingTriples {
 		locationPoint.addProperty(IOTLiteOntologyProperties.latitude(),
 				latitude);
 
+		system.addProperty(IOTLiteOntologyProperties.hasSubSystem(), miniServer);
+
 		FusekiGraphs.insertIntoMiniServersGraph(model);
 
 		return miniServer;
 	}
+
+	/*
+	 * A sensingDevice can have many sensors (one-to-many relationships) A
+	 * sensor must have communicatingDevice (one-to-one relationship) A sensor
+	 * may have metadata
+	 */
 
 	public static Individual insertSensor(Individual sensingDevice,
 			String sensorName, String strUnit, String strQuantityKind,
@@ -209,7 +227,7 @@ public class InsertingTriples {
 	/*
 	 * add new place like a room for example
 	 */
-	public static void insertObject(String objectName, Individual Attribute,
+	public static Individual insertObject(String objectName,
 			String locationName, String longtitude, String latitude) {
 
 		Individual newObject = model.createIndividual(
@@ -223,31 +241,38 @@ public class InsertingTriples {
 				latitude);
 		newObject.addProperty(IOTLiteOntologyProperties.hasLocation(),
 				locationPoint);
-		newObject.addProperty(IOTLiteOntologyProperties.hasAttribute(),
-				Attribute);
 
 		FusekiGraphs.insertIntoObjectsGraph(model);
+		return newObject;
 	}
 
 	/*
 	 * add an attribute for an object An attribute of an IoT object that can be
 	 * exposed by an IoT service (i.e. a room (IoT Object) has a temperature
-	 * (Attribute), that can be exposed by a temperature sensor (IoT device)
+	 * (Attribute), that can be exposed by a temperature sensor (IoT device) .
+	 * 
+	 * An Object(ex:room) can have many attributes (one-to-one relationship)
 	 */
 
 	public static Individual insertAttribute(String attributeName,
-			String quanityKind) {
+			String quanityKind, Individual object) {
 
 		Individual newAttrubute = model.createIndividual(IOT_Lite_URI
 				+ attributeName, IOTLiteOntologyClasses.attribute());
 
 		newAttrubute.addProperty(IOTLiteOntologyProperties.hasQuantityKind(),
 				QU_URI + quanityKind);
+		object.addProperty(IOTLiteOntologyProperties.hasAttribute(),
+				newAttrubute);
 
 		FusekiGraphs.insertIntoObjectsGraph(model);
 
 		return newAttrubute;
 	}
+
+	/*
+	 * A sensor can have many outputs (one-to-many relationship)
+	 */
 
 	public static void insertSensorOutputData(String SensorOutputdata,
 			Individual Sensor, String strValue, String DateTime) {
@@ -271,6 +296,7 @@ public class InsertingTriples {
 	 * coverage will be inserted into device graph because each device will have
 	 * its sensingDevice that is composed of sensors and communicating device to
 	 * coverage will be represented as device has coverage Coverage property
+	 * (one-to-one relationship)
 	 */
 
 	public static void insertCoverage(String coverageAreaName,
@@ -337,7 +363,7 @@ public class InsertingTriples {
 		return newApplication;
 	}
 
-	public static void insertPerson(String personName, String firstName,
+	public static Individual insertPerson(String personName, String firstName,
 			String lastName, String gender, String Birthday, String email,
 			String role) {
 
@@ -355,7 +381,13 @@ public class InsertingTriples {
 
 		FusekiGraphs.insertIntoPersonsGraph(model);
 
+		return newPerson;
 	}
+
+	/*
+	 * A person can use many applications and an application can be used by many
+	 * persons (Many-to-Many relationship)
+	 */
 
 	public static void insertPersonApplicationRelation(Individual Person,
 			Individual Application) {
@@ -367,12 +399,22 @@ public class InsertingTriples {
 
 	}
 
+	/*
+	 * An application can use many systems and a system can be used by many
+	 * Systems (Many-to-Many relationship)
+	 */
+
 	public static void insertApplicationSystemRelation(Individual application,
 			Individual system) {
 		FusekiGraphs.insertIntoApplicationUsesSystemGraph(application
 				.toString(), IOTLiteInstancesOntologyProperties
 				.usesApplication().toString(), system.toString(), null);
 	}
+
+	/*
+	 * A device can be exposed by many IOT services and a service can expose
+	 * many devices
+	 */
 
 	public static void insertDeviceServiceRelation(Individual device,
 			Individual service) {

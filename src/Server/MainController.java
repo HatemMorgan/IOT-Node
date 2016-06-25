@@ -11,20 +11,33 @@ public class MainController {
   public static void main(String[] args) {
 	  
 	// inseting system and its subSystems  
-	Individual newSystem = InsertingTriples.insertSystem("GUC");
-	Individual subSystem = InsertingTriples.insertSubSystem(newSystem, "CBuilding");
+	Individual GUC = InsertingTriples.insertSystem("GUC");	
+	Individual CBuilding = InsertingTriples.insertSystem("CBuilding");
+	
+	//insert subsystem of a system
+	InsertingTriples.insertSubSystem(GUC, CBuilding);
 	
 	// Inserting miniServer	
-	Individual miniServer =InsertingTriples.insertMiniServer("C_Ground_miniserver", subSystem,"C2", "-0.12", "50.01");
+	Individual miniServer =InsertingTriples.insertMiniServer("C_Ground_miniserver","C2", "-0.12", "50.01",CBuilding);
 	
 	// inserting IOT service that is provided by  IOT devices 
 	Individual service = InsertingTriples.insertService("HealthChecker", "http://surrey.ac.uk/sensors/measures/C1_Cafeteria","http://surrey.ac.uk/sensors/measures/C1_Cafeteria");
 
+
+	// inserting Objects that contains the Devices like a room or building
+	Individual C1_Cafeteria = InsertingTriples.insertObject("C1_Cafeteria","C1", "-0.12", "50.01");
     
+	// inserting attribute of the object like measuring tempreture for example
+	Individual attribute = InsertingTriples.insertAttribute("Tempreture_and_Humidity", "Tempreture_and_Humidity",C1_Cafeteria);
+	
 	// inserting Device 
-	Individual device = InsertingTriples.insertDevice(subSystem, "TempHumBLE", miniServer, service);
-	Individual communicatingDevice = InsertingTriples.insertCommunicatingDevice(device,"Bluetooth_Low_Energy_001","Bluetooth Low Energy (BLE)", "10 bits/second","Star_NetworkTopology", "1024 HZ", "100 Watt");
-	Individual sensingDevice = InsertingTriples.insertSensingDevice(device, "TempretureHumidityModule");
+	Individual communicatingDevice = InsertingTriples.insertCommunicatingDevice("Bluetooth_Low_Energy_001","Bluetooth Low Energy (BLE)", "10 bits/second","Star_NetworkTopology", "1024 HZ", "100 Watt");
+	Individual sensingDevice = InsertingTriples.insertSensingDevice("TempretureHumidityModule");
+	Individual device = InsertingTriples.insertDevice("TempHumBLE", CBuilding, miniServer, service, communicatingDevice, sensingDevice, attribute);
+	
+	
+	// inserting Device exposed by service
+	InsertingTriples.insertDeviceServiceRelation(device, service);
 	
 	// adding metaData of tempreture sensor 
 	 Hashtable<String, Object> metaDataList = new Hashtable<String, Object>();
@@ -35,22 +48,23 @@ public class MainController {
 	Individual tempretureSensor = InsertingTriples.insertSensor(sensingDevice, "Tempreture_Sensor","Degree_Celsius", "Tempreture", communicatingDevice, metaDataList);
 	Individual humiditySensor = InsertingTriples.insertSensor(sensingDevice, "Humidity_Sensor","Percentage","Humidity", communicatingDevice,null);
 	
-	// inserting attribute of the object like measuring tempreture for example
-	Individual attribute = InsertingTriples.insertAttribute("Tempreture_and_Humidity", sensingDevice, "Tempreture_and_Humidity");
 
-	
-	// inserting Objects that contains the Devices like a room or building
-	InsertingTriples.insertObject("C1_Cafeteria", attribute,"C1", "-0.12", "50.01");
 	
 	//inserting sensor Output data 
 	InsertingTriples.insertSensorOutputData("Tempreture",tempretureSensor, "70",new Date().toString());
 	InsertingTriples.insertSensorOutputData("Humidity",humiditySensor, "20",new Date().toString());
 	
 	//insert an application 
-	Individual application = InsertingTriples.insertApplication("FoodTesterApp","Testing food enviroment to insure that the food is healthy to eat",subSystem);
+	Individual FoodTesterApp = InsertingTriples.insertApplication("FoodTesterApp","Testing food enviroment to insure that the food is healthy to eat");
+	
+	// insert application uses system 
+    InsertingTriples.insertApplicationSystemRelation(FoodTesterApp,CBuilding);
 	
 	//inserting a person 
-	 InsertingTriples.insertPerson("HatemMorgan","Hatem", "Morgan", "Male", "27/7/1995", application, "hatemmorgan17@gmail.com", "Admin");
+	 Individual HatemMorgan = InsertingTriples.insertPerson("HatemMorgan","Hatem", "Morgan", "Male", "27/7/1995", "hatemmorgan17@gmail.com", "Admin");
+	 
+	// insert person uses application
+	InsertingTriples.insertPersonApplicationRelation(HatemMorgan, FoodTesterApp); 
 	 
 	//create coverage point 
 	Individual point = InsertingTriples.createPoint("SWCorner","-0.12", "50.01");

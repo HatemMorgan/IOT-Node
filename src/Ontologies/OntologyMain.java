@@ -46,6 +46,11 @@ public class OntologyMain {
 		
 		return IotLiteOntModel;
 	}
+
+	public static OntModel getOntModel(){
+	  OntModel model = ModelFactory.createOntologyModel();
+	  return model;
+	}
 	
 	public static OntModel loadOntology(String path) {
 		

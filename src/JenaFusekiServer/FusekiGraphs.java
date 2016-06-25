@@ -14,6 +14,8 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 public class FusekiGraphs {
 	
+	
+	
  public static void insertIntoPersonsGraph(OntModel model){
 	 insertOntmodel(model, "Persons");
  }
@@ -34,8 +36,8 @@ public class FusekiGraphs {
 	 insertNewTriple(subject, Property, Object, literal, "ApplicationUsesSystem"); 
  }
  
- public static void insertIntoSystemHasSubSystemGraph(OntModel model){
-	 insertOntmodel(model, "SystemHasSubSystem");
+ public static void insertIntoSystemHasSubSystemGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "SystemHasSubSystem");
  }
  
  public static void insertIntoMiniServersGraph(OntModel model){
@@ -117,20 +119,21 @@ public static void insertOntmodel(OntModel model,String graphName) {
 		String queryString = "" ;
 		if(Object == null){
 			
-		
-		 queryString =   "INSERT DATA"
-				 		+"{ GRAPH "+graphName
-						+" { <"+subject +"> <"+Property+"> \""+literal+"\" "+" .}"	
-				 		+"}";	
-		// System.out.println(queryString);
+			 queryString =   "PREFIX d: <http://learningsparql.com/ns/data#>"
+							+"INSERT DATA"
+					 		+"{ GRAPH d:"+graphName
+							+" { <"+subject +"> <"+Property+"> \""+literal+"\" "+" .}"	
+					 		+"}";	
+		 System.out.println(queryString);
 		
 		}else{
 			if(literal == null){
-			 queryString = 		  "INSERT DATA"
-								 +"{ GRAPH "+graphName
-								 + "{ <"+subject +"> <"+Property+"> <"+Object+"> .}"
+			 queryString = 		  "PREFIX d: <http://learningsparql.com/ns/data#>"
+								 +"INSERT DATA"
+								 +"{ GRAPH d:"+graphName
+								 + " { <"+subject +"> <"+Property+"> <"+Object+"> .}"
 								 +"}";
-				// System.out.println(queryString);	 
+				 System.out.println(queryString);	 
 			}
 		}
 		
