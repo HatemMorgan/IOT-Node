@@ -16,20 +16,20 @@ public class FusekiGraphs {
 	
 	
 	
- public static void insertIntoPersonsGraph(OntModel model){
-	 insertOntmodel(model, "Persons");
+ public static void insertIntoPersonsGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Persons");
  }
  
- public static void insertIntoApplicationsGraph(OntModel model){
-	 insertOntmodel(model, "Applications");
+ public static void insertIntoApplicationsGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Applications");
  }
  
  public static void insertIntoPersonUsesApplicationGraph(String subject , String Property , String Object , String literal){
 	 insertNewTriple(subject, Property, Object, literal, "PersonUsesApplication");
  }
 	
- public static void insertIntoSystemsGraph(OntModel model){
-	 insertOntmodel(model, "Systems");
+ public static void insertIntoSystemsGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Systems");
  }
  
  public static void insertIntoApplicationUsesSystemGraph(String subject , String Property , String Object , String literal){
@@ -40,39 +40,39 @@ public class FusekiGraphs {
 	 insertNewTriple(subject, Property, Object, literal, "SystemHasSubSystem");
  }
  
- public static void insertIntoMiniServersGraph(OntModel model){
-	 insertOntmodel(model, "MiniServers");
+ public static void insertIntoMiniServersGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "MiniServers");
  }
- public static void insertIntoDevicesGraph(OntModel model){
-	 insertOntmodel(model, "Devices");
+ public static void insertIntoDevicesGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Devices");
  }
- public static void insertIntoSensingDevicesGraph(OntModel model){
-	 insertOntmodel(model, "SensingDevices");
+ public static void insertIntoSensingDevicesGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "SensingDevices");
  }
- public static void insertIntoTagDevicesGraph(OntModel model){
-	 insertOntmodel(model, "TagDevices");
+ public static void insertIntoTagDevicesGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "TagDevices");
  }
  
- public static void insertIntoActuatingDevicesGraph(OntModel model){
-	 insertOntmodel(model, "ActuatingDevices");
+ public static void insertIntoActuatingDevicesGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "ActuatingDevices");
  }
- public static void insertIntoCommunicatingDevicesGraph(OntModel model){
-	 insertOntmodel(model, "CommunicatingDevices");
+ public static void insertIntoCommunicatingDevicesGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "CommunicatingDevices");
  }
- public static void insertIntoSensorsGraph(OntModel model){
-	 insertOntmodel(model, "Sensors");
+ public static void insertIntoSensorsGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Sensors");
  }
- public static void insertIntoServicesGraph(OntModel model){
-	 insertOntmodel(model, "Services");
+ public static void insertIntoServicesGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Services");
  }
  public static void insertIntoDeviceExposedByServiceGraph(String subject , String Property , String Object , String literal){
 	 insertNewTriple(subject, Property, Object, literal, "DeviceExposedByService");
  }
- public static void insertIntoSensorOutputsGraph(OntModel model){
-	 insertOntmodel(model, "SensorOutputs");
+ public static void insertIntoSensorOutputsGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "SensorOutputs");
  }
- public static void insertIntoObjectsGraph(OntModel model){
-	 insertOntmodel(model, "Objects");
+ public static void insertIntoObjectsGraph(String subject , String Property , String Object , String literal){
+	 insertNewTriple(subject, Property, Object, literal, "Objects");
  }
 public static void insertOntmodel(OntModel model,String graphName) {
 		
@@ -124,7 +124,7 @@ public static void insertOntmodel(OntModel model,String graphName) {
 					 		+"{ GRAPH d:"+graphName
 							+" { <"+subject +"> <"+Property+"> \""+literal+"\" "+" .}"	
 					 		+"}";	
-		 System.out.println(queryString);
+		// System.out.println(queryString);
 		
 		}else{
 			if(literal == null){
@@ -133,7 +133,7 @@ public static void insertOntmodel(OntModel model,String graphName) {
 								 +"{ GRAPH d:"+graphName
 								 + " { <"+subject +"> <"+Property+"> <"+Object+"> .}"
 								 +"}";
-				 System.out.println(queryString);	 
+			//	 System.out.println(queryString);	 
 			}
 		}
 		

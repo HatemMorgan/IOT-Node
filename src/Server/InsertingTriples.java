@@ -46,10 +46,12 @@ public class InsertingTriples {
 	// OntologyMain.getSSNOntModel();
 
 	public static Individual insertSystem(String SystemName) {
-
+		OntModel model = ModelFactory.createOntologyModel();
 		Individual newSystem = model.createIndividual(SSN_URI + SystemName,
 				IOTLiteOntologyClasses.system());
-
+		System.out.println(model.listStatements().toList());
+        System.out.println(newSystem.toString());
+        System.out.println(newSystem.listProperties().toList());
 		FusekiGraphs.insertIntoSystemsGraph(model);
 		return newSystem;
 	}
