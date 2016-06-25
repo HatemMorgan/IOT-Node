@@ -23,43 +23,40 @@ import Ontologies.IOTLiteOntology;
 
 public class FusekiQueries {
 
-	
-	
-	public static void deleteAllTriples (){
-		String deleteQueryString = "DELETE  {"
-								   + "?a ?b ?c"
-								   + "}"
-								   +"WHERE {?a ?b ?c}";
+	public static void deleteAllTriples() {
+		String deleteQueryString = "DELETE  {" + "?a ?b ?c" + "}"
+				+ "WHERE {?a ?b ?c}";
 		deleteByCondition(deleteQueryString, "myDataset");
 	}
-	
-	public static void deleteByCondition(String strQuery , String Dataset){
-		 UpdateProcessor upp = UpdateExecutionFactory.createRemote(
-	                UpdateFactory.create(strQuery), 
-	                "http://localhost:3030/"+Dataset+"/update");
-		 try{
-			 upp.execute();
-			 System.out.println("All triples are deleted");
-		 }catch(Exception e){
-			 System.out.println(e.toString());
-		 }
+
+	public static void deleteByCondition(String strQuery, String Dataset) {
+		UpdateProcessor upp = UpdateExecutionFactory.createRemote(
+				UpdateFactory.create(strQuery), "http://localhost:3030/"
+						+ Dataset + "/update");
+		try {
+			upp.execute();
+			System.out.println("All triples are deleted");
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
-	
-	public static void SelectAllTriples(){
+
+	public static void SelectAllTriples() {
 		String SelectQueryString = "SELECT * WHERE {?x ?r ?y}";
-		
+
 		SelectTriplesByConditions(SelectQueryString);
 	}
-	
-	public static void SelectTriplesByConditions(String strQuery){
+
+	public static void SelectTriplesByConditions(String strQuery) {
 		Query qe = QueryFactory.create(strQuery);
-		
-		QueryExecution quex = QueryExecutionFactory.sparqlService("http://localhost:3030/myDataset/query", qe);
-		
-		try{
-			 	ResultSet results = quex.execSelect();
-		        ResultSetFormatter.out(System.out, results);
-		}finally{
+
+		QueryExecution quex = QueryExecutionFactory.sparqlService(
+				"http://localhost:3030/myDataset/query", qe);
+
+		try {
+			ResultSet results = quex.execSelect();
+			ResultSetFormatter.out(System.out, results);
+		} finally {
 			quex.close();
 		}
 	}

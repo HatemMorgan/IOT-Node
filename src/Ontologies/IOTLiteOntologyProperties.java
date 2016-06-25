@@ -9,14 +9,16 @@ public class IOTLiteOntologyProperties {
 	private static final String GEO_URI = "http://www.w3.org/2003/01/geo/wgs84_pos#";
 	private static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
 	private static final String SSN_URI = "http://purl.oclc.org/NET/ssnx/ssn#";
+	private static final String rdf_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	private static final OntModel IOTLiteOntologyModel = OntologyMain
 			.getIOTLiteOntModel();
 
-	public static OntProperty hasSubSystem(){
-		OntProperty hasSubSystem = IOTLiteOntologyModel.getOntProperty(SSN_URI+"hasSubSystem");
+	public static OntProperty hasSubSystem() {
+		OntProperty hasSubSystem = IOTLiteOntologyModel.getOntProperty(SSN_URI
+				+ "hasSubSystem");
 		return hasSubSystem;
 	}
-	
+
 	public static OntProperty hasAttribute() {
 		OntProperty hasAttribute = IOTLiteOntologyModel
 				.getOntProperty(IOT_Lite_URI + "hasAttribute");
@@ -66,8 +68,8 @@ public class IOTLiteOntologyProperties {
 	}
 
 	public static OntProperty hasPoint() {
-		OntProperty hasPoint = IOTLiteOntologyModel
-				.getOntProperty(IOT_Lite_URI + "hasPoint");
+		OntProperty hasPoint = IOTLiteOntologyModel.createOntProperty(IOT_Lite_URI
+				+ "hasPoint");
 		return hasPoint;
 	}
 
@@ -76,22 +78,31 @@ public class IOTLiteOntologyProperties {
 				.createOntProperty(GEO_URI + "hasLocation");
 		return hasLocation;
 	}
+
 	public static OntProperty longtitude() {
-		OntProperty longtitude = IOTLiteOntologyModel
-				.createOntProperty(GEO_URI + "long");
+		OntProperty longtitude = IOTLiteOntologyModel.createOntProperty(GEO_URI
+				+ "long");
 		return longtitude;
 	}
+
 	public static OntProperty latitude() {
-		OntProperty latitude = IOTLiteOntologyModel
-				.createOntProperty(GEO_URI + "lat");
+		OntProperty latitude = IOTLiteOntologyModel.createOntProperty(GEO_URI
+				+ "lat");
 		return latitude;
 	}
-	
-	public static OntProperty hasCoverage(){
-		OntProperty hasCoverage = IOTLiteOntologyModel.getOntProperty(IOT_Lite_URI+"hasCoverage");
+
+	public static OntProperty hasCoverage() {
+		OntProperty hasCoverage = IOTLiteOntologyModel
+				.getOntProperty(IOT_Lite_URI + "hasCoverage");
 		return hasCoverage;
 	}
 
-	
+	public static OntProperty type() {
+		OntProperty type = IOTLiteOntologyModel.createOntProperty(rdf_URI
+				+ "type");
+		return type;
+	}
+public static void main(String[] args) {
+	System.out.println(hasPoint());
 }
-
+}
