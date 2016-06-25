@@ -141,7 +141,7 @@ public class InsertingTriples {
 		return miniServer;
 	}
 
-	public static void insertSensor(Individual sensingDevice,
+	public static Individual insertSensor(Individual sensingDevice,
 			String sensorName, String strUnit, String strQuantityKind,
 			Individual communicatingDevice,
 			Hashtable<String, Object> metadataList) {
@@ -150,8 +150,8 @@ public class InsertingTriples {
 				IOTLiteOntologyClasses.sensor());
 	
 
-		sensingDevice.addProperty(IOTLiteOntologyProperties.hasSensingDevice(),
-				newSensor);
+		newSensor.addProperty(IOTLiteOntologyProperties.hasSensingDevice(),
+				sensingDevice);
 		newSensor.addProperty(IOTLiteOntologyProperties.hasQuantityKind(),
 				QU_URI + strQuantityKind);
 		newSensor.addProperty(IOTLiteOntologyProperties.hasUnit(), QU_URI
@@ -178,6 +178,8 @@ public class InsertingTriples {
 		}
 		}
 		FusekiQueries.insertOntmodel(model);
+		
+		return newSensor;
 	}
 
 	public static Individual insertService(String serviceName, String endpoint,

@@ -61,7 +61,7 @@ public class IOTLiteOntologyControllerTest {
 	}
 
 	public static void main(String[] args) {
-  FusekiQueries.deleteAllTriples();
+//  FusekiQueries.deleteAllTriples();
 //	  insertNewSystem();
 //	  FusekiQueries.SelectAllTriples();
 		
@@ -123,7 +123,7 @@ public class IOTLiteOntologyControllerTest {
 					+"SELECT ?sensor "
 					+"WHERE{"
 					+"	?a a ssn:SensingDevice ."
-					+"    ?sensor ?hasSensingDevice ?a"
+					+"    ?sensor iot-lite:hasSensingDevice ?a"
 					  	
 					+"}";	
 	//  FusekiQueries.SelectTriplesByConditions(q2);
@@ -136,10 +136,10 @@ public class IOTLiteOntologyControllerTest {
 				+"SELECT (COUNT(*) as ?NumberOfSensors )"
 				+"WHERE{"
 				+"	?a a ssn:SensingDevice ."
-				+"    ?sensor ?hasSensingDevice ?a"
+				+"    ?sensor iot-lite:hasSensingDevice ?a"
 				  	
 				+"}";	
-	//FusekiQueries.SelectTriplesByConditions(q3);
+	FusekiQueries.SelectTriplesByConditions(q3);
 		
 	}
 }

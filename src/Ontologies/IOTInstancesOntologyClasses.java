@@ -32,7 +32,7 @@ public class IOTInstancesOntologyClasses {
 	public static OntClass communicatingDevice() {
 		OntClass CommunicatingDevice = IOTLiteInstancesOntologyModel
 				.createClass(iotlins_URI + "CommunicatingDevice");
-		CommunicatingDevice.addSuperClass(IOTLiteOntologyClasses.device());
+	
 		return CommunicatingDevice;
 	}
 
