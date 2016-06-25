@@ -23,74 +23,7 @@ import Ontologies.IOTLiteOntology;
 
 public class FusekiQueries {
 
-	public static void insertOntmodel(OntModel model) {
-		
-		ExtendedIterator<Individual> individuals = model
-				.listIndividuals();
-
-		// Iterates trough the list
-		while (individuals.hasNext()) {
-			
-			Individual individual = individuals.next();
-			// Retrieves the URI - identifier of the individual
-			String label = individual.getURI();
-
-			// Retrieves the class name of the individual
-			String type = individual.getOntClass().getLocalName();
-
-			StmtIterator itr = individual.listProperties();
-			while (itr.hasNext()) {
-				
-				Statement statment = itr.nextStatement();
-				Resource subject = statment.getSubject();
-				Property property = statment.getPredicate();
-		
-				
-				RDFNode Object = statment.getObject();
-				//System.out.println(subject +" "+property+" "+Object);
-				if(Object.isLiteral()){
-					//System.out.println("here "+Object.asLiteral());
-					FusekiQueries.insertNewTriple(subject.toString(),
-							property.toString(),null ,Object.toString());
-				}else{
-					
-					FusekiQueries.insertNewTriple(subject.toString(),
-							property.toString(), Object.toString(),null);
-				}
-			
-			}
-
-		}
-
-	}
-
-	public static void insertNewTriple(String subject , String Property , String Object , String literal){
-		String queryString = "" ;
-		if(Object == null){
-			
-		
-		 queryString = 	"INSERT DATA"
-							+ "{ <"+subject +"> <"+Property+"> \""+literal+"\" "+" .}"	;	
-		// System.out.println(queryString);
-		
-		}else{
-			if(literal == null){
-				 queryString = 	"INSERT DATA"
-						+ "{ <"+subject +"> <"+Property+"> <"+Object+"> .}"	;	
-				// System.out.println(queryString);	 
-			}
-		}
-		
-		 UpdateProcessor upp = UpdateExecutionFactory.createRemote(
-	                UpdateFactory.create(queryString), 
-	                "http://localhost:3030/myDataset/update");
-		 try{
-			 upp.execute();
-			 System.out.println("new triple inserted");
-		 }catch(Exception e){
-			 System.out.println(e.toString());
-		 }
-	}
+	
 	
 	public static void deleteAllTriples (){
 		String deleteQueryString = "DELETE  {"
