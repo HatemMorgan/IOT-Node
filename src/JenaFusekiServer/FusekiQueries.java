@@ -1,5 +1,6 @@
 package JenaFusekiServer;
 
+import org.apache.jena.iri.impl.Main;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntProperty;
@@ -23,10 +24,17 @@ import Ontologies.IOTLiteOntology;
 
 public class FusekiQueries {
 
-	public static void deleteAllTriples() {
-		String deleteQueryString = "DELETE  {" + "?a ?b ?c" + "}"
-				+ "WHERE {?a ?b ?c}";
-		deleteByCondition(deleteQueryString, "myDataset");
+	public static void DropAllGraphs() {
+		String deleteQueryString = "DROP ALL";
+		UpdateProcessor upp = UpdateExecutionFactory.createRemote(
+				UpdateFactory.create(deleteQueryString), "http://localhost:3030/myDataset/update");
+		try {
+			upp.execute();
+			System.out.println("All graphs are dropped");
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		
 	}
 
 	public static void deleteByCondition(String strQuery, String Dataset) {
@@ -60,4 +68,7 @@ public class FusekiQueries {
 			quex.close();
 		}
 	}
+		public static void main(String[] args) {
+		DropAllGraphs();
+		}
 }

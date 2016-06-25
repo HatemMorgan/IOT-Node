@@ -84,6 +84,14 @@ public class InsertingTriples {
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
 
+		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDevice.toString(), IOTLiteOntologyProperties.type()
+				.toString(), IOTInstancesOntologyClasses.communicatingDevice()
+				.toString(), null);
+		
+		FusekiGraphs.insertIntoDevicesGraph(sensingDevice.toString(),
+				IOTLiteOntologyProperties.type().toString(),
+				IOTLiteOntologyClasses.sensingDevice().toString(), null);
+		
 		FusekiGraphs.insertIntoDevicesGraph(SSN_URI + DeviceName,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.device().toString(), null);
@@ -480,8 +488,8 @@ public class InsertingTriples {
 
 	public static Individual insertPerson(String personName, String firstName,
 			String lastName, String gender, String Birthday, String email,
-			String role) {
-
+			String role) throws Exception {
+		if(role.equals("Developer") || role.equals("NormalUser") || role.equals("Admin")){
 		Individual newPerson = model.createIndividual(FOAF_URI + personName,
 				FOAFOntologyClasses.PersonClass());
 
@@ -504,12 +512,18 @@ public class InsertingTriples {
 		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
 				IOTLiteInstancesOntologyProperties.email().toString(), null,
 				email);
-
+		
+		
+			
+		
 		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
 				IOTLiteInstancesOntologyProperties.hasRole().toString(), null,
 				role);
 
 		return newPerson;
+		}else{
+			throw new Exception("no role type equal to " + role);
+		}
 	}
 
 	/*

@@ -65,7 +65,7 @@ public class IOTLiteOntologyControllerTest {
 	}
 
 	public static void main(String[] args) {
-  FusekiQueries.deleteAllTriples();
+  //FusekiQueries.deleteAllTriples();
 //	  insertNewSystem();
 //	  FusekiQueries.SelectAllTriples();
 		

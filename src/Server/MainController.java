@@ -5,11 +5,14 @@ import java.util.Hashtable;
 
 import org.apache.jena.ontology.Individual;
 
+import JenaFusekiServer.FusekiGraphs;
+import JenaFusekiServer.FusekiQueries;
+
 import com.github.andrewoma.dexx.collection.ArrayList;
 
 public class MainController {
 	public static void main(String[] args) {
-
+		FusekiQueries.DropAllGraphs();
 		// inseting system and its subSystems
 		Individual GUC = InsertingTriples.insertSystem("GUC");
 		Individual CBuilding = InsertingTriples.insertSystem("CBuilding");
@@ -79,25 +82,38 @@ public class MainController {
 				CBuilding);
 
 		// inserting a person
-		Individual HatemMorgan = InsertingTriples.insertPerson("HatemMorgan",
-				"Hatem", "Morgan", "Male", "27/7/1995",
-				"hatemmorgan17@gmail.com", "Admin");
+		Individual HatemMorgan;
+		try {
+			HatemMorgan = InsertingTriples.insertPerson("HatemMorgan",
+					"Hatem", "Morgan", "Male", "27/7/1995",
+					"hatemmorgan17@gmail.com", "Admin");
+			// insert person uses application
+			InsertingTriples.insertPersonApplicationRelation(HatemMorgan,
+					FoodTesterApp);
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 
-		// insert person uses application
-		InsertingTriples.insertPersonApplicationRelation(HatemMorgan,
-				FoodTesterApp);
+	
 
 		// inserting coverage
 		try {
 		Individual	coverage = InsertingTriples.insertCoverage("Cafeteria'sFridgeArea",
-					sensingDevice, "Rectangle");
+					device, "Rectangle");
 			// create coverage point
 			InsertingTriples.createPoint("SWCorner", "-0.12", "50.01", coverage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	
+	try {
+		Individual MohamedAhmed = InsertingTriples.insertPerson("MohamedAhmed","Mohamed", "Ahmed", "Male","01/01/1990","MohamedAhmed@gmail.com","NormalUser");
+		InsertingTriples.insertPersonApplicationRelation(MohamedAhmed,
+				FoodTesterApp);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 
 	}
 }
