@@ -40,10 +40,10 @@ public class MainController {
 				C1_Cafeteria);
 
 		// inserting Device
-		Individual communicatingDevice = InsertingTriples
-				.insertCommunicatingDevice("Bluetooth_Low_Energy_001",
-						"Bluetooth Low Energy (BLE)", "10 bits/second",
-						"Star_NetworkTopology", "1024 HZ", "100 Watt");
+		Individual communicatingDevice = InsertingTriples.insertCommunicatingDevice("Bluetooth_Low_Energy_001",
+				"Bluetooth Low Energy (BLE)", "10 bits/second",
+				"Star_NetworkTopology", "1024 HZ", "100 Watt", "-173.9 dBm/Hz", "2", "6c23548ab568953a", "60%");
+
 		Individual sensingDevice = InsertingTriples
 				.insertSensingDevice("TempretureHumidityModule");
 		Individual device = InsertingTriples.insertDevice("TempHumBLE",
