@@ -84,14 +84,15 @@ public class InsertingTriples {
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
 
-		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDevice.toString(), IOTLiteOntologyProperties.type()
-				.toString(), IOTInstancesOntologyClasses.communicatingDevice()
-				.toString(), null);
-		
+		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDevice.toString(),
+				IOTLiteOntologyProperties.type().toString(),
+				IOTInstancesOntologyClasses.communicatingDevice().toString(),
+				null);
+
 		FusekiGraphs.insertIntoDevicesGraph(sensingDevice.toString(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
-		
+
 		FusekiGraphs.insertIntoDevicesGraph(SSN_URI + DeviceName,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.device().toString(), null);
@@ -132,7 +133,9 @@ public class InsertingTriples {
 
 	public static Individual insertCommunicatingDevice(
 			String communicatingDeviceName, String type, String bandwidth,
-			String networkTopology, String frequency, String transmitPower) {
+			String networkTopology, String frequency, String transmitPower,
+			String sensitvity, String numberOfChannels, String macAddress,
+			String dutyCycle) {
 
 		Individual newCommunicatingDevice = model.createIndividual(iotlins_URI
 				+ communicatingDeviceName,
@@ -458,7 +461,7 @@ public class InsertingTriples {
 				.insertIntoDevicesGraph(newPoint.toString(),
 						IOTLiteOntologyProperties.latitude().toString(), null,
 						latitude);
-		
+
 		FusekiGraphs.insertIntoDevicesGraph(coverage.toString(),
 				IOTLiteOntologyProperties.hasPoint().toString(),
 				newPoint.toString(), null);
@@ -489,39 +492,40 @@ public class InsertingTriples {
 	public static Individual insertPerson(String personName, String firstName,
 			String lastName, String gender, String Birthday, String email,
 			String role) throws Exception {
-		if(role.equals("Developer") || role.equals("NormalUser") || role.equals("Admin")){
-		Individual newPerson = model.createIndividual(FOAF_URI + personName,
-				FOAFOntologyClasses.PersonClass());
+		if (role.equals("Developer") || role.equals("NormalUser")
+				|| role.equals("Admin")) {
+			Individual newPerson = model.createIndividual(
+					FOAF_URI + personName, FOAFOntologyClasses.PersonClass());
 
-		FusekiGraphs.insertIntoPersonsGraph(FOAF_URI + personName,
-				IOTLiteOntologyProperties.type().toString(),
-				FOAFOntologyClasses.PersonClass().toString(), null);
+			FusekiGraphs.insertIntoPersonsGraph(FOAF_URI + personName,
+					IOTLiteOntologyProperties.type().toString(),
+					FOAFOntologyClasses.PersonClass().toString(), null);
 
-		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
-				FOAFOntologyProperties.firstName().toString(), null, firstName);
+			FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
+					FOAFOntologyProperties.firstName().toString(), null,
+					firstName);
 
-		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
-				FOAFOntologyProperties.lastName().toString(), null, lastName);
+			FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
+					FOAFOntologyProperties.lastName().toString(), null,
+					lastName);
 
-		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
-				FOAFOntologyProperties.gender().toString(), null, gender);
+			FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
+					FOAFOntologyProperties.gender().toString(), null, gender);
 
-		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
-				FOAFOntologyProperties.birthday().toString(), null, Birthday);
+			FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
+					FOAFOntologyProperties.birthday().toString(), null,
+					Birthday);
 
-		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
-				IOTLiteInstancesOntologyProperties.email().toString(), null,
-				email);
-		
-		
-			
-		
-		FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
-				IOTLiteInstancesOntologyProperties.hasRole().toString(), null,
-				role);
+			FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
+					IOTLiteInstancesOntologyProperties.email().toString(),
+					null, email);
 
-		return newPerson;
-		}else{
+			FusekiGraphs.insertIntoPersonsGraph(newPerson.toString(),
+					IOTLiteInstancesOntologyProperties.hasRole().toString(),
+					null, role);
+
+			return newPerson;
+		} else {
 			throw new Exception("no role type equal to " + role);
 		}
 	}

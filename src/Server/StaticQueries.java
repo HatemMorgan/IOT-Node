@@ -275,7 +275,7 @@ public class StaticQueries {
 							+ "} "
 						    + "}";
 					UpdateProcessor upp2 = UpdateExecutionFactory.createRemote(
-							UpdateFactory.create(strQuery2),
+							UpdateFactory.create(strQuery3),
 							"http://localhost:3030/myDataset/update");
 					try {
 						upp2.execute();
@@ -297,8 +297,8 @@ public class StaticQueries {
 	}
 
 	public static void main(String[] args) {
-		// SelectSensors("MohamedAhmed@gmail.com");
-		// normalUserViewCommunicatingDeviceOfaSensor("MohamedAhmed@gmail.com","TempHumBLE");
+	//	 SelectSensors("MohamedAhmed@gmail.com");
+	//	 normalUserViewCommunicatingDeviceOfaSensor("MohamedAhmed@gmail.com","TempHumBLE");
 		adminCanChangeCommunicatingDeviceOFaSensor("Zigbee", "Zigbee",
 				"50 bits/second", "Mesh", "1024 HZ", "100 Watt", "TempHumBLE",
 				"hatemmorgan17@gmail.com");
