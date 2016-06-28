@@ -24,7 +24,7 @@ public class IOTLiteInstancesOntologyProperties {
 		return hasApplicationDescription;
 	}
 
-	public static OntProperty usesSystemProperty() {
+	public static OntProperty usesSystem() {
 		OntProperty usesSystem = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "usesSystem");
 		return usesSystem;

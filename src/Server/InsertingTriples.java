@@ -489,15 +489,16 @@ public class InsertingTriples {
 		return newApplication;
 	}
 
-	public static Individual insertPerson(String personName, String firstName,
+	public static Individual insertPerson(String userName, String firstName,
 			String lastName, String gender, String Birthday, String email,
 			String role) throws Exception {
 		if (role.equals("Developer") || role.equals("NormalUser")
 				|| role.equals("Admin")) {
+			
 			Individual newPerson = model.createIndividual(
-					FOAF_URI + personName, FOAFOntologyClasses.PersonClass());
+					FOAF_URI + userName, FOAFOntologyClasses.PersonClass());
 
-			FusekiGraphs.insertIntoPersonsGraph(FOAF_URI + personName,
+			FusekiGraphs.insertIntoPersonsGraph(FOAF_URI + userName,
 					IOTLiteOntologyProperties.type().toString(),
 					FOAFOntologyClasses.PersonClass().toString(), null);
 
@@ -554,7 +555,7 @@ public class InsertingTriples {
 			Individual system) {
 		FusekiGraphs.insertIntoApplicationUsesSystemGraph(application
 				.toString(), IOTLiteInstancesOntologyProperties
-				.usesApplication().toString(), system.toString(), null);
+				.usesSystem().toString(), system.toString(), null);
 	}
 
 	/*
