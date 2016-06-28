@@ -241,47 +241,7 @@ public class StaticQueries {
 						"http://localhost:3030/myDataset/update");
 				try {
 					upp.execute();
-
-					String strQuery3 = " PREFIX g: <http://learningsparql.com/ns/graphs#>"
-							+ "PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
-							+ "PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
-							+ "PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
-							+ "DELETE{" + "GRAPH g:Devices " + "{" + "ssn:"
-							+ DeviceName
-							+ " ssn:hasSubSystem ?CommunicatingDevice ."
-							+ "?CommunicatingDevice a iot-liteIns:CommunicatingDevice ."
-							+ "	} "
-							+ "	} "
-							+ "INSERT { "
-							+ "GRAPH g:Devices "
-							+ "{ "
-							+ "ssn:"
-							+ DeviceName
-							+ " ssn:hasSubSystem iot-liteIns:"
-							+ communicatingDeviceName
-							+ " ."
-							+ "iot-liteIns:"
-							+ communicatingDeviceName
-							+ " a iot-liteIns:CommunicatingDevice ."
-							+ "}"
-							+ "}"
-							+ "WHERE{ "
-							+ "GRAPH g:Devices "
-							+ "{ "
-							+ "ssn:"
-							+ DeviceName
-							+ " ssn:hasSubSystem ?communicatingDeviceName."
-							+ "?CommunicatingDevice a iot-liteIns:CommunicatingDevice ."
-							+ "} "
-						    + "}";
-					UpdateProcessor upp2 = UpdateExecutionFactory.createRemote(
-							UpdateFactory.create(strQuery3),
-							"http://localhost:3030/myDataset/update");
-					try {
-						upp2.execute();
-					} catch (Exception e) {
-						System.out.println(e.toString());
-					}
+				    
 				} catch (Exception e) {
 					System.out.println(e.toString());
 				}
@@ -296,11 +256,85 @@ public class StaticQueries {
 		}
 	}
 
+	public static void addnewDevice(String DeviceName, Individual system,
+			Individual miniServer, Individual service,
+			Individual CommunicatingDevice, Individual sensingDevice,
+			Individual attribute) {
+
+		InsertingTriples.insertDevice(DeviceName, system, miniServer, service,
+				CommunicatingDevice, sensingDevice, attribute);
+	}
+
+	
+	public static void deleteExsistingDevice(String deviceName){
+		
+	String strQuery = 	
+		"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+		+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+		+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+		+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+		+"PREFIX g: <http://learningsparql.com/ns/graphs#>"
+		+"DELETE  { "
+		+" GRAPH g:Devices "
+		+"  { "
+		+"ssn:"+deviceName+" a ssn:Device;"
+		+"    			     ssn:hasSubSystem ?communicatingDevice;"
+		+"  				 ssn:hasSubSystem ?sensingDevice;"
+		+"    			     iot-liteIns:isConnectedTo ?miniserver;"
+		+"  				 iot-lite:exposedBy ?service."
+		+"  ?attribute  	 iot-lite:isAssociatedWith  ssn:"+deviceName+"."
+		+"  ?system  		 ssn:hasSubSystem ssn:"+deviceName+"."
+		+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+		+"  ?sensingDevice a ssn:SensingDevice ."
+		+"  ssn:"+deviceName+" iot-lite:hasCoverage ?coverage."
+		+"  ?coverage a ?coverageClass ."
+		+"  ?coverage iot-lite:hasPoint ?point."
+		+"  ?point a geo:Point ;"
+		+"     	 geo:lat ?latitude;"
+		+"    	 geo:long ?longtitude ."
+		+"  		    } "
+		+"}"
+		+" GRAPH g:SensingDevices {"
+		+"	   ?sensingDevice a ssn:SensingDevice ."
+		+"	  } "
+		+"WHERE{"
+		+"GRAPH g:Devices "
+		+"  {"
+		+" ssn:"+deviceName+" a ssn:Device;"
+		+"    			     ssn:hasSubSystem ?communicatingDevice;"
+		+"  				 ssn:hasSubSystem ?sensingDevice;"
+		+"    			     iot-liteIns:isConnectedTo ?miniserver;"
+		+"   				 iot-lite:exposedBy ?service."
+		+"  ?attribute  	 iot-lite:isAssociatedWith  ssn:"+deviceName+"."
+		+"  ?system  		 ssn:hasSubSystem ssn:"+deviceName+"."
+		+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+		+" ?sensingDevice a ssn:SensingDevice ."
+				+ "  ssn:"
+				+ deviceName
+				+ " iot-lite:hasCoverage ?coverage."
+		+"  ?coverage a ?coverageClass ."
+		+" ?coverage iot-lite:hasPoint ?point."
+		+"  ?point  a  geo:Point;"
+		+"          geo:lat ?latitude;"
+		+"          geo:long ?longtitude ."
+		+"		 }"
+		+"}";
+	UpdateProcessor upp2 = UpdateExecutionFactory.createRemote(
+			UpdateFactory.create(strQuery),
+			"http://localhost:3030/myDataset/update");
+	try {
+		upp2.execute();
+	} catch (Exception e) {
+		System.out.println(e.toString());
+	}
+}
+	
 	public static void main(String[] args) {
-	//	 SelectSensors("MohamedAhmed@gmail.com");
-	//	 normalUserViewCommunicatingDeviceOfaSensor("MohamedAhmed@gmail.com","TempHumBLE");
-		adminCanChangeCommunicatingDeviceOFaSensor("Zigbee", "Zigbee",
-				"50 bits/second", "Mesh", "1024 HZ", "100 Watt", "TempHumBLE",
-				"hatemmorgan17@gmail.com");
+	   // SelectSensors("MohamedAhmed@gmail.com");
+	   normalUserViewCommunicatingDeviceOfaSensor("MohamedAhmed@gmail.com","TempHumBLE");
+//		adminCanChangeCommunicatingDeviceOFaSensor("Zigbee", "Zigbee",
+//				"50 bits/second", "Mesh", "1024 HZ", "100 Watt", "TempHumBLE",
+//				"hatemmorgan17@gmail.com");
+//	   deleteExsistingDevice("TempHumBLE");
 	}
 }
