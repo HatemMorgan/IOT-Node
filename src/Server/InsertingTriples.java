@@ -3,15 +3,25 @@ package Server;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.graph.Node;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.rdf.model.AnonId;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.RDFVisitor;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 
 import com.github.andrewoma.dexx.collection.ArrayList;
 
@@ -79,16 +89,16 @@ public class InsertingTriples {
 	public static Individual insertDevice(String DeviceName, Individual system,
 			Individual miniServer, Individual service,
 			Individual CommunicatingDevice, Individual sensingDevice,
-			Individual attribute) {
+			Individual attribute , String deviceMacAddress) {
 
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
-
+		
 		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDevice.toString(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTInstancesOntologyClasses.communicatingDevice().toString(),
 				null);
-
+ 
 		FusekiGraphs.insertIntoDevicesGraph(sensingDevice.toString(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
@@ -96,7 +106,11 @@ public class InsertingTriples {
 		FusekiGraphs.insertIntoDevicesGraph(SSN_URI + DeviceName,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.device().toString(), null);
-
+        
+		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasMacaddress().toString(),
+				null, deviceMacAddress);
+		
 		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
 				IOTLiteInstancesOntologyProperties.isConnectedTo().toString(),
 				miniServer.toString(), null);
@@ -120,15 +134,23 @@ public class InsertingTriples {
 	}
 
 	public static Individual insertSensingDevice(String sensingDeviceName) {
-
+		String id = UUID.randomUUID().toString();
 		Individual newSensingDevice = model.createIndividual(SSN_URI
 				+ sensingDeviceName, IOTLiteOntologyClasses.sensingDevice());
 
 		FusekiGraphs.insertIntoSensingDevicesGraph(SSN_URI + sensingDeviceName,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
+		
+		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasUUID().toString(),
+				null, id);
+		
+		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasName().toString(),
+				null, sensingDeviceName);
 
-		return newSensingDevice;
+		return model.createIndividual(model.createResource(IOT_Lite_URI+id));
 	}
 
 	public static Individual insertCommunicatingDevice(
@@ -160,6 +182,22 @@ public class InsertingTriples {
 				.toString(), IOTLiteInstancesOntologyProperties
 				.hasTransmitPower().toString(), null, transmitPower);
 
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasMacaddress().toString(), null, macAddress);
+		
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasNumberOfChannels().toString(), null, numberOfChannels);
+		
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasSensitivity().toString(), null, sensitvity);
+		
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasDutyCycle().toString(), null, dutyCycle);
+		
 		FusekiGraphs.insertIntoCommunicatingDevicesGraph(
 				newCommunicatingDevice.toString(),
 				IOTLiteInstancesOntologyProperties.hasType().toString(), null,

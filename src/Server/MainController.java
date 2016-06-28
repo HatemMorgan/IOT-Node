@@ -48,7 +48,7 @@ public class MainController {
 				.insertSensingDevice("TempretureHumidityModule");
 		Individual device = InsertingTriples.insertDevice("TempHumBLE",
 				CBuilding, miniServer, service, communicatingDevice,
-				sensingDevice, attribute);
+				sensingDevice, attribute ,"6c23548ab568953a");
 
 		// inserting Device exposed by service
 		InsertingTriples.insertDeviceServiceRelation(device, service);
