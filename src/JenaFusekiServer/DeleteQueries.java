@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.jena.update.UpdateExecutionFactory;
 import org.apache.jena.update.UpdateFactory;
 import org.apache.jena.update.UpdateProcessor;
+import org.apache.xerces.dom.DeepNodeListImpl;
 
 public class DeleteQueries {
  public static void deletePerson(String userName){
@@ -36,6 +37,7 @@ public class DeleteQueries {
 			   +"	 }";
 	 
 	 executeDeleteQuery(strQuery);
+	 deleteApplicationsUsedByDeletedPersonRelation(userName);
  }
  
  
@@ -60,6 +62,7 @@ public class DeleteQueries {
 			 +"	 }";
 
 	 executeDeleteQuery(strQuery);
+	 deletePersonUsesDeletedApplicationRelation(applicationName);
  }
  
 public static void deleteApplicationsUsedByDeletedPersonRelation(String userName){
@@ -124,6 +127,13 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 				+"  }"
 				+"}";
 	executeDeleteQuery(strQuery);
+	deleteDevicesSubSystemOfDeletedSystem(systemName);
+	deleteSystemHasDeletedSubSystemRelation(systemName);
+	deletesubSystemsOfDeletedSystemRelation(systemName);
+	deleteMiniServersSubSystemOfDeletedSystem(systemName);
+	deleteApplicationsUsesDeletedSystemRelation(systemName);
+	
+	// Hard delete queries
  }
  
  /*
@@ -274,6 +284,7 @@ public static void deleteMiniServers(String miniServerName){
 				 +"		}"
 				 +"}";
 	 executeDeleteQuery(strQuery);
+	 deleteDevicesConnectedToDeletedMiniServer(miniServerName);
 				 
  }
 
@@ -331,6 +342,7 @@ String strQuery =
 			+"}";
 
   executeDeleteQuery(strQuery);
+  
 }
 
 public static void deleteSensingDevice(String UUID){
@@ -356,6 +368,9 @@ public static void deleteSensingDevice(String UUID){
 			   +"	  }";
 	
 	executeDeleteQuery(strQuery);
+	deleteSensorsHavingDeletedSensingDevice(UUID);
+	
+	// hard delete
 
 }
 
@@ -398,6 +413,7 @@ public static void deleteSensingDevice(String UUID){
 			+ "}";
 	
 	executeDeleteQuery(strQuery);
+	deleteRelationTriple(macAddress);
 
  }
  
@@ -441,6 +457,7 @@ public static void deleteSensingDevice(String UUID){
 			   +"}";
 	 
 	 executeDeleteQuery(strQuery);
+	 deleteSensorOutputs(sensorName, sensingDeviceMacAddress);
  }
  
  public static void deleteSensorsMetadata(String sensorName , String sensingDeviceMacAddress){
@@ -487,6 +504,8 @@ public static void deleteSensingDevice(String UUID){
 			 		   +"  }"
 			 		   +"}";
 	 executeDeleteQuery(strQuery);
+	 deleteDevicesExposedByDeletedServiceRelation(serviceName);
+	 
  }
  
  /*
@@ -614,10 +633,12 @@ executeDeleteQuery(strQuery);
 			    	+"DELETE { "
 			    	+"  GRAPH g:Objects{ "
 			    	+"     		iot-lite:"+objectName+"  a  iot-lite:Object ;"
-			        +"  								   geo:hasLocation ?location ."
+			        +"  								 geo:hasLocation ?location ;"
+			    	+"                                   iot-lite:hasAttribute ?attribute .  "
 			        +"			?location  a  geo:Point;"
 			        +"  					   geo:long  ?longtitude ;"
 			        +"  					   geo:lat   ?latitude ."
+			        +"       ?attribute ?property ?value ."
 			        +"   }"
 			        +" }"
 			    	+"WHERE{ "
@@ -628,8 +649,18 @@ executeDeleteQuery(strQuery);
 			        +"  					   geo:long  ?longtitude ;"
 			        +"  					   geo:lat   ?latitude ."
 			        +"   }"
+			        +"   { "
+					+"  SELECT  ?attribute ?property ?value  "
+					+" WHERE{ "
+				    +"    GRAPH g:Objects{ "
+				    +"   iot-lite:"+objectName+"  iot-lite:hasAttribute ?attribute."
+				    +"   ?attribute ?property ?value ."
+				    +" 			}"
+				    +" 		}"
+				    +"	}"
 			        +"}";
 	 executeDeleteQuery(strQuery);
+	 
  }
  
  public static void deleteAttribute(String ObjectName , String attribute){
@@ -776,7 +807,7 @@ public static void deleteDevicesAssociatedWithDeletedAttribute(){
 	
 }
 
-public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceMacAddress){
+public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceUUID){
 	 String strQuery = 
 
 				"	PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -787,7 +818,7 @@ public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceM
 			   +"	DELETE {"
 			   +"	  GRAPH g:Sensors{"
 			   +"	    ?sensor      a   ssn:Sensor;"
-			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+";"
+			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceUUID+";"
 			   +" 	      					     iot-lite:hasQuantityKind ?quantityKind;"
 			   +"	     						 iot-lite:hasUnit  ?unit;"
 		       +"		      					 iot-liteIns:hasCommunicatingDevice ?communicatingDevice;"
@@ -798,7 +829,7 @@ public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceM
 			   +"	WHERE{ "
 			   +"		 GRAPH g:Sensors{ "
 			   +"	     ?sensor      a   ssn:Sensor;"
-			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+" ;"
+			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceUUID+" ;"
 			   +"	      					     iot-lite:hasQuantityKind ?quantityKind;"
 			   +"	     						 iot-lite:hasUnit  ?unit;"
 			   +"	       						 iot-liteIns:hasCommunicatingDevice ?communicatingDevice;"
@@ -809,7 +840,7 @@ public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceM
 			   +" WHERE{ "
 			   +"    GRAPH g:Sensors{ "
 			   +"     ?sensor   a   ssn:Sensor;"
-			   +"                            iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+";"
+			   +"                            iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceUUID+";"
 			   +"                            iot-liteIns:hasMetadata ?metadata ."
 			   +"      ?metadata ?property ?value ."
 			   +" 			}"
@@ -818,6 +849,36 @@ public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceM
 			   +"}";
 	 
 	 executeDeleteQuery(strQuery);
+}
+
+public static void deleteMiniServersSubSystemOfDeletedSystem(String systemName){
+	 String strQuery = 
+		 	 "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			 +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			 +"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			 +"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+			 +"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			 +"DELETE { "
+			 +"	GRAPH g:MiniServers { "
+			 +"      	ssn:"+systemName+" ssn:hasSubSystem ?miniServer ."	
+			 +" 		?miniServer a  iot-liteIns:MiniServer;"
+			 +"      			    geo:hasLocation ?location ."
+			 +"        ?location a   geo:Point;"
+			 +"      			  geo:lat ?latitude ;"
+			 +"      			  geo:long ?longtitude."    					
+			 +"			}"
+			 +"}"
+			 +"WHERE{"
+			 +"GRAPH g:MiniServers {"
+			 +"      	ssn:"+systemName+" ssn:hasSubSystem ?miniServer ."	
+			 +" 		?miniServer a  iot-liteIns:MiniServer;"
+			 +"      									geo:hasLocation ?location ."
+			 +"        ?location a   geo:Point;"
+			 +"      			  geo:lat ?latitude ;"
+			 +"      			  geo:long ?longtitude."    						
+			 +"		}"
+			 +"}";
+ executeDeleteQuery(strQuery);
 }
 
 
