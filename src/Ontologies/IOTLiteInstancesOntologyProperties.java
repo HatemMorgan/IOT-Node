@@ -133,4 +133,10 @@ public class IOTLiteInstancesOntologyProperties {
 				.createOntProperty(iotlins_URI + "hasName");
 		return hasName;
 	}
+	
+	public static OntProperty hasSensingDeviceUUID() {
+		OntProperty hasSensingDeviceUUID = IOTLiteInstancesOntologyModel
+				.createOntProperty(iotlins_URI + "hasSensingDeviceUUID");
+		return hasSensingDeviceUUID;
+	}
 }

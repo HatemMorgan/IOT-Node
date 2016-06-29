@@ -41,5 +41,17 @@ public class IOTInstancesOntologyClasses {
 				.createClass(iotlins_URI + "Application");
 		return Application;
 	}
+	
+	public static OntClass SensingDeviceUUID() {
+		OntClass SensingDeviceUUID = IOTLiteInstancesOntologyModel
+				.createClass(iotlins_URI + "SensingDeviceUUID");
+		return SensingDeviceUUID;
+	}
+	
+	public static OntClass macAddress() {
+		OntClass macAddress = IOTLiteInstancesOntologyModel
+				.createClass(iotlins_URI + "macAddress");
+		return macAddress;
+	}
 
 }
