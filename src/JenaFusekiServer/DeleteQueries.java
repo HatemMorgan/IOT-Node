@@ -277,62 +277,6 @@ public static void deleteMiniServers(String miniServerName){
 				 
  }
 
-/*
- *  One To Many relationship
- */
- 
-public static void deleteDevicesConnectedToDeletedMiniServer(String miniServerName){
-	String strQuery = 	
-			 "PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
-			+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
-			+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
-			+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
-			+"PREFIX g: <http://learningsparql.com/ns/graphs#>"
-			+"DELETE  { "
-			+" GRAPH g:Devices "
-			+"  { "
-			+"      ?deviceName  a ssn:Device;"
-			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
-			+"    			     ssn:hasSubSystem ?communicatingDevice;"
-			+"  				 ssn:hasSubSystem ?sensingDevice;"
-			+"    			     iot-liteIns:isConnectedTo iot-liteIns:"+miniServerName+";"
-			+"  				 iot-lite:exposedBy ?service."
-			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
-			+"  ?system  		 ssn:hasSubSystem ?deviceName."
-			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
-			+"  ?sensingDevice a ssn:SensingDevice ."
-			+"  ?deviceName iot-lite:hasCoverage ?coverage."
-			+"  ?coverage a ?coverageClass ."
-			+"  ?coverage iot-lite:hasPoint ?point."
-			+"  ?point a geo:Point ;"
-			+"     	 geo:lat ?latitude;"
-			+"    	 geo:long ?longtitude ."
-			+"  		    } "
-			+"}"
-			+"WHERE{"
-			+"GRAPH g:Devices "
-			+"  {"
-			+" ?deviceName a ssn:Device;"
-			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
-			+"    			     ssn:hasSubSystem ?communicatingDevice;"
-			+"  				 ssn:hasSubSystem ?sensingDevice;"
-			+"    			     iot-liteIns:isConnectedTo iot-liteIns:"+miniServerName+";"
-			+"   				 iot-lite:exposedBy ?service."
-			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
-			+"  ?system  		 ssn:hasSubSystem ?deviceName."
-			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
-			+" ?sensingDevice a ssn:SensingDevice ."
-			+ "?deviceName iot-lite:hasCoverage ?coverage."
-			+"  ?coverage a ?coverageClass ."
-			+" ?coverage iot-lite:hasPoint ?point."
-			+"  ?point  a  geo:Point;"
-			+"          geo:lat ?latitude;"
-			+"          geo:long ?longtitude ."
-			+"		 }"
-			+"}";
-
- executeDeleteQuery(strQuery);
-}
 
 
 
@@ -669,7 +613,7 @@ executeDeleteQuery(strQuery);
 			    	+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
 			    	+"DELETE { "
 			    	+"  GRAPH g:Objects{ "
-			    	+"     		iot-lite:C1_Cafeteria  a  iot-lite:Object ;"
+			    	+"     		iot-lite:"+objectName+"  a  iot-lite:Object ;"
 			        +"  								   geo:hasLocation ?location ."
 			        +"			?location  a  geo:Point;"
 			        +"  					   geo:long  ?longtitude ;"
@@ -678,7 +622,7 @@ executeDeleteQuery(strQuery);
 			        +" }"
 			    	+"WHERE{ "
 			    	+"   GRAPH g:Objects{ "
-			    	+"     		iot-lite:C1_Cafeteria  a  iot-lite:Object ;"
+			    	+"     		iot-lite:"+objectName+"  a  iot-lite:Object ;"
 			        +"  								   geo:hasLocation ?location ."
 			        +"			?location  a  geo:Point;"
 			        +"  					   geo:long  ?longtitude ;"
@@ -695,7 +639,7 @@ executeDeleteQuery(strQuery);
 	    	+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
 	    	+"DELETE { "
 	    	+"  GRAPH g:Objects{ "
-	    	+"     		iot-lite:C1_Cafeteria iot-lite:hasAttribute  ?attribute ."
+	    	+"     		iot-lite:"+ObjectName+" iot-lite:hasAttribute  ?attribute ."
 	        +"			?attribute  a  iot-lite:Attribute;"
 	        +"  					iot-lite:hasQuantityKind ?quantityKind ."
 	        +"   }"
@@ -704,7 +648,7 @@ executeDeleteQuery(strQuery);
 	    	+"SELECT ?attribute ?quantityKind "
 	    	+"	    WHERE{ "
 	    	+"		 	  GRAPH g:Objects{ "
-	    	+"		     			iot-lite:C1_Cafeteria  iot-lite:hasAttribute  ?attribute ."
+	    	+"		     			iot-lite:"+ObjectName+"  iot-lite:hasAttribute  ?attribute ."
 	    	+"	    				?attribute  a  iot-lite:Attribute;"
 	    	+"	      						    iot-lite:hasQuantityKind ?quantityKind .	"	  			
 	    	+"	  			}"
@@ -713,6 +657,172 @@ executeDeleteQuery(strQuery);
 	        +"}";
 executeDeleteQuery(strQuery);
  }
+ 
+ /*
+  *  one-to-many relationships delete queries 
+  */
+ 
+ // ----------------------------------------------------START-------------------------------------------------------
+ 
+public static void deleteDevicesConnectedToDeletedMiniServer(String miniServerName){
+	String strQuery = 	
+			 "PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+			+"PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			+"DELETE  { "
+			+" GRAPH g:Devices "
+			+"  { "
+			+"      ?deviceName  a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
+			+"    			     ssn:hasSubSystem ?communicatingDevice;"
+			+"  				 ssn:hasSubSystem ?sensingDevice;"
+			+"    			     iot-liteIns:isConnectedTo iot-liteIns:"+miniServerName+";"
+			+"  				 iot-lite:exposedBy ?service."
+			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
+			+"  ?system  		 ssn:hasSubSystem ?deviceName."
+			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+			+"  ?sensingDevice a ssn:SensingDevice ."
+			+"  ?deviceName iot-lite:hasCoverage ?coverage."
+			+"  ?coverage a ?coverageClass ."
+			+"  ?coverage iot-lite:hasPoint ?point."
+			+"  ?point a geo:Point ;"
+			+"     	 geo:lat ?latitude;"
+			+"    	 geo:long ?longtitude ."
+			+"  		    } "
+			+"}"
+			+"WHERE{"
+			+"GRAPH g:Devices "
+			+"  {"
+			+" ?deviceName a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
+			+"    			     ssn:hasSubSystem ?communicatingDevice;"
+			+"  				 ssn:hasSubSystem ?sensingDevice;"
+			+"    			     iot-liteIns:isConnectedTo iot-liteIns:"+miniServerName+";"
+			+"   				 iot-lite:exposedBy ?service."
+			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
+			+"  ?system  		 ssn:hasSubSystem ?deviceName."
+			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+			+" ?sensingDevice a ssn:SensingDevice ."
+			+ "?deviceName iot-lite:hasCoverage ?coverage."
+			+"  ?coverage a ?coverageClass ."
+			+" ?coverage iot-lite:hasPoint ?point."
+			+"  ?point  a  geo:Point;"
+			+"          geo:lat ?latitude;"
+			+"          geo:long ?longtitude ."
+			+"		 }"
+			+"}";
+
+ executeDeleteQuery(strQuery);
+}
+
+
+public static void deleteDevicesSubSystemOfDeletedSystem(String systemName){
+	String strQuery = 	
+			 "PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+			+"PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			+"DELETE  { "
+			+" GRAPH g:Devices "
+			+"  { "
+			+"  ssn:"+systemName+"   ssn:hasSubSystem ?deviceName."
+			+"      ?deviceName  a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
+			+"    			     ssn:hasSubSystem ?communicatingDevice;"
+			+"  				 ssn:hasSubSystem ?sensingDevice;"
+			+"    			     iot-liteIns:isConnectedTo ?miniserver;"
+			+"  				 iot-lite:exposedBy ?service."
+			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
+			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+			+"  ?sensingDevice a ssn:SensingDevice ."
+			+"  ?deviceName iot-lite:hasCoverage ?coverage."
+			+"  ?coverage a ?coverageClass ."
+			+"  ?coverage iot-lite:hasPoint ?point."
+			+"  ?point a geo:Point ;"
+			+"     	 geo:lat ?latitude;"
+			+"    	 geo:long ?longtitude ."
+			+"  		    } "
+			+"}"
+			+"WHERE{"
+			+"GRAPH g:Devices "
+			+"  {"
+			+" ssn:"+systemName+"    ssn:hasSubSystem ?deviceName."
+			+"       ?deviceName a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
+			+"    			     ssn:hasSubSystem ?communicatingDevice;"
+			+"  				 ssn:hasSubSystem ?sensingDevice;"
+			+"    			     iot-liteIns:isConnectedTo ?miniserver;"
+			+"   				 iot-lite:exposedBy ?service."
+			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
+			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+			+" ?sensingDevice a ssn:SensingDevice ."
+			+ "?deviceName iot-lite:hasCoverage ?coverage."
+			+"  ?coverage a ?coverageClass ."
+			+" ?coverage iot-lite:hasPoint ?point."
+			+"  ?point  a  geo:Point;"
+			+"          geo:lat ?latitude;"
+			+"          geo:long ?longtitude ."
+			+"		 }"
+			+"}";
+
+ executeDeleteQuery(strQuery);
+}
+
+
+public static void deleteDevicesAssociatedWithDeletedAttribute(){
+	
+}
+
+public static void deleteSensorsHasingDeletedSensingDevice(String sensingDeviceMacAddress){
+	 String strQuery = 
+
+				"	PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			   +"	PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			   +"	PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			   +"	PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"	PREFIX iot: <http://www.linkedthings.com/iot/>"
+			   +"	DELETE {"
+			   +"	  GRAPH g:Sensors{"
+			   +"	    ?sensor      a   ssn:Sensor;"
+			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+";"
+			   +" 	      					     iot-lite:hasQuantityKind ?quantityKind;"
+			   +"	     						 iot-lite:hasUnit  ?unit;"
+		       +"		      					 iot-liteIns:hasCommunicatingDevice ?communicatingDevice;"
+			   +"	      						 iot-liteIns:hasMetadata ?metadata . "
+			   +"      ?metadata  ?property ?value ."
+			   +"	   }"
+			   +"	 }"
+			   +"	WHERE{ "
+			   +"		 GRAPH g:Sensors{ "
+			   +"	     ?sensor      a   ssn:Sensor;"
+			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+" ;"
+			   +"	      					     iot-lite:hasQuantityKind ?quantityKind;"
+			   +"	     						 iot-lite:hasUnit  ?unit;"
+			   +"	       						 iot-liteIns:hasCommunicatingDevice ?communicatingDevice;"
+		       +"		      						 iot-liteIns:hasMetadata ?metadata ."
+		       +" }"
+			   +"   { "
+			   +"  SELECT  ?metadata ?property ?value  "
+			   +" WHERE{ "
+			   +"    GRAPH g:Sensors{ "
+			   +"     ?sensor   a   ssn:Sensor;"
+			   +"                            iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+";"
+			   +"                            iot-liteIns:hasMetadata ?metadata ."
+			   +"      ?metadata ?property ?value ."
+			   +" 			}"
+			   +" 		}"
+			   +"	}"
+			   +"}";
+	 
+	 executeDeleteQuery(strQuery);
+}
+
+
+
+ //-----------------------------------------------------END---------------------------------------------------------
  
  public static void executeDeleteQuery(String strQuery){
 	 UpdateProcessor updateQuery = UpdateExecutionFactory.createRemote(
@@ -737,7 +847,7 @@ executeDeleteQuery(strQuery);
 	//deleteDevice("6c23548ab568953a");
 	//deleteSensingDevice("47bed232-3d43-4033-a937-20e34c1ad055");
 	//deleteCommunicatingDevice("6c23548ab568953a");
-	//deleteSensor("Tempreture_Sensor", "3ed0a862-17f3-4c0d-8f9a-57bdfe8aca52");
+	//deleteSensor("Tempreture_Sensor", "f2fd0cde-5275-4772-bf08-dc603cc6edf6");
 	//deleteSensorsMetadata("Tempreture_Sensor", "c82f5b36-a913-4de3-89c0-cdac713ebfec");
 	//deleteServices("HealthChecker");
     //deleteDeviceExposedByServiceRelation("6c23548ab568953a", "HealthChecker");
@@ -754,6 +864,8 @@ executeDeleteQuery(strQuery);
 	//deleteDevicesConnectedToDeletedMiniServer("C_Ground_miniserver");
 	//deleteDevicesExposedByDeletedServiceRelation("HealthChecker");
 	//deleteServicesExposedByDeletedDeviceRelation("6c23548ab568953a");
+	//deleteDevicesSubSystemOfDeletedSystem("CBuilding");
+	//deleteSensorsHasingDeletedSensingDevice("31130131-8f12-4aab-b1ea-8bfd352a39b4");
  }
 }
 

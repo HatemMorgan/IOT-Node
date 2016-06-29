@@ -64,7 +64,7 @@ public class MainController {
 				"Tempreture", communicatingDevice, metaDataList);
 		Individual humiditySensor = InsertingTriples.insertSensor(
 				sensingDevice, "Humidity_Sensor", "Percentage", "Humidity",
-				communicatingDevice, null);
+				communicatingDevice, metaDataList);
 
 		// inserting sensor Output data
 		InsertingTriples.insertSensorOutputData("Tempreture", tempretureSensor,
