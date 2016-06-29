@@ -534,6 +534,9 @@ public class InsertingTriples {
 				newPoint.toString(), null);
 
 	}
+	/*
+	 * The unique value is the application name
+	 */
 
 	public static Individual insertApplication(String applicationName,
 			String applicationDescription) {
@@ -555,6 +558,10 @@ public class InsertingTriples {
 
 		return newApplication;
 	}
+	
+	/*
+	 * The unique value is the userName
+	 */
 
 	public static Individual insertPerson(String userName, String firstName,
 			String lastName, String gender, String Birthday, String email,

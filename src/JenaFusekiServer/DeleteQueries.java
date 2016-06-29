@@ -39,6 +39,7 @@ public class DeleteQueries {
  }
  
  
+ 
  public static void deleteApplication(String applicationName){
 	 String strQuery =
 			 "PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -61,6 +62,44 @@ public class DeleteQueries {
 	 executeDeleteQuery(strQuery);
  }
  
+public static void deleteApplicationsUsedByDeletedPersonRelation(String userName){
+	String strQuery = 
+		    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+		   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+		   +"PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+		   +"DELETE { "
+		   +"   GRAPH g:PersonUsesApplication { "
+		   +"	      foaf:"+userName+" iot-liteIns:usesApplication  ?application ."
+		   +"	     }"
+		   +"	 }"
+		   +"WHERE { "
+		   +"   GRAPH g:PersonUsesApplication { "
+		   +"	      foaf:"+userName+" iot-liteIns:usesApplication  ?application ."
+		   +"	     }"
+		   +"	 }";
+ 
+ executeDeleteQuery(strQuery);
+ }
+ 
+ public static void deletePersonUsesDeletedApplicationRelation(String applicationName){
+	 String strQuery = 
+			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+			   +"DELETE { "
+			   +"   GRAPH g:PersonUsesApplication { "
+			   +"	      ?person iot-liteIns:usesApplication iot-liteIns:"+applicationName+" ."
+			   +"	     }"
+			   +"	 }"
+	 		   +"WHERE { "
+	 		   +"   GRAPH g:PersonUsesApplication { "
+			   +"	      ?person iot-liteIns:usesApplication iot-liteIns:"+applicationName+" ."
+			   +"	     }"
+	 		   +"}";
+	 
+	 executeDeleteQuery(strQuery);
+ }
+
  public static void deletePersonUsesApplicationRelation(String userName , String applicationName){
 	 String strQuery = 
 			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -87,6 +126,48 @@ public class DeleteQueries {
 	executeDeleteQuery(strQuery);
  }
  
+ /*
+  *  Many To Many relationship
+  */
+ 
+ // ---------------------------------------------------------------------------------------------------------
+ 
+ public static void deleteApplicationsUsesDeletedSystemRelation(String systemName){
+	 String strQuery = 
+			"PREFIX g: <http://learningsparql.com/ns/graphs#>"
+ 		   +"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+ 		   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"DELETE { "
+			   +"   GRAPH g:ApplicationUsesSystem { "
+			   +"	      ?application iot-liteIns:usesSystem ssn:"+systemName+" ."
+			   +"	     }"
+			   +"	 }"
+			   +"WHERE { "
+			   +"   GRAPH g:ApplicationUsesSystem { "
+			   +"	      ?application iot-liteIns:usesSystem ssn:"+systemName+" ."
+			   +"	     }"
+			   +"	 }";
+	 executeDeleteQuery(strQuery);
+ }
+ 
+ public static void deleteSystemsUsedByDeletedApplicationRelation (String applicationName){
+	 String strQuery = 
+			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+ 		   +"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+ 		   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"DELETE { "
+			   +"   GRAPH g:ApplicationUsesSystem { "
+			   +"	      iot-liteIns:"+applicationName+" iot-liteIns:usesSystem ?system ."
+			   +"	     }"
+			   +"	 }"
+			   +"WHERE { "
+			   +"   GRAPH g:ApplicationUsesSystem { "
+			   +"	      iot-liteIns:"+applicationName+" iot-liteIns:usesSystem ?system ."
+			   +"	     }"
+			   +"	 }";
+	 executeDeleteQuery(strQuery); 
+ }
+ 
  public static void deleteApplicationUsesSystemRelation(String applicationName , String systemName){
 	 String strQuery = 
 			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -100,6 +181,56 @@ public class DeleteQueries {
 	 executeDeleteQuery(strQuery);
  }
  
+ //------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ /*
+  * Many to many relationship
+  */
+ 
+ 
+ //---------------------------------------------------------------------------------------------------------
+ 
+ public static void deletesubSystemsOfDeletedSystemRelation(String deletedSystemName){
+	 String strQuery = 
+			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+	 		   +"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			   +"DELETE { "
+			   +"   GRAPH g:SystemHasSubSystem { "
+			   +"	      ssn:"+deletedSystemName+" ssn:hasSubSystem ?subSystem ."
+			   +"	     }"
+			   +"	 }"
+			   +"WHERE { "
+			   +"   GRAPH g:SystemHasSubSystem { "
+			   +"	      ssn:"+deletedSystemName+" ssn:hasSubSystem ?subSystem ."
+			   +"	     }"
+			   +"	 }";
+	 executeDeleteQuery(strQuery);
+ }
+
+ 
+ 
+ public static void deleteSystemHasDeletedSubSystemRelation(String deletedSubSystemName){
+	 String strQuery = 
+			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+	 		   +"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			   +"DELETE { "
+			   +"   GRAPH g:SystemHasSubSystem { "
+			   +"	       ?system ssn:hasSubSystem ssn:"+deletedSubSystemName+" ."
+			   +"	     }"
+			   +"	 }"
+			   +"WHERE { "
+			   +"   GRAPH g:SystemHasSubSystem { "
+			   +"	       ?system ssn:hasSubSystem ssn:"+deletedSubSystemName+" ."
+			   +"	     }"
+			   +"	 }";
+	 executeDeleteQuery(strQuery);
+ }
+ 
+ 
+
+ 
  public static void deleteSystemHasSubSystemRelation(String systemName , String subSystemName){
 	 String strQuery = 
 			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -112,6 +243,8 @@ public class DeleteQueries {
 	 executeDeleteQuery(strQuery);
 
  }
+ 
+//------------------------------------------------------------------------------------------------------------ 
  
 public static void deleteMiniServers(String miniServerName){
 	 String strQuery = 
@@ -143,7 +276,66 @@ public static void deleteMiniServers(String miniServerName){
 	 executeDeleteQuery(strQuery);
 				 
  }
+
+/*
+ *  One To Many relationship
+ */
  
+public static void deleteDevicesConnectedToDeletedMiniServer(String miniServerName){
+	String strQuery = 	
+			 "PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+			+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+			+"PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			+"DELETE  { "
+			+" GRAPH g:Devices "
+			+"  { "
+			+"      ?deviceName  a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
+			+"    			     ssn:hasSubSystem ?communicatingDevice;"
+			+"  				 ssn:hasSubSystem ?sensingDevice;"
+			+"    			     iot-liteIns:isConnectedTo iot-liteIns:"+miniServerName+";"
+			+"  				 iot-lite:exposedBy ?service."
+			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
+			+"  ?system  		 ssn:hasSubSystem ?deviceName."
+			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+			+"  ?sensingDevice a ssn:SensingDevice ."
+			+"  ?deviceName iot-lite:hasCoverage ?coverage."
+			+"  ?coverage a ?coverageClass ."
+			+"  ?coverage iot-lite:hasPoint ?point."
+			+"  ?point a geo:Point ;"
+			+"     	 geo:lat ?latitude;"
+			+"    	 geo:long ?longtitude ."
+			+"  		    } "
+			+"}"
+			+"WHERE{"
+			+"GRAPH g:Devices "
+			+"  {"
+			+" ?deviceName a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress ?macaddress ;"
+			+"    			     ssn:hasSubSystem ?communicatingDevice;"
+			+"  				 ssn:hasSubSystem ?sensingDevice;"
+			+"    			     iot-liteIns:isConnectedTo iot-liteIns:"+miniServerName+";"
+			+"   				 iot-lite:exposedBy ?service."
+			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
+			+"  ?system  		 ssn:hasSubSystem ?deviceName."
+			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
+			+" ?sensingDevice a ssn:SensingDevice ."
+			+ "?deviceName iot-lite:hasCoverage ?coverage."
+			+"  ?coverage a ?coverageClass ."
+			+" ?coverage iot-lite:hasPoint ?point."
+			+"  ?point  a  geo:Point;"
+			+"          geo:lat ?latitude;"
+			+"          geo:long ?longtitude ."
+			+"		 }"
+			+"}";
+
+ executeDeleteQuery(strQuery);
+}
+
+
+
 public static void deleteDevice(String deviceMacAddress){
 String strQuery = 	
 			 "PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
@@ -176,6 +368,7 @@ String strQuery =
 			+"GRAPH g:Devices "
 			+"  {"
 			+" ?deviceName a ssn:Device;"
+			+" 					 iot-liteIns:hasMacaddress \""+deviceMacAddress+"\" ;"
 			+"    			     ssn:hasSubSystem ?communicatingDevice;"
 			+"  				 ssn:hasSubSystem ?sensingDevice;"
 			+"    			     iot-liteIns:isConnectedTo ?miniserver;"
@@ -220,17 +413,7 @@ public static void deleteSensingDevice(String UUID){
 
 }
 
- public static void executeDeleteQuery(String strQuery){
-	 UpdateProcessor updateQuery = UpdateExecutionFactory.createRemote(
-				UpdateFactory.create(strQuery),
-				"http://localhost:3030/myDataset/update");
-		try {
-			updateQuery.execute();
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
- }
- 
+
  public static void deleteCommunicatingDevice(String macAddress){
 	String strQuery = 
 			 "PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -362,6 +545,49 @@ public static void deleteSensingDevice(String UUID){
 	 executeDeleteQuery(strQuery);
  }
  
+ /*
+  *  Many to many relationship
+  */
+ 
+ //---------------------------------------------------------------------------------------------------------
+ 
+ public static void deleteDevicesExposedByDeletedServiceRelation(String serviceName){
+	 String strQuery = 
+			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			   +"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"DELETE { "
+			   +"   GRAPH g:DeviceExposedByService { "
+			   +"	      ?deviceMacAddress iot-lite:exposedBy iot-lite:"+serviceName+" ."
+			   +"	     }"
+			   +"	 }"
+			   +"WHERE { "
+			   +"   GRAPH g:DeviceExposedByService { "
+			   +"	      ?deviceMacAddress iot-lite:exposedBy iot-lite:"+serviceName+" ."
+			   +"	     }"
+			   +"	 }";
+	 executeDeleteQuery(strQuery);
+ }
+ 
+ 
+ public static void deleteServicesExposedByDeletedDeviceRelation(String deviceMacAddress ){
+	 String strQuery = 
+			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			   +"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+			   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"DELETE { "
+			   +"   GRAPH g:DeviceExposedByService { "
+			   +"	      iot-liteIns:"+deviceMacAddress+" iot-lite:exposedBy ?service ."
+			   +"	     }"
+			   +"	 }"
+			   +"WHERE { "
+			   +"   GRAPH g:DeviceExposedByService { "
+			   +"	      iot-liteIns:"+deviceMacAddress+" iot-lite:exposedBy ?service ."
+			   +"	     }"
+			   +"	 }";
+	 executeDeleteQuery(strQuery);
+ }
+ 
  public static void deleteDeviceExposedByServiceRelation (String deviceMacAddress , String serviceName){
 	 String strQuery = 
 			    "PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -369,11 +595,14 @@ public static void deleteSensingDevice(String UUID){
 			   +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
 			   +"DELETE DATA{ "
 			   +"   GRAPH g:DeviceExposedByService { "
-			   +"	      iot-liteIns:"+deviceMacAddress+" ssn:exposedBy iot-lite:"+serviceName+" ."
+			   +"	      iot-liteIns:"+deviceMacAddress+" iot-lite:exposedBy iot-lite:"+serviceName+" ."
 			   +"	     }"
 			   +"	 }";
 	 executeDeleteQuery(strQuery);
  }
+ 
+ 
+ //-------------------------------------------------------------------------------------------------------------
  
  public static void deleteSensorOutputs(String sensorName , String sensingDeviceMacAddress){
 	 String strQuery = 
@@ -485,6 +714,18 @@ executeDeleteQuery(strQuery);
 executeDeleteQuery(strQuery);
  }
  
+ public static void executeDeleteQuery(String strQuery){
+	 UpdateProcessor updateQuery = UpdateExecutionFactory.createRemote(
+				UpdateFactory.create(strQuery),
+				"http://localhost:3030/myDataset/update");
+		try {
+			updateQuery.execute();
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+ }
+ 
+ 
  public static void main(String[] args) {
 	//deletePerson("MohamedAhmed");
 	//deleteApplication("FoodTesterApp");
@@ -503,7 +744,16 @@ executeDeleteQuery(strQuery);
 	//deleteSensorOutputs("Humidity_Sensor", "8d47cf8f-4f15-4616-a01e-ccf3099c5937");
 	//deleteSensorOutputsByDateTime("Humidity_Sensor", "530e5d9c-5712-409a-aec8-25f3faceaab1", "Wed Jun 29 14:19:48 EET 2016");
 	//deleteObject("C1_Cafeteria");
-	 deleteAttribute("C1_Cafeteria", "Tempreture_and_Humidity");
+	//deleteAttribute("C1_Cafeteria", "Tempreture_and_Humidity");
+	//deleteApplicationsUsedByDeletedPersonRelation("HatemMorgan");
+	//deletePersonUsesDeletedApplicationRelation("FoodTesterApp");
+	//deleteApplicationsUsesDeletedSystemRelation("CBuilding");
+	//deleteSystemsUsedByDeletedApplicationRelation("FoodTesterApp");
+	//deleteSystemHasDeletedSubSystemRelation("CBuilding");
+	//deletesubSystemsOfDeletedSystemRelation("GUC");
+	//deleteDevicesConnectedToDeletedMiniServer("C_Ground_miniserver");
+	//deleteDevicesExposedByDeletedServiceRelation("HealthChecker");
+	//deleteServicesExposedByDeletedDeviceRelation("6c23548ab568953a");
  }
 }
 
