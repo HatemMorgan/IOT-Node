@@ -342,14 +342,16 @@ public static void deleteSensingDevice(String UUID){
 			   +"	  GRAPH g:SensingDevices { "
 			   +"	       ?sensingDevice a ssn:SensingDevice ;"
 			   +"	                      iot-liteIns:hasUUID \""+UUID+"\" ;"
-			   +"	      				  iot-liteIns:hasName ?name"
+			   +"	      				  iot-liteIns:hasName ?name ;"
+			   +"                         iot-liteIns:hasCommunicatingDevice ?communicatingDevice ."
 			   +"	    }"
 			   +"	 }"
 			   +"	WHERE{"
 			   +"	     GRAPH g:SensingDevices {"
 			   +"	       ?sensingDevice a ssn:SensingDevice ;"
 			   +"	                      iot-liteIns:hasUUID \""+UUID+"\" ;"
-			   +"	      				  iot-liteIns:hasName ?name"
+			   +"	      				  iot-liteIns:hasName ?name;"
+			   +"                         iot-liteIns:hasCommunicatingDevice ?communicatingDevice ."
 			   +"	    }"
 			   +"	  }";
 	
@@ -413,7 +415,6 @@ public static void deleteSensingDevice(String UUID){
 			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+";"
 			   +" 	      					     iot-lite:hasQuantityKind ?quantityKind;"
 			   +"	     						 iot-lite:hasUnit  ?unit;"
-		       +"		      					 iot-liteIns:hasCommunicatingDevice ?communicatingDevice;"
 			   +"	      						 iot-liteIns:hasMetadata ?metadata . "
 			   +"      ?metadata  ?property ?value ."
 			   +"	   }"
@@ -424,8 +425,7 @@ public static void deleteSensingDevice(String UUID){
 			   +"	      						 iot-lite:hasSensingDevice iot-liteIns:"+sensingDeviceMacAddress+" ;"
 			   +"	      					     iot-lite:hasQuantityKind ?quantityKind;"
 			   +"	     						 iot-lite:hasUnit  ?unit;"
-			   +"	       						 iot-liteIns:hasCommunicatingDevice ?communicatingDevice;"
-		       +"		      						 iot-liteIns:hasMetadata ?metadata ."
+		       +"		      				     iot-liteIns:hasMetadata ?metadata ."
 		       +" }"
 			   +"   { "
 			   +"  SELECT  ?metadata ?property ?value  "
@@ -776,7 +776,7 @@ public static void deleteDevicesAssociatedWithDeletedAttribute(){
 	
 }
 
-public static void deleteSensorsHasingDeletedSensingDevice(String sensingDeviceMacAddress){
+public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceMacAddress){
 	 String strQuery = 
 
 				"	PREFIX g: <http://learningsparql.com/ns/graphs#>"
@@ -824,6 +824,36 @@ public static void deleteSensorsHasingDeletedSensingDevice(String sensingDeviceM
 
  //-----------------------------------------------------END---------------------------------------------------------
  
+/*
+ * ONE TO ONE RELATIONSHIPS 
+ * sensor has communicatingDevice communicatingDevice  triple in sensors graph
+ */
+
+//-----------------------------------------------------START--------------------------------------------------------
+ 
+public static void deleteRelationTriple(String communicatingDeviceMacAddress){
+	 String strQuery = 
+
+				"	PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			   +"	PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+			   +"	DELETE {"
+			   +"	  GRAPH g:SensingDevices{"
+		       +"		   ?sensingDevice  iot-liteIns:hasCommunicatingDevice iot-liteIns:"+communicatingDeviceMacAddress+"."
+			   +"	   }"
+			   +"	 }"
+			   +"	WHERE{ "
+			   +"		 GRAPH g:SensingDevices{ "
+			   +"	       ?sensingDevice  iot-liteIns:hasCommunicatingDevice iot-liteIns:"+communicatingDeviceMacAddress+"."
+			   +"	}"
+			   +"}";
+	 
+	 executeDeleteQuery(strQuery);
+}
+
+
+//-----------------------------------------------------END----------------------------------------------------------
+
+
  public static void executeDeleteQuery(String strQuery){
 	 UpdateProcessor updateQuery = UpdateExecutionFactory.createRemote(
 				UpdateFactory.create(strQuery),
@@ -845,9 +875,9 @@ public static void deleteSensorsHasingDeletedSensingDevice(String sensingDeviceM
 	//deleteSystemHasSubSystemRelation("GUC", "CBuilding"); 
 	//deleteMiniServers("C_Ground_miniserver");
 	//deleteDevice("6c23548ab568953a");
-	//deleteSensingDevice("47bed232-3d43-4033-a937-20e34c1ad055");
+	//deleteSensingDevice("734d3ef2-3385-4470-90bf-4f5554496dc9");
 	//deleteCommunicatingDevice("6c23548ab568953a");
-	//deleteSensor("Tempreture_Sensor", "f2fd0cde-5275-4772-bf08-dc603cc6edf6");
+	//deleteSensor("Tempreture_Sensor", "734d3ef2-3385-4470-90bf-4f5554496dc9");
 	//deleteSensorsMetadata("Tempreture_Sensor", "c82f5b36-a913-4de3-89c0-cdac713ebfec");
 	//deleteServices("HealthChecker");
     //deleteDeviceExposedByServiceRelation("6c23548ab568953a", "HealthChecker");
@@ -865,7 +895,8 @@ public static void deleteSensorsHasingDeletedSensingDevice(String sensingDeviceM
 	//deleteDevicesExposedByDeletedServiceRelation("HealthChecker");
 	//deleteServicesExposedByDeletedDeviceRelation("6c23548ab568953a");
 	//deleteDevicesSubSystemOfDeletedSystem("CBuilding");
-	//deleteSensorsHasingDeletedSensingDevice("31130131-8f12-4aab-b1ea-8bfd352a39b4");
+	//deleteSensorsHavingDeletedSensingDevice("31130131-8f12-4aab-b1ea-8bfd352a39b4");
+	//deleteRelationTriple("6c23548ab568953a");
  }
 }
 

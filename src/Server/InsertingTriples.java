@@ -142,7 +142,7 @@ public class InsertingTriples {
 	 * The unique value is the UUID generated for the new sensingDevice 
 	 */
 	
-	public static Individual insertSensingDevice(String sensingDeviceName) {
+	public static Individual insertSensingDevice(String sensingDeviceName , Individual communicatingDevice) {
 		String id = UUID.randomUUID().toString();
 		Individual newSensingDevice = model.createIndividual(SSN_URI
 				+ sensingDeviceName, IOTLiteOntologyClasses.sensingDevice());
@@ -159,6 +159,10 @@ public class InsertingTriples {
 				IOTLiteInstancesOntologyProperties.hasName().toString(),
 				null, sensingDeviceName);
 
+		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasCommunicatingDevice()
+						.toString(), communicatingDevice.toString(), null);
+		
 		return model.createIndividual(iotlins_URI+id,IOTInstancesOntologyClasses.SensingDeviceUUID());
 	}
 	
@@ -216,7 +220,7 @@ public class InsertingTriples {
 				IOTLiteInstancesOntologyProperties.hasType().toString(), null,
 				type);
 
-		return newCommunicatingDevice;
+		return model.createIndividual(iotlins_URI+macAddress,IOTInstancesOntologyClasses.macAddress());
 	}
 
 	/*
@@ -270,7 +274,6 @@ public class InsertingTriples {
 
 	public static Individual insertSensor(Individual sensingDevice,
 			String sensorName, String strUnit, String strQuantityKind,
-			Individual communicatingDevice,
 			Hashtable<String, Object> metadataList) {
 
 		Individual newSensor = model.createIndividual(SSN_URI + sensorName,
@@ -289,9 +292,7 @@ public class InsertingTriples {
 		FusekiGraphs.insertIntoSensorsGraph(newSensor.toString(),
 				IOTLiteOntologyProperties.hasUnit().toString(), QU_URI
 						+ strUnit, null);
-		FusekiGraphs.insertIntoSensorsGraph(newSensor.toString(),
-				IOTLiteInstancesOntologyProperties.hasCommunicatingDevice()
-						.toString(), communicatingDevice.toString(), null);
+
 
 		if (metadataList != null) {
 
