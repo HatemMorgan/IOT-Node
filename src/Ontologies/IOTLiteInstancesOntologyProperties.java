@@ -24,7 +24,7 @@ public class IOTLiteInstancesOntologyProperties {
 		return hasApplicationDescription;
 	}
 
-	public static OntProperty usesSystemProperty() {
+	public static OntProperty usesSystem() {
 		OntProperty usesSystem = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "usesSystem");
 		return usesSystem;
@@ -120,5 +120,23 @@ public class IOTLiteInstancesOntologyProperties {
 		OntProperty hasDutyCycle = IOTLiteInstancesOntologyModel
 				.createOntProperty(iotlins_URI + "hasDutyCycle");
 		return hasDutyCycle;
+	}
+
+	public static OntProperty hasUUID() {
+		OntProperty hasUUID = IOTLiteInstancesOntologyModel
+				.createOntProperty(iotlins_URI + "hasUUID");
+		return hasUUID;
+	}
+	
+	public static OntProperty hasName() {
+		OntProperty hasName = IOTLiteInstancesOntologyModel
+				.createOntProperty(iotlins_URI + "hasName");
+		return hasName;
+	}
+	
+	public static OntProperty hasSensingDeviceUUID() {
+		OntProperty hasSensingDeviceUUID = IOTLiteInstancesOntologyModel
+				.createOntProperty(iotlins_URI + "hasSensingDeviceUUID");
+		return hasSensingDeviceUUID;
 	}
 }

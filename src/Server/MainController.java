@@ -40,18 +40,18 @@ public class MainController {
 				C1_Cafeteria);
 
 		// inserting Device
-		Individual communicatingDevice = InsertingTriples.insertCommunicatingDevice("Bluetooth_Low_Energy_001",
+		Individual communicatingDeviceMacAddress = InsertingTriples.insertCommunicatingDevice("Bluetooth_Low_Energy_001",
 				"Bluetooth Low Energy (BLE)", "10 bits/second",
 				"Star_NetworkTopology", "1024 HZ", "100 Watt", "-173.9 dBm/Hz", "2", "6c23548ab568953a", "60%");
 
 		Individual sensingDevice = InsertingTriples
-				.insertSensingDevice("TempretureHumidityModule");
-		Individual device = InsertingTriples.insertDevice("TempHumBLE",
-				CBuilding, miniServer, service, communicatingDevice,
-				sensingDevice, attribute);
+				.insertSensingDevice("TempretureHumidityModule",communicatingDeviceMacAddress);
+		Individual deviceMacAddress = InsertingTriples.insertDevice("TempHumBLE",
+				CBuilding, miniServer, service, communicatingDeviceMacAddress,
+				sensingDevice, attribute ,"6c23548ab568953a");
 
 		// inserting Device exposed by service
-		InsertingTriples.insertDeviceServiceRelation(device, service);
+		InsertingTriples.insertDeviceServiceRelation(deviceMacAddress, service);
 
 		// adding metaData of tempreture sensor
 		Hashtable<String, Object> metaDataList = new Hashtable<String, Object>();
@@ -61,16 +61,16 @@ public class MainController {
 		// inserting sensors
 		Individual tempretureSensor = InsertingTriples.insertSensor(
 				sensingDevice, "Tempreture_Sensor", "Degree_Celsius",
-				"Tempreture", communicatingDevice, metaDataList);
+				"Tempreture", metaDataList);
 		Individual humiditySensor = InsertingTriples.insertSensor(
 				sensingDevice, "Humidity_Sensor", "Percentage", "Humidity",
-				communicatingDevice, null);
+				 metaDataList);
 
 		// inserting sensor Output data
 		InsertingTriples.insertSensorOutputData("Tempreture", tempretureSensor,
-				"70", new Date().toString());
+				"70", new Date().toString(),sensingDevice);
 		InsertingTriples.insertSensorOutputData("Humidity", humiditySensor,
-				"20", new Date().toString());
+				"20", new Date().toString(),sensingDevice);
 
 		// insert an application
 		Individual FoodTesterApp = InsertingTriples
@@ -100,7 +100,7 @@ public class MainController {
 		// inserting coverage
 		try {
 		Individual	coverage = InsertingTriples.insertCoverage("Cafeteria'sFridgeArea",
-					device, "Rectangle");
+				InsertingTriples.getDevice(), "Rectangle");
 			// create coverage point
 			InsertingTriples.createPoint("SWCorner", "-0.12", "50.01", coverage);
 		} catch (Exception e) {

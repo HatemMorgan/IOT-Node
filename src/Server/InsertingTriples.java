@@ -3,15 +3,26 @@ package Server;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.graph.Node;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.rdf.model.AnonId;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.RDFVisitor;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.sparql.engine.index.SetIndexTable;
 
 import com.github.andrewoma.dexx.collection.ArrayList;
 
@@ -36,14 +47,13 @@ public class InsertingTriples {
 	private static final String SSN_URI = "http://purl.oclc.org/NET/ssnx/ssn#";
 	private static final String FOAF_URI = "http://xmlns.com/foaf/0.1/";
 
-	// private static final OntModel FOAFOntologyModel =
-	// OntologyMain.getFOAFOntModel();
-	// private static final OntModel IOTLiteInstancesOntologyModel =
-	// OntologyMain.getIOTLiteInstancesOntModel();
+	private static Individual device ;
+
 	private static final OntModel model = OntologyMain.getIOTLiteOntModel();
 
-	// private static final OntModel SSNOntologyModel =
-	// OntologyMain.getSSNOntModel();
+	/*
+	 * Unique value is the systemName
+	 */
 
 	public static Individual insertSystem(String SystemName) {
 
@@ -74,21 +84,25 @@ public class InsertingTriples {
 	 * subsystem communicatingDevice and SensingDevice (one-to-one relationship)
 	 * A service can has many devices (many-to-many relationship) A MiniServer
 	 * can has many devices connecting to it (one-to-many relationship)
+	 * 
+	 * Unique value is deviceMacAddress 
 	 */
 
 	public static Individual insertDevice(String DeviceName, Individual system,
 			Individual miniServer, Individual service,
 			Individual CommunicatingDevice, Individual sensingDevice,
-			Individual attribute) {
+			Individual attribute , String deviceMacAddress) {
 
 		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
 				IOTLiteOntologyClasses.device());
-
+		
+		setDevice(newDevice);
+		
 		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDevice.toString(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTInstancesOntologyClasses.communicatingDevice().toString(),
 				null);
-
+ 
 		FusekiGraphs.insertIntoDevicesGraph(sensingDevice.toString(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
@@ -96,7 +110,11 @@ public class InsertingTriples {
 		FusekiGraphs.insertIntoDevicesGraph(SSN_URI + DeviceName,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.device().toString(), null);
-
+        
+		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasMacaddress().toString(),
+				null, deviceMacAddress);
+		
 		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
 				IOTLiteInstancesOntologyProperties.isConnectedTo().toString(),
 				miniServer.toString(), null);
@@ -116,20 +134,41 @@ public class InsertingTriples {
 				IOTLiteOntologyProperties.hasSubSystem().toString(),
 				newDevice.toString(), null);
 
-		return newDevice;
+		return model.createIndividual(iotlins_URI+deviceMacAddress,IOTInstancesOntologyClasses.macAddress());
 	}
 
-	public static Individual insertSensingDevice(String sensingDeviceName) {
-
+	
+	/*
+	 * The unique value is the UUID generated for the new sensingDevice 
+	 */
+	
+	public static Individual insertSensingDevice(String sensingDeviceName , Individual communicatingDevice) {
+		String id = UUID.randomUUID().toString();
 		Individual newSensingDevice = model.createIndividual(SSN_URI
 				+ sensingDeviceName, IOTLiteOntologyClasses.sensingDevice());
 
 		FusekiGraphs.insertIntoSensingDevicesGraph(SSN_URI + sensingDeviceName,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
+		
+		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasUUID().toString(),
+				null, id);
+		
+		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasName().toString(),
+				null, sensingDeviceName);
 
-		return newSensingDevice;
+		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
+				IOTLiteInstancesOntologyProperties.hasCommunicatingDevice()
+						.toString(), communicatingDevice.toString(), null);
+		
+		return model.createIndividual(iotlins_URI+id,IOTInstancesOntologyClasses.SensingDeviceUUID());
 	}
+	
+	/*
+	 * The Unique value is the macAddress
+	 */
 
 	public static Individual insertCommunicatingDevice(
 			String communicatingDeviceName, String type, String bandwidth,
@@ -160,16 +199,34 @@ public class InsertingTriples {
 				.toString(), IOTLiteInstancesOntologyProperties
 				.hasTransmitPower().toString(), null, transmitPower);
 
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasMacaddress().toString(), null, macAddress);
+		
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasNumberOfChannels().toString(), null, numberOfChannels);
+		
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasSensitivity().toString(), null, sensitvity);
+		
+		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
+				.toString(), IOTLiteInstancesOntologyProperties
+				.hasDutyCycle().toString(), null, dutyCycle);
+		
 		FusekiGraphs.insertIntoCommunicatingDevicesGraph(
 				newCommunicatingDevice.toString(),
 				IOTLiteInstancesOntologyProperties.hasType().toString(), null,
 				type);
 
-		return newCommunicatingDevice;
+		return model.createIndividual(iotlins_URI+macAddress,IOTInstancesOntologyClasses.macAddress());
 	}
 
 	/*
 	 * A system can has many MiniServers (one-to-many relationship)
+	 * 
+	 * The unique value is the miniServerName
 	 */
 
 	public static Individual insertMiniServer(String miniServerName,
@@ -211,11 +268,12 @@ public class InsertingTriples {
 	 * A sensingDevice can have many sensors (one-to-many relationships) A
 	 * sensor must have communicatingDevice (one-to-one relationship) A sensor
 	 * may have metadata
+	 * 
+	 * Unique value is the sensor name
 	 */
 
 	public static Individual insertSensor(Individual sensingDevice,
 			String sensorName, String strUnit, String strQuantityKind,
-			Individual communicatingDevice,
 			Hashtable<String, Object> metadataList) {
 
 		Individual newSensor = model.createIndividual(SSN_URI + sensorName,
@@ -234,18 +292,16 @@ public class InsertingTriples {
 		FusekiGraphs.insertIntoSensorsGraph(newSensor.toString(),
 				IOTLiteOntologyProperties.hasUnit().toString(), QU_URI
 						+ strUnit, null);
-		FusekiGraphs.insertIntoSensorsGraph(newSensor.toString(),
-				IOTLiteInstancesOntologyProperties.hasCommunicatingDevice()
-						.toString(), communicatingDevice.toString(), null);
+
 
 		if (metadataList != null) {
 
 			Individual metadata = model.createIndividual(iotlins_URI
-					+ sensorName + "'s_Metadata",
+					+ sensorName + "_Metadata",
 					IOTInstancesOntologyClasses.metaData());
 
 			FusekiGraphs.insertIntoSensorsGraph(iotlins_URI + sensorName
-					+ "'s_Metadata", IOTLiteOntologyProperties.type()
+					+ "_Metadata", IOTLiteOntologyProperties.type()
 					.toString(), IOTInstancesOntologyClasses.metaData()
 					.toString(), null);
 
@@ -272,6 +328,10 @@ public class InsertingTriples {
 		return newSensor;
 	}
 
+	/*
+	 *  The unique value is the serviceName
+	 */
+	
 	public static Individual insertService(String serviceName, String endpoint,
 			String interfaceDescription) {
 
@@ -298,6 +358,8 @@ public class InsertingTriples {
 
 	/*
 	 * add new place like a room for example
+	 * 
+	 * The unique value is objectName
 	 */
 	public static Individual insertObject(String objectName,
 			String locationName, String longtitude, String latitude) {
@@ -361,10 +423,12 @@ public class InsertingTriples {
 
 	/*
 	 * A sensor can have many outputs (one-to-many relationship)
+	 * 
+	 * The Unique value is the SensorName and sensingDevice UUID
 	 */
 
 	public static void insertSensorOutputData(String SensorOutputdata,
-			Individual Sensor, String strValue, String DateTime) {
+			Individual Sensor, String strValue, String DateTime , Individual sensingDeviceUUID ) {
 
 		Individual newSensorOutput = model.createIndividual(SSN_URI
 				+ SensorOutputdata, SSNOntologyClasses.sensorOutput());
@@ -388,6 +452,10 @@ public class InsertingTriples {
 				SSNOntologyProperties.hasValue().toString(), value.toString(),
 				null);
 
+		FusekiGraphs.insertIntoSensorOutputsGraph(newSensorOutput.toString(),
+				IOTLiteInstancesOntologyProperties.hasSensingDeviceUUID().toString(), sensingDeviceUUID.toString(),
+				null);
+		
 		FusekiGraphs.insertIntoSensorOutputsGraph(newSensorOutput.toString(),
 				SSNOntologyProperties.observationResultTime().toString(), null,
 				DateTime);
@@ -467,6 +535,9 @@ public class InsertingTriples {
 				newPoint.toString(), null);
 
 	}
+	/*
+	 * The unique value is the application name
+	 */
 
 	public static Individual insertApplication(String applicationName,
 			String applicationDescription) {
@@ -488,16 +559,21 @@ public class InsertingTriples {
 
 		return newApplication;
 	}
+	
+	/*
+	 * The unique value is the userName
+	 */
 
-	public static Individual insertPerson(String personName, String firstName,
+	public static Individual insertPerson(String userName, String firstName,
 			String lastName, String gender, String Birthday, String email,
 			String role) throws Exception {
 		if (role.equals("Developer") || role.equals("NormalUser")
 				|| role.equals("Admin")) {
+			
 			Individual newPerson = model.createIndividual(
-					FOAF_URI + personName, FOAFOntologyClasses.PersonClass());
+					FOAF_URI + userName, FOAFOntologyClasses.PersonClass());
 
-			FusekiGraphs.insertIntoPersonsGraph(FOAF_URI + personName,
+			FusekiGraphs.insertIntoPersonsGraph(FOAF_URI + userName,
 					IOTLiteOntologyProperties.type().toString(),
 					FOAFOntologyClasses.PersonClass().toString(), null);
 
@@ -554,7 +630,7 @@ public class InsertingTriples {
 			Individual system) {
 		FusekiGraphs.insertIntoApplicationUsesSystemGraph(application
 				.toString(), IOTLiteInstancesOntologyProperties
-				.usesApplication().toString(), system.toString(), null);
+				.usesSystem().toString(), system.toString(), null);
 	}
 
 	/*
@@ -569,4 +645,12 @@ public class InsertingTriples {
 				service.toString(), null);
 	}
 
+	public static void setDevice(Individual newDevice){
+		device = newDevice;
+	}
+	
+	public static Individual getDevice (){
+		return device;
+	}
+	
 }

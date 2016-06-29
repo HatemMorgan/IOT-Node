@@ -256,14 +256,6 @@ public class StaticQueries {
 		}
 	}
 
-	public static void addnewDevice(String DeviceName, Individual system,
-			Individual miniServer, Individual service,
-			Individual CommunicatingDevice, Individual sensingDevice,
-			Individual attribute) {
-
-		InsertingTriples.insertDevice(DeviceName, system, miniServer, service,
-				CommunicatingDevice, sensingDevice, attribute);
-	}
 
 	
 	public static void deleteExsistingDevice(String deviceName){
