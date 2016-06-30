@@ -2,17 +2,23 @@ package Server;
 
 import java.util.Date;
 import java.util.Hashtable;
-
+import java.util.ArrayList;
+import JenaFusekiServer.FusekiQueries;
 import org.apache.jena.ontology.Individual;
 
-import JenaFusekiServer.FusekiGraphs;
-import JenaFusekiServer.FusekiQueries;
-
-import com.github.andrewoma.dexx.collection.ArrayList;
 
 public class MainController {
-	public static void main(String[] args) {
-		FusekiQueries.DropAllGraphs();
+	public static int test(){
+		ArrayList<Integer> x = new ArrayList<Integer>();
+		x.add(new Integer(1));
+		x.add(new Integer(2));
+		x.add(new Integer(3));
+		x.add(new Integer(4));
+		
+		return (int) x.get(2);
+	}
+	public static void insertData(){
+		 JenaFusekiServer.FusekiQueries.DropAllGraphs();
 		// inseting system and its subSystems
 		Individual GUC = InsertingTriples.insertSystem("GUC");
 		Individual CBuilding = InsertingTriples.insertSystem("CBuilding");
@@ -54,7 +60,7 @@ public class MainController {
 		InsertingTriples.insertDeviceServiceRelation(deviceMacAddress, service);
 
 		// adding metaData of tempreture sensor
-		Hashtable<String, Object> metaDataList = new Hashtable<String, Object>();
+		java.util.Hashtable<String, Object> metaDataList = new java.util.Hashtable<String, Object>();
 		metaDataList.put("MetaType", "Resolution");
 		metaDataList.put("MetaValue", Integer.valueOf(1024));
 
@@ -68,7 +74,7 @@ public class MainController {
 
 		// inserting sensor Output data
 		InsertingTriples.insertSensorOutputData("Tempreture", tempretureSensor,
-				"70", new Date().toString(),sensingDevice);
+				"70",new Date().toString(),sensingDevice);
 		InsertingTriples.insertSensorOutputData("Humidity", humiditySensor,
 				"20", new Date().toString(),sensingDevice);
 
@@ -115,5 +121,8 @@ public class MainController {
 		e.printStackTrace();
 	}
 
+	}
+	public static void main(String[] args) {
+		
 	}
 }
