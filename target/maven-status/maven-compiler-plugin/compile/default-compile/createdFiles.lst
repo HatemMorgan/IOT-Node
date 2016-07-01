@@ -1,0 +1,17 @@
+Ontologies/IOTLiteOntologyClasses.class
+Ontologies/SSNOntologyProperties.class
+JenaFusekiServer/DeleteQueries.class
+JenaFusekiServer/FusekiGraphs.class
+Server/MainController.class
+JenaFusekiServer/FusekiQueries.class
+Ontologies/SSNOntologyClasses.class
+Ontologies/FOAFOntologyClasses.class
+Ontologies/IOTLiteOntologyProperties.class
+Ontologies/OntologyMain.class
+Ontologies/IOTInstancesOntologyClasses.class
+Ontologies/FOAFOntologyProperties.class
+Server/IOTLiteOntologyControllerTest.class
+Ontologies/IOTLiteOntology.class
+Ontologies/IOTLiteInstancesOntologyProperties.class
+Server/StaticQueries.class
+Server/InsertingTriples.class
