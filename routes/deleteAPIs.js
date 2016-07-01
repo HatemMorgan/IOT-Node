@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-var javaInit = require('../javaInit');
+var javaInit = require('../javascript/javaInit');
 var java = javaInit.getJavaInstance();
 
 /* delete a person . */
-router.get('/person/:userName', function(req, res) {
+router.delete('/person/:userName', function(req, res) {
     var username = req.params.userName;
   java.callStaticMethod("JenaFusekiServer.DeleteQueries", "deletePerson",username ,function(err, results) {
     if(err) { console.error("ERROR ------->"+err); return; }
@@ -15,7 +15,7 @@ router.get('/person/:userName', function(req, res) {
 });
 
 /* delete an application . */
-router.get('/application/:applicationName', function(req, res) {
+router.delete('/application/:applicationName', function(req, res) {
     var applicationName = req.params.applicationName;
   java.callStaticMethod("JenaFusekiServer.DeleteQueries", "deleteApplication",applicationName ,function(err, results) {
     if(err) { console.error("ERROR ------->"+err); return; }
@@ -25,7 +25,7 @@ router.get('/application/:applicationName', function(req, res) {
 });
 
 /* delete personUsesApplicationRelation . */
-router.get('/PersonUsesApplicationRelation/:username/:applicationName', function(req, res) {
+router.delete('/PersonUsesApplicationRelation/:username/:applicationName', function(req, res) {
     var applicationName = req.params.applicationName;
     var username = req.params.username;
   java.callStaticMethod("JenaFusekiServer.DeleteQueries", "deletePersonUsesApplicationRelation",username,applicationName ,function(err, results) {
@@ -37,7 +37,7 @@ router.get('/PersonUsesApplicationRelation/:username/:applicationName', function
 
 
 /* delete a system . */
-router.get('/system/:systemName', function(req, res) {
+router.delete('/system/:systemName', function(req, res) {
     var systemName = req.params.systemName;
   java.callStaticMethod("JenaFusekiServer.DeleteQueries", "deleteSystem",systemName ,function(err, results) {
     if(err) { console.error("ERROR ------->"+err); return; }
@@ -48,7 +48,7 @@ router.get('/system/:systemName', function(req, res) {
 
 
 /* delete a ApplicationUsesSystemRelation . */
-router.get('/ApplicationUsesSystemRelation/:applicationName/:systemName', function(req, res) {
+router.delete('/ApplicationUsesSystemRelation/:applicationName/:systemName', function(req, res) {
     var applicationName = req.params.applicationName;
     var systemName = req.params.systemName;
   java.callStaticMethod("JenaFusekiServer.DeleteQueries", "deleteApplicationUsesSystemRelation",applicationName,systemName,function(err, results) {
@@ -60,7 +60,7 @@ router.get('/ApplicationUsesSystemRelation/:applicationName/:systemName', functi
 
 
 /* delete a SystemHasSubSystemRelation . */
-router.get('/SystemHasSubSystemRelation/:systemName/:subSystemName', function(req, res) {
+router.delete('/SystemHasSubSystemRelation/:systemName/:subSystemName', function(req, res) {
     var systemName = req.params.systemName;
     var subSystemName = req.params.subSystemName;
   java.callStaticMethod("JenaFusekiServer.DeleteQueries", "deleteSystemHasSubSystemRelation",systemName,subSystemName ,function(err, results) {
