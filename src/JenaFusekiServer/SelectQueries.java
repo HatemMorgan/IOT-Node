@@ -10,6 +10,9 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 
 public class SelectQueries {
+	
+	
+	
   public static String getPersons(){
 	  String query = 
 		  		  "PREFIX g: <http://learningsparql.com/ns/graphs#>"

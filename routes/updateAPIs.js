@@ -8,7 +8,6 @@ var functions = require('../javascript/functions');
 /* update person */
 router.put('/person/:username', function(req, res) {
   var username = req.params.username;
-
 functions.createHashtable(req.body,function(htblColNameValue){
   java.callStaticMethod("JenaFusekiServer.UpdateQueries", "updatePerson",username,htblColNameValue ,function(err, results) {
     if(err) { console.error("ERROR ------->"+err); return; }

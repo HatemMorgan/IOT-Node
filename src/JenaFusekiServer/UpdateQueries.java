@@ -12,23 +12,23 @@ import Ontologies.entitiesOntologyPropertiesPrefixes;
 
 public class UpdateQueries {
 	public static void updatePerson(String userName,Hashtable<String, String> htblColNameValue){
-		
+
 		Hashtable<String, String> htblprefixProperty = entitiesOntologyPropertiesPrefixes.getPersonPropertiesPrefixes();
-		
+
 		String deleteStatement = "";
 		String insertStatement = "";
 		String whereStatement = "";
-		
+
 		 Set<String> keySet = htblColNameValue.keySet();
 		 Iterator<String> itr = keySet.iterator();
-		 
+
 		 // use the count to know the last statment in the query in order to add . instead of ; "
 		 int count = htblColNameValue.size();
-		 
+
 		 while(itr.hasNext()){
 			 String property = itr.next();
 			 String value = htblColNameValue.get(property);
-			 
+
 			 if(count != 1){
 				 deleteStatement += htblprefixProperty.get(property)+":"+property +"   ?"+property+";";
 				 whereStatement  += htblprefixProperty.get(property)+":"+property +"   ?"+property+";";
@@ -39,10 +39,10 @@ public class UpdateQueries {
 				 whereStatement  += htblprefixProperty.get(property)+":"+property +"   ?"+property+".";
 				 insertStatement += htblprefixProperty.get(property)+":"+property  +"   \""+value+"\".";
 			 }
-	
+
 		 }
-		 
-	  String strQuery = 
+
+	  String strQuery =
 			  	   "PREFIX g: <http://learningsparql.com/ns/graphs#>"
 				  +"PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
 				  +"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
@@ -76,5 +76,8 @@ public class UpdateQueries {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
+	}
+	public static void main(String[] args) {
+		
 	}
 }
