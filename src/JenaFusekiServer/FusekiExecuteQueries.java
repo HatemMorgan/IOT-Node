@@ -1,5 +1,7 @@
 package JenaFusekiServer;
 
+import java.io.ByteArrayOutputStream;
+
 import org.apache.jena.iri.impl.Main;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
@@ -48,5 +50,22 @@ public class FusekiExecuteQueries {
 			}
 	 }
 	 
+		public static String executeSelectQueries(String strQuery){
+			Query qe = QueryFactory.create(strQuery);
+
+			QueryExecution quex = QueryExecutionFactory.sparqlService(
+					"http://localhost:3030/myDataset/query", qe);
+
+			try {
+				ResultSet results = quex.execSelect();
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				ResultSetFormatter.outputAsJSON(outputStream, results);
+				String json = new String(outputStream.toByteArray());
+			   return json;
+
+			} finally {
+				quex.close();
+			}
+		}
 
 }
