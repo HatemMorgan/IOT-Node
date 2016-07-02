@@ -41,5 +41,16 @@ public class entitiesOntologyPropertiesPrefixes {
     	
     	return htblPropertyPrefix;
     	
+    } 
+    
+    public static Hashtable<String, String> getServicePropertiesPrefixes(){
+    	Hashtable<String, String> htblPropertyPrefix = new Hashtable<String, String>();
+    	
+    	htblPropertyPrefix.put("interfaceDescription", "iot-lite");
+    	htblPropertyPrefix.put("endpoint", "iot-lite");
+
+    	
+    	return htblPropertyPrefix;
+    	
     }  
 }

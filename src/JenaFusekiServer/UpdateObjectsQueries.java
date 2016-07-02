@@ -43,7 +43,7 @@ public class UpdateObjectsQueries {
 			 }
 			 
 		 }else{
-			 throw new Exception(property+" is not a property of Communicating Device");
+			 throw new Exception(property+" is not a property of  person class");
 		 }
 
 		 }
@@ -105,7 +105,7 @@ public class UpdateObjectsQueries {
 			 insertStatement += htblprefixProperty.get(property)+":"+property  +"   \""+value+"\".";
 		 }
 	 }else{
-		 throw new Exception(property+" is not a property of Communicating Device");
+		 throw new Exception(property+" is not a property of Application Class");
 	 }
 
 	 }
@@ -233,7 +233,7 @@ public class UpdateObjectsQueries {
 				 insertStatement += "iot-liteIns:"+property  +"   \""+value+"\".";
 			 	}
 			 }else{
-				 throw new Exception(property+" is not a property of Communicating Device");
+				 throw new Exception(property+" is not a property of CommunicatingDevice Class");
 			 }
 		 }
 		 
@@ -262,11 +262,111 @@ public class UpdateObjectsQueries {
 		 FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	}
 	
+	public static void updateService(String serviceName ,Hashtable<String, String> htblColNameValue ) throws Exception{
+		Hashtable<String, String> htblprefixProperty  = entitiesOntologyPropertiesPrefixes.getServicePropertiesPrefixes();
+		
+		String deleteStatement = "";
+		String insertStatement = "";
+		String whereStatement = "";
+
+		 Set<String> keySet = htblColNameValue.keySet();
+		 Iterator<String> itr = keySet.iterator();
+
+		 // use the count to know the last statment in the query in order to add . instead of ; "
+		 int count = htblColNameValue.size();
+
+		 while(itr.hasNext()){
+			
+			 String property = itr.next();
+			 String value = htblColNameValue.get(property);
+			 
+			 if(htblprefixProperty.containsKey(property)){
+				 
+			
+				 if(count != 1){
+					 deleteStatement += htblprefixProperty.get(property)+":"+property +"   ?"+property+";";
+					 whereStatement  += htblprefixProperty.get(property)+":"+property +"   ?"+property+";";
+					 insertStatement += htblprefixProperty.get(property)+":"+property  +"   \""+value+"\";";
+					 count--;
+				 }else{
+					 deleteStatement += htblprefixProperty.get(property)+":"+property +"   ?"+property+".";
+					 whereStatement  += htblprefixProperty.get(property)+":"+property +"   ?"+property+".";
+					 insertStatement += htblprefixProperty.get(property)+":"+property  +"   \""+value+"\".";
+				 }
+				 
+			 }else{
+				 throw new Exception(property+" is not a property of a Service class ");
+			 }
+		 }
+		 
+		 String strQuery =
+			  	   "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+				  +"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+				  +" DELETE { "
+				  +"   GRAPH g:Services{ "
+				  +"	     iot-lite:"+serviceName+" a  iot-lite:Service ;"
+				  +deleteStatement
+				  +"   }"
+				  +"}"
+				  +" INSERT { "
+				  +"   GRAPH g:Services{ "
+				  +"	     iot-lite:"+serviceName+" a  iot-lite:Service ;"
+				  +insertStatement
+				  +"   }"
+				  +"}"
+				  +" where { "
+				  +"   GRAPH g:Services{ "
+				  +"	     iot-lite:"+serviceName+" a  iot-lite:Service ;"
+				  +whereStatement
+				  +"   }"
+				  +"}";
+		 
+		 FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
+	}
+	public static void updateObjectLocation	 (String objectName , Hashtable<String, String> htblColNameValue){
+		
+		 String locationName = htblColNameValue.get("hasLocation");
+		 String locationLatitude = htblColNameValue.get("lat");
+		 String locationLongtitude = htblColNameValue.get("long");
+      
+		 
+		 String strQuery =
+			  	   "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+				  +"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+				  +"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+				  +" DELETE { "
+				  +"   GRAPH g:Objects{ "
+				  +"	     iot-lite:"+objectName+" geo:hasLocation  ?point ."
+				  +"		 ?point   a	geo:Point	;							"
+				  +"                  geo:lat  ?latitude ;"
+				  +"                  geo:long ?longtitude ."
+				  +"   }"
+				  +"}"
+				  +" INSERT { "
+				  +"   GRAPH g:Objects{ "
+				  +"	     iot-lite:"+objectName+" geo:hasLocation  geo:"+locationName+" ."
+				  +"		 geo:"+locationName+"  a	 geo:Point	;"		
+				  +"		    				  geo:lat  \""+locationLatitude+"\" ;"
+				  +"							  geo:long  \""+locationLongtitude+"\" ."							
+				  +"   }"
+				  +"}"
+				  +" where { "
+				  +"   GRAPH g:Objects{ "
+				  +"	     iot-lite:"+objectName+" geo:hasLocation  ?point."
+				  +"		 ?point   a	geo:Point	;							"
+				  +"                  geo:lat  ?latitude ;"
+				  +"                  geo:long ?longtitude ."
+				  +"   }"
+				  +"}";
+		 
+		 FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
+	}
 	
     public static void updateSensor(){
-    	// TODO 
+    	// TODO when specifing a unique value to it
     }
 	
+  
     
     
 	public static void main(String[] args) {

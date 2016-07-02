@@ -29,7 +29,7 @@ functions.createHashtable(req.body,function(htblColNameValue){
 });
 
 /* update miniServer location */
-router.put('/miniServer/:miniServerName', function(req, res) {
+router.put('/miniServerLocation/:miniServerName', function(req, res) {
   var miniServerName = req.params.miniServerName;
 functions.createHashtable(req.body,function(htblColNameValue){
   java.callStaticMethod("JenaFusekiServer.UpdateObjectsQueries", "updateMiniServerLocation",miniServerName,htblColNameValue ,function(err, results) {
@@ -41,7 +41,7 @@ if(err) { res.send("<h1>"+err+"</h1>" ); console.log("ERROR ------->"+err); retu
 
 
 /* update communicating Device connected to a senesingDevice  */
-router.put('/updateCommunicatingDeviceOfSensingDevice/:senesingDeviceUUID/:communicatingDeviceMacaddress', function(req, res) {
+router.put('/CommunicatingDeviceOfSensingDevice/:senesingDeviceUUID/:communicatingDeviceMacaddress', function(req, res) {
 
   var senesingDeviceUUID = req.params.senesingDeviceUUID;
   var communicatingDeviceMacaddress = req.params.communicatingDeviceMacaddress;
@@ -55,8 +55,8 @@ router.put('/updateCommunicatingDeviceOfSensingDevice/:senesingDeviceUUID/:commu
 });
 
 
-/* update communicating Device connected to a senesingDevice  */
-router.put('/updateCommunicatingDevice/:communicatingDeviceMacaddress', function(req, res) {
+/* update communicating Device   */
+router.put('/CommunicatingDevice/:communicatingDeviceMacaddress', function(req, res) {
 
   var communicatingDeviceMacaddress = req.params.communicatingDeviceMacaddress;
 
@@ -68,5 +68,29 @@ router.put('/updateCommunicatingDevice/:communicatingDeviceMacaddress', function
   });
   });
 
+
+  /* update Service which describes an IOT services provided by a device */
+  router.put('/service/:serviceName', function(req, res) {
+
+    var serviceName = req.params.serviceName;
+
+    functions.createHashtable(req.body,function(htblColNameValue){
+      java.callStaticMethod("JenaFusekiServer.UpdateObjectsQueries", "updateService",serviceName,htblColNameValue ,function(err, results) {
+        if(err) { res.send("<h1>"+err+"</h1>" ); console.log("ERROR ------->"+err); return; }
+            res.send("A service with serviceName: "+serviceName+"  is updated");
+      });
+    });
+    });
+
+    /* update miniServer location */
+    router.put('/objectLocation/:objectName', function(req, res) {
+      var objectName = req.params.objectName;
+    functions.createHashtable(req.body,function(htblColNameValue){
+      java.callStaticMethod("JenaFusekiServer.UpdateObjectsQueries", "updateObjectLocation",objectName,htblColNameValue ,function(err, results) {
+    if(err) { res.send("<h1>"+err+"</h1>" ); console.log("ERROR ------->"+err); return; }
+            res.send("Object with objectName: "+objectName+" location is updated");
+      });
+    });
+    });
 
 module.exports = router;
