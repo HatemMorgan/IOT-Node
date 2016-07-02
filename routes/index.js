@@ -13,4 +13,9 @@ router.get('/getPersons', function(req, res, next) {
 
 });
 
+router.get('/test', function(req, res, next) {
+res.send("working");
+
+});
+
 module.exports = router;
