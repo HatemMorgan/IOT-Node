@@ -1,7 +1,8 @@
 "use strict";
 var fs = require("fs");
+console.log("----------------->javainit classs");
 var java = require("java");
-var mvn = require('node-java-maven');
+console.log("java ------------>"+java);
 
 
 
