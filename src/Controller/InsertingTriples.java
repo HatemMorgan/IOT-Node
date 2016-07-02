@@ -1,4 +1,4 @@
-package Server;
+package Controller;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -27,7 +27,7 @@ import org.apache.jena.sparql.engine.index.SetIndexTable;
 import com.github.andrewoma.dexx.collection.ArrayList;
 
 import JenaFusekiServer.FusekiGraphs;
-import JenaFusekiServer.FusekiQueries;
+
 import Ontologies.FOAFOntologyClasses;
 import Ontologies.FOAFOntologyProperties;
 import Ontologies.IOTInstancesOntologyClasses;
@@ -85,20 +85,19 @@ public class InsertingTriples {
 	 * A service can has many devices (many-to-many relationship) A MiniServer
 	 * can has many devices connecting to it (one-to-many relationship)
 	 * 
-	 * Unique value is deviceMacAddress 
+	 * Unique value is communicatingDeviceMacAddress 
 	 */
 
 	public static Individual insertDevice(String DeviceName, Individual system,
 			Individual miniServer, Individual service,
-			Individual CommunicatingDevice, Individual sensingDevice,
-			Individual attribute , String deviceMacAddress) {
+			Individual CommunicatingDeviceMacAddress, Individual sensingDevice,
+			Individual attribute) {
 
-		Individual newDevice = model.createIndividual(SSN_URI + DeviceName,
+		Individual newDevice = model.createIndividual(SSN_URI + CommunicatingDeviceMacAddress.getLocalName(),
 				IOTLiteOntologyClasses.device());
 		
-		setDevice(newDevice);
 		
-		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDevice.toString(),
+		FusekiGraphs.insertIntoDevicesGraph(CommunicatingDeviceMacAddress.toString(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTInstancesOntologyClasses.communicatingDevice().toString(),
 				null);
@@ -107,13 +106,13 @@ public class InsertingTriples {
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
 
-		FusekiGraphs.insertIntoDevicesGraph(SSN_URI + DeviceName,
+		FusekiGraphs.insertIntoDevicesGraph(SSN_URI + CommunicatingDeviceMacAddress.getLocalName(),
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.device().toString(), null);
         
 		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
-				IOTLiteInstancesOntologyProperties.hasMacaddress().toString(),
-				null, deviceMacAddress);
+				IOTLiteInstancesOntologyProperties.hasName().toString(),
+				null, DeviceName);
 		
 		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
 				IOTLiteInstancesOntologyProperties.isConnectedTo().toString(),
@@ -123,18 +122,20 @@ public class InsertingTriples {
 				service.toString(), null);
 		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
 				IOTLiteOntologyProperties.hasSubSystem().toString(),
-				CommunicatingDevice.toString(), null);
+				CommunicatingDeviceMacAddress.toString(), null);
 		FusekiGraphs.insertIntoDevicesGraph(newDevice.toString(),
 				IOTLiteOntologyProperties.hasSubSystem().toString(),
 				sensingDevice.toString(), null);
+		
 		FusekiGraphs.insertIntoDevicesGraph(attribute.toString(),
 				IOTLiteOntologyProperties.isAssociatedWith().toString(),
 				newDevice.toString(), null);
+		
 		FusekiGraphs.insertIntoDevicesGraph(system.toString(),
 				IOTLiteOntologyProperties.hasSubSystem().toString(),
 				newDevice.toString(), null);
 
-		return model.createIndividual(iotlins_URI+deviceMacAddress,IOTInstancesOntologyClasses.macAddress());
+		return model.createIndividual(SSN_URI+CommunicatingDeviceMacAddress.getLocalName(),IOTInstancesOntologyClasses.macAddress());
 	}
 
 	
@@ -144,16 +145,14 @@ public class InsertingTriples {
 	
 	public static Individual insertSensingDevice(String sensingDeviceName , Individual communicatingDevice) {
 		String id = UUID.randomUUID().toString();
+		
 		Individual newSensingDevice = model.createIndividual(SSN_URI
-				+ sensingDeviceName, IOTLiteOntologyClasses.sensingDevice());
+				+ id, IOTLiteOntologyClasses.sensingDevice());
 
-		FusekiGraphs.insertIntoSensingDevicesGraph(SSN_URI + sensingDeviceName,
+		FusekiGraphs.insertIntoSensingDevicesGraph(SSN_URI + id,
 				IOTLiteOntologyProperties.type().toString(),
 				IOTLiteOntologyClasses.sensingDevice().toString(), null);
 		
-		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
-				IOTLiteInstancesOntologyProperties.hasUUID().toString(),
-				null, id);
 		
 		FusekiGraphs.insertIntoSensingDevicesGraph(newSensingDevice.toString(),
 				IOTLiteInstancesOntologyProperties.hasName().toString(),
@@ -177,11 +176,11 @@ public class InsertingTriples {
 			String dutyCycle) {
 
 		Individual newCommunicatingDevice = model.createIndividual(iotlins_URI
-				+ communicatingDeviceName,
+				+ macAddress,
 				IOTInstancesOntologyClasses.communicatingDevice());
 
 		FusekiGraphs.insertIntoCommunicatingDevicesGraph(iotlins_URI
-				+ communicatingDeviceName, IOTLiteOntologyProperties.type()
+				+ macAddress, IOTLiteOntologyProperties.type()
 				.toString(), IOTInstancesOntologyClasses.communicatingDevice()
 				.toString(), null);
 		FusekiGraphs.insertIntoCommunicatingDevicesGraph(
@@ -201,7 +200,7 @@ public class InsertingTriples {
 
 		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
 				.toString(), IOTLiteInstancesOntologyProperties
-				.hasMacaddress().toString(), null, macAddress);
+				.hasName().toString(), null, communicatingDeviceName);
 		
 		FusekiGraphs.insertIntoCommunicatingDevicesGraph(newCommunicatingDevice
 				.toString(), IOTLiteInstancesOntologyProperties
@@ -478,28 +477,28 @@ public class InsertingTriples {
 		Individual newCoverage;
 		switch (coverageType) {
 		case "Circle":
-			newCoverage = model.createIndividual(IOT_Lite_URI + coverageType,
+			newCoverage = model.createIndividual(IOT_Lite_URI +device.getLocalName()+"/"+coverageType,
 					IOTLiteOntologyClasses.circle());
 
-			FusekiGraphs.insertIntoDevicesGraph(IOT_Lite_URI + coverageType,
-					IOTLiteOntologyProperties.type().toString(),
-					IOTLiteOntologyClasses.circle().toString(), null);
+//			FusekiGraphs.insertIntoDevicesGraph(IOT_Lite_URI + coverageType,
+//					IOTLiteOntologyProperties.type().toString(),
+//					IOTLiteOntologyClasses.circle().toString(), null);
 			break;
 		case "Rectangle":
-			newCoverage = model.createIndividual(IOT_Lite_URI + coverageType,
+			newCoverage = model.createIndividual(IOT_Lite_URI + device.getLocalName()+"/"+coverageType,
 					IOTLiteOntologyClasses.rectangle());
-
-			FusekiGraphs.insertIntoDevicesGraph(IOT_Lite_URI + coverageType,
-					IOTLiteOntologyProperties.type().toString(),
-					IOTLiteOntologyClasses.rectangle().toString(), null);
+//
+//			FusekiGraphs.insertIntoDevicesGraph(IOT_Lite_URI + coverageType,
+//					IOTLiteOntologyProperties.type().toString(),
+//					IOTLiteOntologyClasses.rectangle().toString(), null);
 			break;
 		case "Polygon":
-			model.createIndividual(IOT_Lite_URI + coverageType,
+			model.createIndividual(IOT_Lite_URI + device.getLocalName()+"/"+coverageType,
 					IOTLiteOntologyClasses.polygon());
 
-			FusekiGraphs.insertIntoDevicesGraph(IOT_Lite_URI + coverageType,
-					IOTLiteOntologyProperties.type().toString(),
-					IOTLiteOntologyClasses.polygon().toString(), null);
+//			FusekiGraphs.insertIntoDevicesGraph(IOT_Lite_URI + coverageType,
+//					IOTLiteOntologyProperties.type().toString(),
+//					IOTLiteOntologyClasses.polygon().toString(), null);
 		default:
 			throw new Exception("no coverage type equal to " + coverageType);
 
@@ -645,12 +644,6 @@ public class InsertingTriples {
 				service.toString(), null);
 	}
 
-	public static void setDevice(Individual newDevice){
-		device = newDevice;
-	}
-	
-	public static Individual getDevice (){
-		return device;
-	}
+
 	
 }

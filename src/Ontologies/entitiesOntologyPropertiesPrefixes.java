@@ -15,4 +15,31 @@ public class entitiesOntologyPropertiesPrefixes {
     	
     	return htblPropertyPrefix;
     }
+    
+    public static Hashtable<String, String> getApplicationPropertiesPrefixes(){
+    	Hashtable<String, String> htblPropertyPrefix = new Hashtable<String, String>();
+    	
+    	htblPropertyPrefix.put("hasApplicationName", "iot-liteIns");
+    	htblPropertyPrefix.put("hasApplicationDescription", "iot-liteIns");
+    	
+    	return htblPropertyPrefix;
+    }
+   
+    
+    public static Hashtable<String, String> getCommunicatingDevicePropertiesPrefixes(){
+    	Hashtable<String, String> htblPropertyPrefix = new Hashtable<String, String>();
+    	
+    	htblPropertyPrefix.put("hasFrequency", "iot-liteIns");
+    	htblPropertyPrefix.put("hasNetworkTopology", "iot-liteIns");
+    	htblPropertyPrefix.put("hasBandwidth", "iot-liteIns");
+    	htblPropertyPrefix.put("hasTransmitPower", "iot-liteIns");
+    	htblPropertyPrefix.put("hasSensitivity", "iot-liteIns");
+    	htblPropertyPrefix.put("hasNumberOfChannels", "iot-liteIns");
+    	htblPropertyPrefix.put("hasDutyCycle", "iot-liteIns");
+    	htblPropertyPrefix.put("hasName", "iot-liteIns");
+    	htblPropertyPrefix.put("hasType", "iot-liteIns");
+    	
+    	return htblPropertyPrefix;
+    	
+    }  
 }

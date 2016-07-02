@@ -148,7 +148,14 @@ public class FusekiGraphs {
 		String queryString = "";
 		if (Object == null) {
 
-			queryString = "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+			queryString = 
+					 "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+					+"PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+					+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+					+"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+					+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+					+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+					+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 					+ "INSERT DATA" + "{ GRAPH g:" + graphName + " { <"
 					+ subject + "> <" + Property + "> \"" + literal + "\" "
 					+ " .}" + "}";
@@ -156,7 +163,14 @@ public class FusekiGraphs {
 
 		} else {
 			if (literal == null) {
-				queryString = "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+				queryString = 
+						 "PREFIX g: <http://learningsparql.com/ns/graphs#>"
+						+"PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+						+"PREFIX iot-liteIns:<http://purl.oclc.org/NET/UNIS/iot-lite/iot-liteInstance#>"
+						+"PREFIX ssn: <http://purl.oclc.org/NET/ssnx/ssn#>"
+						+"PREFIX iot-lite:<http://purl.oclc.org/NET/UNIS/fiware/iot-lite#>"
+						+"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>"
+						+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 						+ "INSERT DATA" + "{ GRAPH g:" + graphName + " { <"
 						+ subject + "> <" + Property + "> <" + Object + "> .}"
 						+ "}";

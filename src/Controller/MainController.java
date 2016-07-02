@@ -1,9 +1,9 @@
-package Server;
+package Controller;
 
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.ArrayList;
-import JenaFusekiServer.FusekiQueries;
+import JenaFusekiServer.FusekiExecuteQueries;
 import org.apache.jena.ontology.Individual;
 
 
@@ -18,7 +18,7 @@ public class MainController {
 		return (int) x.get(2);
 	}
 	public static void insertData(){
-		 JenaFusekiServer.FusekiQueries.DropAllGraphs();
+		 JenaFusekiServer.FusekiExecuteQueries.DropAllGraphs();
 		// inseting system and its subSystems
 		Individual GUC = InsertingTriples.insertSystem("GUC");
 		Individual CBuilding = InsertingTriples.insertSystem("CBuilding");
@@ -49,12 +49,23 @@ public class MainController {
 		Individual communicatingDeviceMacAddress = InsertingTriples.insertCommunicatingDevice("Bluetooth_Low_Energy_001",
 				"Bluetooth Low Energy (BLE)", "10 bits/second",
 				"Star_NetworkTopology", "1024 HZ", "100 Watt", "-173.9 dBm/Hz", "2", "6c23548ab568953a", "60%");
+		Individual communicatingDeviceMacAddress2 = InsertingTriples.insertCommunicatingDevice("Bluetooth_Low_Energy_002",
+				"Bluetooth Low Energy (BLE)", "20 bits/second",
+				"Star_NetworkTopology", "1024 HZ", "100 Watt", "-173.9 dBm/Hz", "2", "c23548ab568919ca", "30%");
 
 		Individual sensingDevice = InsertingTriples
 				.insertSensingDevice("TempretureHumidityModule",communicatingDeviceMacAddress);
+		
+		Individual sensingDevice2 = InsertingTriples
+				.insertSensingDevice("TempretureHumidityModule",communicatingDeviceMacAddress2);
+		
 		Individual deviceMacAddress = InsertingTriples.insertDevice("TempHumBLE",
 				CBuilding, miniServer, service, communicatingDeviceMacAddress,
-				sensingDevice, attribute ,"6c23548ab568953a");
+				sensingDevice, attribute);
+		
+		Individual deviceMacAddress2 = InsertingTriples.insertDevice("TempHumBLE",
+				CBuilding, miniServer, service, communicatingDeviceMacAddress2,
+				sensingDevice2, attribute );
 
 		// inserting Device exposed by service
 		InsertingTriples.insertDeviceServiceRelation(deviceMacAddress, service);
@@ -68,6 +79,11 @@ public class MainController {
 		Individual tempretureSensor = InsertingTriples.insertSensor(
 				sensingDevice, "Tempreture_Sensor", "Degree_Celsius",
 				"Tempreture", metaDataList);
+//		
+//		Individual tempretureSensor2 = InsertingTriples.insertSensor(
+//				sensingDevice2, "Tempreture_Sensor", "Degree_Celsius",
+//				"Tempreture", metaDataList);
+		
 		Individual humiditySensor = InsertingTriples.insertSensor(
 				sensingDevice, "Humidity_Sensor", "Percentage", "Humidity",
 				 metaDataList);
@@ -77,7 +93,15 @@ public class MainController {
 				"70",new Date().toString(),sensingDevice);
 		InsertingTriples.insertSensorOutputData("Humidity", humiditySensor,
 				"20", new Date().toString(),sensingDevice);
-
+		
+//		InsertingTriples.insertSensorOutputData("Tempreture", humiditySensor,
+//				"40", new Date().toString(),sensingDevice);
+//		
+//		InsertingTriples.insertSensorOutputData("Tempreture", humiditySensor,
+//				"30", new Date().toString(),sensingDevice2);
+//		InsertingTriples.insertSensorOutputData("Tempreture", humiditySensor,
+//				"20", new Date().toString(),sensingDevice2);
+		
 		// insert an application
 		Individual FoodTesterApp = InsertingTriples
 				.insertApplication("FoodTesterApp",
@@ -106,9 +130,15 @@ public class MainController {
 		// inserting coverage
 		try {
 		Individual	coverage = InsertingTriples.insertCoverage("Cafeteria'sFridgeArea",
-				InsertingTriples.getDevice(), "Rectangle");
+			deviceMacAddress, "Rectangle");
 			// create coverage point
 			InsertingTriples.createPoint("SWCorner", "-0.12", "50.01", coverage);
+			
+			Individual	coverage2 = InsertingTriples.insertCoverage("Cafeteria'sCashierArea",
+					deviceMacAddress2, "Rectangle");
+					// create coverage point
+					InsertingTriples.createPoint("NWCorner", "-0.22", "50.51", coverage2);
+					
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
