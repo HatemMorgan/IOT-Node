@@ -1,4 +1,4 @@
-package Server;
+package Controller;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Iterator;
@@ -21,7 +21,6 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-import JenaFusekiServer.FusekiQueries;
 import Ontologies.IOTLiteOntology;
 
 public class IOTLiteOntologyControllerTest {

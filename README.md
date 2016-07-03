@@ -13,6 +13,15 @@ more simple and avoid specifing the graphs name each time I query or SPARQL will
 This way of organizing data allow us to add more complex entity in on dataset and seprate it to different graphs , where each
 graph acts as a container for a specified partition of this complex entity
 
+#Technologies used 
+- Java 8 eclipse
+- Maven
+- NodeJS
+- Jena libraries
+- jena fuseki server
+- Predefined semantic web ontologies (FOAF , SSN , IOT-LITE)
+
+
 ##To add dependencies to local directory 
 mvn dependency:copy-dependencies
 
@@ -28,5 +37,14 @@ npm install
 
 ##To run Fuseki server
 java -Xmx1200M -jar fuseki-server.jar --update --loData /myDataset
+
+## TO build maven project 
+mvn package
+
+## To run a command forerver on ubuntu background which I used to run jena fuseki server when deployed
+nohup java -Xmx1200M -jar fuseki-server.jar --update --loData /myDataset
+
+## I use forever to run node server forever when deployed
+sudo forever start myServer.js
 
 

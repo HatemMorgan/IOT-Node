@@ -36,7 +36,8 @@ public class DeleteQueries {
 			   +"	 	} "
 			   +"	 }";
 	 
-	 executeDeleteQuery(strQuery);
+	 FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
+	 
 	 deleteApplicationsUsedByDeletedPersonRelation(userName);
  }
  
@@ -61,7 +62,7 @@ public class DeleteQueries {
 			 +"	 }"
 			 +"	 }";
 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	 deletePersonUsesDeletedApplicationRelation(applicationName);
  }
  
@@ -81,7 +82,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 		   +"	     }"
 		   +"	 }";
  
- executeDeleteQuery(strQuery);
+FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  public static void deletePersonUsesDeletedApplicationRelation(String applicationName){
@@ -100,7 +101,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	     }"
 	 		   +"}";
 	 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
 
  public static void deletePersonUsesApplicationRelation(String userName , String applicationName){
@@ -114,7 +115,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	     }"
 			   +"	 }";
 	 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  public static void deleteSystem(String systemName){
@@ -126,7 +127,9 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 				+"   ssn:"+systemName+" a ssn:System ."
 				+"  }"
 				+"}";
-	executeDeleteQuery(strQuery);
+	
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
+	
 	deleteDevicesSubSystemOfDeletedSystem(systemName);
 	deleteSystemHasDeletedSubSystemRelation(systemName);
 	deletesubSystemsOfDeletedSystemRelation(systemName);
@@ -157,7 +160,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	      ?application iot-liteIns:usesSystem ssn:"+systemName+" ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  public static void deleteSystemsUsedByDeletedApplicationRelation (String applicationName){
@@ -175,7 +178,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	      iot-liteIns:"+applicationName+" iot-liteIns:usesSystem ?system ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery); 
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery); 
  }
  
  public static void deleteApplicationUsesSystemRelation(String applicationName , String systemName){
@@ -188,7 +191,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	      iot-liteIns:"+applicationName+" iot-liteIns:usesSystem ssn:"+systemName+" ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  //------------------------------------------------------------------------------------------------------------
@@ -216,7 +219,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	      ssn:"+deletedSystemName+" ssn:hasSubSystem ?subSystem ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
 
  
@@ -235,7 +238,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	       ?system ssn:hasSubSystem ssn:"+deletedSubSystemName+" ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  
@@ -250,7 +253,7 @@ public static void deleteApplicationsUsedByDeletedPersonRelation(String userName
 			   +"	      ssn:"+systemName+" ssn:hasSubSystem ssn:"+subSystemName+" ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 
  }
  
@@ -283,7 +286,7 @@ public static void deleteMiniServers(String miniServerName){
 				 +"      	?system ssn:hasSubSystem iot-liteIns:"+miniServerName+" .	"							
 				 +"		}"
 				 +"}";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	 deleteDevicesConnectedToDeletedMiniServer(miniServerName);
 				 
  }
@@ -301,18 +304,17 @@ String strQuery =
 			+"DELETE  { "
 			+" GRAPH g:Devices "
 			+"  { "
-			+"      ?deviceName  a ssn:Device;"
- 			+" 					 iot-liteIns:hasMacaddress \""+deviceMacAddress+"\" ;"
+			+"      ssn:"+deviceMacAddress+"  a ssn:Device ;"
+ 			+" 					 iot-liteIns:hasName ?deviceName ;"
 			+"    			     ssn:hasSubSystem ?communicatingDevice;"
 			+"  				 ssn:hasSubSystem ?sensingDevice;"
 			+"    			     iot-liteIns:isConnectedTo ?miniserver;"
 			+"  				 iot-lite:exposedBy ?service."
-			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
-			+"  ?system  		 ssn:hasSubSystem ?deviceName."
+			+"  ?attribute  	 iot-lite:isAssociatedWith       ssn:"+deviceMacAddress+"."
+			+"  ?system  		 ssn:hasSubSystem      ssn:"+deviceMacAddress+"."
 			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
 			+"  ?sensingDevice a ssn:SensingDevice ."
-			+"  ?deviceName iot-lite:hasCoverage ?coverage."
-			+"  ?coverage a ?coverageClass ."
+			+"  ssn:"+deviceMacAddress+" iot-lite:hasCoverage ?coverage."
 			+"  ?coverage iot-lite:hasPoint ?point."
 			+"  ?point a geo:Point ;"
 			+"     	 geo:lat ?latitude;"
@@ -322,18 +324,17 @@ String strQuery =
 			+"WHERE{"
 			+"GRAPH g:Devices "
 			+"  {"
-			+" ?deviceName a ssn:Device;"
-			+" 					 iot-liteIns:hasMacaddress \""+deviceMacAddress+"\" ;"
+			+"      ssn:"+deviceMacAddress+"  a ssn:Device;"
+ 			+" 					 iot-liteIns:hasName ?deviceName ;"
 			+"    			     ssn:hasSubSystem ?communicatingDevice;"
 			+"  				 ssn:hasSubSystem ?sensingDevice;"
 			+"    			     iot-liteIns:isConnectedTo ?miniserver;"
 			+"   				 iot-lite:exposedBy ?service."
-			+"  ?attribute  	 iot-lite:isAssociatedWith  ?deviceName."
-			+"  ?system  		 ssn:hasSubSystem ?deviceName."
+			+"  ?attribute  	 iot-lite:isAssociatedWith    ssn:"+deviceMacAddress+"."
+			+"  ?system  		 ssn:hasSubSystem  ssn:"+deviceMacAddress+"."
 			+"  ?communicatingDevice a iot-liteIns:CommunicatingDevice."
 			+" ?sensingDevice a ssn:SensingDevice ."
-			+ "?deviceName iot-lite:hasCoverage ?coverage."
-			+"  ?coverage a ?coverageClass ."
+			+ " ssn:"+deviceMacAddress+" iot-lite:hasCoverage ?coverage."
 			+" ?coverage iot-lite:hasPoint ?point."
 			+"  ?point  a  geo:Point;"
 			+"          geo:lat ?latitude;"
@@ -341,7 +342,7 @@ String strQuery =
 			+"		 }"
 			+"}";
 
-  executeDeleteQuery(strQuery);
+ FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
   
 }
 
@@ -352,22 +353,20 @@ public static void deleteSensingDevice(String UUID){
 			   +"PREFIX g: <http://learningsparql.com/ns/graphs#>"
 			   +"	DELETE { "
 			   +"	  GRAPH g:SensingDevices { "
-			   +"	       ?sensingDevice a ssn:SensingDevice ;"
-			   +"	                      iot-liteIns:hasUUID \""+UUID+"\" ;"
+			   +"	       ssn:"+UUID+ " a ssn:SensingDevice ;"
 			   +"	      				  iot-liteIns:hasName ?name ;"
 			   +"                         iot-liteIns:hasCommunicatingDevice ?communicatingDevice ."
 			   +"	    }"
 			   +"	 }"
 			   +"	WHERE{"
 			   +"	     GRAPH g:SensingDevices {"
-			   +"	       ?sensingDevice a ssn:SensingDevice ;"
-			   +"	                      iot-liteIns:hasUUID \""+UUID+"\" ;"
+			   +"	       ssn:"+UUID+ " a ssn:SensingDevice ;"
 			   +"	      				  iot-liteIns:hasName ?name;"
 			   +"                         iot-liteIns:hasCommunicatingDevice ?communicatingDevice ."
 			   +"	    }"
 			   +"	  }";
 	
-	executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	deleteSensorsHavingDeletedSensingDevice(UUID);
 	
 	// hard delete
@@ -412,7 +411,8 @@ public static void deleteSensingDevice(String UUID){
 			+ "    }" 
 			+ "}";
 	
-	executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
+	
 	deleteRelationTriple(macAddress);
 
  }
@@ -456,7 +456,7 @@ public static void deleteSensingDevice(String UUID){
 			   +"	}"
 			   +"}";
 	 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	 deleteSensorOutputs(sensorName, sensingDeviceMacAddress);
  }
  
@@ -483,7 +483,7 @@ public static void deleteSensingDevice(String UUID){
 				+"		    	}"
 				+"		 }"		   
 			    +" }" ;
-	 executeDeleteQuery(strQuery);		
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);		
  }
  
  public static void deleteServices(String serviceName){
@@ -503,7 +503,7 @@ public static void deleteSensingDevice(String UUID){
 			 		   +"                                 iot-lite:interfaceDescription ?desc ."
 			 		   +"  }"
 			 		   +"}";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	 deleteDevicesExposedByDeletedServiceRelation(serviceName);
 	 
  }
@@ -529,7 +529,7 @@ public static void deleteSensingDevice(String UUID){
 			   +"	      ?deviceMacAddress iot-lite:exposedBy iot-lite:"+serviceName+" ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  
@@ -548,7 +548,7 @@ public static void deleteSensingDevice(String UUID){
 			   +"	      iot-liteIns:"+deviceMacAddress+" iot-lite:exposedBy ?service ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  public static void deleteDeviceExposedByServiceRelation (String deviceMacAddress , String serviceName){
@@ -561,7 +561,7 @@ public static void deleteSensingDevice(String UUID){
 			   +"	      iot-liteIns:"+deviceMacAddress+" iot-lite:exposedBy iot-lite:"+serviceName+" ."
 			   +"	     }"
 			   +"	 }";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  
@@ -593,7 +593,7 @@ public static void deleteSensingDevice(String UUID){
 			        +"   }"
 			        +"}";
 	 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  public static void deleteSensorOutputsByDateTime(String sensorName , String sensingDeviceMacAddress,String dateTime){
@@ -622,7 +622,7 @@ public static void deleteSensingDevice(String UUID){
 	        +"   }"
 	        +"}";
 
-executeDeleteQuery(strQuery);
+	 FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
  }
  
  public static void deleteObject(String objectName){
@@ -659,7 +659,7 @@ executeDeleteQuery(strQuery);
 				    +" 		}"
 				    +"	}"
 			        +"}";
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 	 
  }
  
@@ -686,7 +686,9 @@ executeDeleteQuery(strQuery);
 	    	+"			 FILTER (?attribute = iot-lite:"+attribute+")	"
 	    	+"	    }	"    
 	        +"}";
-executeDeleteQuery(strQuery);
+	 
+	 FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
+	 
  }
  
  /*
@@ -745,7 +747,7 @@ public static void deleteDevicesConnectedToDeletedMiniServer(String miniServerNa
 			+"		 }"
 			+"}";
 
- executeDeleteQuery(strQuery);
+FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 }
 
 
@@ -799,7 +801,7 @@ public static void deleteDevicesSubSystemOfDeletedSystem(String systemName){
 			+"		 }"
 			+"}";
 
- executeDeleteQuery(strQuery);
+FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 }
 
 
@@ -848,7 +850,7 @@ public static void deleteSensorsHavingDeletedSensingDevice(String sensingDeviceU
 			   +"	}"
 			   +"}";
 	 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 }
 
 public static void deleteMiniServersSubSystemOfDeletedSystem(String systemName){
@@ -878,7 +880,7 @@ public static void deleteMiniServersSubSystemOfDeletedSystem(String systemName){
 			 +"      			  geo:long ?longtitude."    						
 			 +"		}"
 			 +"}";
- executeDeleteQuery(strQuery);
+FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 }
 
 
@@ -908,23 +910,14 @@ public static void deleteRelationTriple(String communicatingDeviceMacAddress){
 			   +"	}"
 			   +"}";
 	 
-	 executeDeleteQuery(strQuery);
+	FusekiExecuteQueries.executeUpdateAndDeleteQuery(strQuery);
 }
 
 
 //-----------------------------------------------------END----------------------------------------------------------
 
 
- public static void executeDeleteQuery(String strQuery){
-	 UpdateProcessor updateQuery = UpdateExecutionFactory.createRemote(
-				UpdateFactory.create(strQuery),
-				"http://localhost:3030/myDataset/update");
-		try {
-			updateQuery.execute();
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
- }
+
  
  
  public static void main(String[] args) {
@@ -935,7 +928,7 @@ public static void deleteRelationTriple(String communicatingDeviceMacAddress){
 	//deleteApplicationUsesSystemRelation("FoodTesterApp", "CBuilding"); 
 	//deleteSystemHasSubSystemRelation("GUC", "CBuilding"); 
 	//deleteMiniServers("C_Ground_miniserver");
-	//deleteDevice("6c23548ab568953a");
+	//	deleteDevice("c23548ab568953a");
 	//deleteSensingDevice("734d3ef2-3385-4470-90bf-4f5554496dc9");
 	//deleteCommunicatingDevice("6c23548ab568953a");
 	//deleteSensor("Tempreture_Sensor", "734d3ef2-3385-4470-90bf-4f5554496dc9");

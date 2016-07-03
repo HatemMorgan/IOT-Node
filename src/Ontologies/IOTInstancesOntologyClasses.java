@@ -4,7 +4,7 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ModelFactory;
 
-import Server.IOTLiteOntologyControllerTest;
+
 
 public class IOTInstancesOntologyClasses {
 
