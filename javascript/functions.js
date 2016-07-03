@@ -5,10 +5,10 @@ var java = javaInit.getJavaInstance();
 exports.createHashtable = function(propertiesValuesObject,cb){
     var htblColNameValue = java.newInstanceSync("java.util.Hashtable");
   for (var poperty in propertiesValuesObject) {
-  if (propertiesValuesObject.hasOwnProperty(poperty)) {
+
     var value = propertiesValuesObject[poperty];
     htblColNameValue.putSync(poperty,value);
-  }
+
 }
   cb(htblColNameValue);
 }
