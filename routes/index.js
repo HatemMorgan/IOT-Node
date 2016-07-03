@@ -13,6 +13,15 @@ router.get('/getPersons', function(req, res, next) {
 
 });
 
+router.get('/insert', function(req, res, next) {
+  java.callStaticMethod("Controller.MainController", "insertData", function(err, results) {
+    if(err) { console.error("ERROR ------->"+err); return; }
+
+        res.send("Data inserted");
+  });
+
+});
+
 router.get('/test', function(req, res, next) {
 res.send("working");
 
