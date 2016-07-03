@@ -4,19 +4,15 @@
 @prefix tdb:     <http://jena.hpl.hp.com/2008/tdb#> .
 @prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
 @prefix :        <#> .
-
 [] rdf:type fuseki:Server ;
    fuseki:services (
      <#xeac>
    ) .
-
 # TDB
 [] ja:loadClass "com.hp.hpl.jena.tdb.TDB" .
 tdb:DatasetTDB  rdfs:subClassOf  ja:RDFDataset .
 tdb:GraphTDB    rdfs:subClassOf  ja:Model .
-
 ## ---------------------------------------------------------------
-
 <#xeac> rdf:type fuseki:Service ;
     # URI of the dataset -- http://host:port/ds
     fuseki:name                        "xeac" ;
@@ -28,7 +24,6 @@ tdb:GraphTDB    rdfs:subClassOf  ja:Model .
     fuseki:serviceReadGraphStore       "get" ;
     fuseki:dataset                     <#myDataset> ;
     .
-
 #TBD
 <#myDataset> rdf:type      tdb:DatasetTDB ;
     tdb:location "Data"
