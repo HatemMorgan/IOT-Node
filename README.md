@@ -36,15 +36,21 @@ mvn install
 npm install
 
 ##To run Fuseki server
-java -Xmx1200M -jar fuseki-server.jar --update --loData /myDataset
+java -Xmx1200M -jar fuseki-server.jar --update --loc=Data /myDataset
 
 ## TO build maven project 
 mvn package
 
 ## To run a command forerver on ubuntu background which I used to run jena fuseki server when deployed
-nohup java -Xmx1200M -jar fuseki-server.jar --update --loData /myDataset
+nohup java -Xmx1200M -jar fuseki-server.jar --update --loc=Data /myDataset
 
 ## I use forever to run node server forever when deployed
 sudo forever start myServer.js
+
+## Links helped me in installation on cloud
+    http://tecadmin.net/install-oracle-java-8-jdk-8-ubuntu-via-ppa/ 
+    https://www.npmjs.com/package/forever
+    http://www.dangtrinh.com/2014/04/install-and-configure-java-and-maven-in.html
+    http://jena.apache.org/download/#jena-fuseki
 
 
